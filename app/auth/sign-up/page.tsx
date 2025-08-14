@@ -1,7 +1,8 @@
 "use client";
 
-import { Card, CardBody } from "@heroui/react";
+import { Card, CardBody, Divider } from "@heroui/react";
 import SignUpForm from "./signup-form";
+import { SignInOauthButton } from "@/components/sign-in-oauth-button";
 
 export default function SignUpPage() {
 
@@ -15,6 +16,11 @@ export default function SignUpPage() {
             <Card className="w-1/2 py-6">
                 <CardBody>
                     <SignUpForm />
+                    <Divider className="my-4" />
+                    <div className="flex flex-col max-w-full gap-4 items-center">
+                      <SignInOauthButton signUp provider="google" />
+                      <SignInOauthButton signUp provider="github" />
+                    </div>
                 </CardBody>
             </Card>
 

@@ -4,7 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import {Form, Input, Select, SelectItem, Checkbox, Button} from "@heroui/react";
 import { addToast } from "@heroui/react"; 
-import signInEmailAction from "../actions/sign-in-email.action";
+import signInEmailAction from "../../actions/sign-in-email.action";
 import Link from "next/link";
 
 export default function SignInForm() {
@@ -20,21 +20,21 @@ export default function SignInForm() {
     const formData = new FormData(evt.target as HTMLFormElement);
 
     const { error } = await signInEmailAction(formData);
-    console.log(error);
 
     if (error) {
       addToast({
         title: "Erreur identification",
         description: error,
-        color: "danger"
+        color: "danger",
       });
       setIsPending(false);
     } else {
       addToast({
         title: "Success identification",
-        description: "Registration complete. You're all set"
+        description: "Registration complete. You're all set",
+        color: "success",
       });
-      router.push("/sign-in");
+      router.push("/profile");
     }
 
   }
@@ -86,7 +86,7 @@ export default function SignInForm() {
       </div>
       <div className="text-sm text-foreground-400">
           Don't Already have an account?{" "}
-          <Link href="/sign-up" className="hover:text-foreground">
+          <Link href="/auth/sign-up" className="hover:text-foreground">
               Sign Up
           </Link>
       </div>

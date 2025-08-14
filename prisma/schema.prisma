@@ -13,12 +13,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  USER
+  ADMIN
+}
+
 model Post {
-  id String @id @default(uuid())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  title String
+  title   String
   content String
 
   @@map("posts")
@@ -26,32 +31,32 @@ model Post {
 
 model CategoryTopic {
   id          String  @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   title       String  @unique
   slug        String  @unique
   description String
   topics      Topic[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Topic {
-  id              String         @id @default(cuid())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  title           String         @unique
-  slug            String         @unique
-  description     String
+  title       String @unique
+  slug        String @unique
+  description String
 
-  studyProcesses  StudyProcess[]
+  studyProcesses StudyProcess[]
 
   categoryTopicId String
-  category CategoryTopic @relation(fields: [categoryTopicId], references: [id])
+  category        CategoryTopic @relation(fields: [categoryTopicId], references: [id])
 }
 
 model StudyProcess {
-  id      String @id @default(cuid())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -59,25 +64,29 @@ model StudyProcess {
   content String
 
   topicId String
-  topic Topic @relation(fields: [topicId], references: [id])
+  topic   Topic  @relation(fields: [topicId], references: [id])
 
-  userId  String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  id            String    @id
-  createdAt     DateTime
-  updatedAt     DateTime
+  id        String   @id
+  createdAt DateTime
+  updatedAt DateTime
 
   name          String
-  email         String @unique
+  email         String   @unique
   emailVerified Boolean
   image         String?
-  
-  studyProcesses  StudyProcess[]
-  sessions      Session[]
-  accounts      Account[]
+  role          UserRole @default(USER)
+  banned        Boolean?
+  banReason     String?
+  banExpires    DateTime?
+
+  studyProcesses StudyProcess[]
+  sessions       Session[]
+  accounts       Account[]
 
   @@map("user")
 }
@@ -88,20 +97,21 @@ model Session {
   updatedAt DateTime
 
   expiresAt DateTime
-  token     String @unique
+  token     String   @unique
   ipAddress String?
   userAgent String?
-  
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  impersonatedBy String?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("session")
 }
 
 model Account {
-  id                    String    @id
-  createdAt             DateTime
-  updatedAt             DateTime
+  id        String   @id
+  createdAt DateTime
+  updatedAt DateTime
 
   accountId             String
   providerId            String
@@ -113,16 +123,16 @@ model Account {
   scope                 String?
   password              String?
 
-  userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("account")
 }
 
 model Verification {
-  id         String    @id
-  createdAt  DateTime?
-  updatedAt  DateTime?
+  id        String    @id
+  createdAt DateTime?
+  updatedAt DateTime?
 
   identifier String
   value      String

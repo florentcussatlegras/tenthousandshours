@@ -3,11 +3,11 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import {Form, Input, Select, SelectItem, Checkbox, Button} from "@heroui/react";
-import { signUp } from "../lib/auth-client";
+import { signUp } from "../../lib/auth-client";
 import { redirect } from "next/navigation";
-import signUpEmailAction from "../actions/sign-up-email.action";
+import signUpEmailAction from "../../actions/sign-up-email.action";
 // import { toast } from "sonner";
-import { addToast } from "@heroui/react"; 
+import { addToast, ToastProvider } from "@heroui/react"; 
 import Link from "next/link";
 
 export default function SignUpForm() {
@@ -45,21 +45,21 @@ export default function SignUpForm() {
     const formData = new FormData(evt.target as HTMLFormElement);
 
     const { error } = await signUpEmailAction(formData);
-    console.log(error);
 
     if (error) {
       addToast({
         title: "Erreur registration",
         description: error,
-        color: "danger"
+        color: "danger",
       });
       setIsPending(false);
     } else {
       addToast({
         title: "Success registration",
-        description: "Registration complete. You're all set"
+        description: "Registration complete. You're all set",
+        color: "success",
       });
-      router.push("/sign-in");
+      router.push("/auth/sign-in");
     }
 
     // const data = Object.fromEntries(new FormData(e.currentTarget));
@@ -180,21 +180,21 @@ export default function SignUpForm() {
           <SelectItem key="au">Australia</SelectItem>
         </Select> */}
 
-        {/* <Checkbox
+        <Checkbox
           isRequired
           classNames={{
             label: "text-small",
           }}
-          isInvalid={!!errors.terms}
+          // isInvalid={!!errors.terms}
           name="terms"
           validationBehavior="aria"
           value="true"
-          onValueChange={() => setErrors((prev) => ({...prev, terms: undefined}))}
+          // onValueChange={() => setErrors((prev) => ({...prev, terms: undefined}))}
         >
           I agree to the terms and conditions
         </Checkbox>
 
-        {errors.terms && <span className="text-danger text-tiny">{errors.terms}</span>} */}
+        {/* {errors.terms && <span className="text-danger text-tiny">{errors.terms}</span>} */}
 
         <div className="flex gap-4">
           <Button className="w-full" color="primary" type="submit">
@@ -207,7 +207,7 @@ export default function SignUpForm() {
       </div>
       <div className="text-sm text-foreground-400">
           Already have an account?{" "}
-          <Link href="/sign-in" className="hover:text-foreground">
+          <Link href="/auth/sign-in" className="hover:text-foreground">
               Sign In
           </Link>
       </div>

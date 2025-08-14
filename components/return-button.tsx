@@ -9,8 +9,8 @@ interface ReturnButtonProps {
 
 export const ReturnButton = ({ href, label }: ReturnButtonProps) => {
     return (
-        <Button>
-            <Link href={href}>
+        <Button color="primary">
+            <Link href={href} className="flex items-center gap-2">
                 <ArrowLeftIcon /> {label}
             </Link>
         </Button>
