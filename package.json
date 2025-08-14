@@ -22,6 +22,7 @@
     "@heroui/system": "2.4.20",
     "@heroui/theme": "2.4.20",
     "@hookform/resolvers": "^5.2.1",
+    "@node-rs/argon2": "^2.0.2",
     "@prisma/client": "^6.13.0",
     "@prisma/extension-accelerate": "^2.0.2",
     "@react-aria/ssr": "3.9.10",

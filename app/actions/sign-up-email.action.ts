@@ -1,6 +1,7 @@
 "use server";
 
-import { auth } from "@/app/lib/auth";
+import { auth, ErrorCode } from "@/app/lib/auth";
+import { APIError } from "better-auth/api";
 
 // const SignUpFormSchema = z.object({
 //     name: z.string().min(20),
@@ -63,6 +64,11 @@ async function signUpEmailAction(formData: FormData) {
         return { error: "Password needs at least 1 symbol" };
     }
 
+    const terms = Boolean(formData.get("terms"));
+    if (!terms) {
+        return { error: "Veuillez accepter nos termes d'utilisation" };
+    }
+
     try {
         await auth.api.signUpEmail({
             body: {
@@ -74,9 +80,18 @@ async function signUpEmailAction(formData: FormData) {
 
         return { error: null }
     }catch (err) {
-        if (err instanceof Error) {
-            return { error: err.message };
-        } 
+        if (err instanceof APIError) {
+            const errCode = err.body ? (err.body.code as ErrorCode) : "UNKNOWN";
+
+            switch (errCode) {
+                case "USER_ALREADY_EXISTS":
+                    return { error: "Cet utilisateur existe déja" }
+                default: 
+                    return { error: err.message };
+            }
+        }
+
+        return { error: "Internal Server Error" };
     }
 
 }

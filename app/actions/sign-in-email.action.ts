@@ -1,7 +1,8 @@
 "use server";
 
 import { auth } from "@/app/lib/auth";
-
+import { headers } from "next/headers";
+import { APIError } from "better-auth/api";
 
 async function signInEmailAction(formData: FormData) {
 
@@ -17,6 +18,7 @@ async function signInEmailAction(formData: FormData) {
 
     try {
         await auth.api.signInEmail({
+            headers: await headers(),
             body: {
                 email,
                 password
@@ -25,9 +27,11 @@ async function signInEmailAction(formData: FormData) {
 
         return { error: null }
     }catch (err) {
-        if (err instanceof Error) {
+        if (err instanceof APIError) {
             return { error: err.message };
-        } 
+        }
+
+        return { error: "Internal Server Error" };
     }
 
 }

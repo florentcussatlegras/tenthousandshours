@@ -23,11 +23,14 @@ declare module "@react-types/shared" {
 
 export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
+  const [placement, setPlacement] = React.useState("top-center");
 
   return (
     <HeroUIProvider navigate={router.push}>
       <NextThemesProvider {...themeProps}>
-        <ToastProvider />
+        <div className="fixed z-[100]">
+          <ToastProvider placement={placement} toastOffset={placement.includes("top") ? 60 : 0} />
+        </div>
         {children}
       </NextThemesProvider>
     </HeroUIProvider>

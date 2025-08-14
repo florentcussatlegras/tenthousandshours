@@ -23,15 +23,15 @@ export const SignOutButton = () => {
                     toast.error(ctx.error.message);
                 },
                 onSuccess: () => {
-                    router.push("/sign-in");
+                    router.push("/auth/sign-in");
                 }
             }
         });
     }
 
     return (
-        <Button onPress={handleClick} size="sm" color="primary" variant="solid" disabled={isPending}>
-            Sign Out
+        <Button onPress={handleClick} color="primary" disabled={isPending}>
+            Sign out
         </Button>
     );
 }
