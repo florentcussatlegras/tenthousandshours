@@ -37,6 +37,7 @@ model CategoryTopic {
   title       String  @unique
   slug        String  @unique
   description String
+  status String
   topics      Topic[]
 }
 

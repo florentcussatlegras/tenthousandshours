@@ -30,8 +30,8 @@ export default function SignInForm() {
       setIsPending(false);
     } else {
       addToast({
-        title: "Success identification",
-        description: "Registration complete. You're all set",
+        title: "Succès identification",
+        description: "Bonjour! Heureux de vous revoir :)",
         color: "success",
       });
       router.push("/profile");
@@ -61,33 +61,41 @@ export default function SignInForm() {
           label="Email"
           labelPlacement="outside"
           name="email"
-          placeholder="Enter your email"
+          placeholder="Saisissez votre email"
         />
 
-        <Input
-          // isRequired
-          // errorMessage={getPasswordError(password)}
-          // isInvalid={getPasswordError(password) !== null}
-          label="Password"
-          labelPlacement="outside"
-          name="password"
-          placeholder="Enter your password"
-          type="password"
-        />
+        <div className="space-y-2">
+
+          <Input
+            // isRequired
+            // errorMessage={getPasswordError(password)}
+            // isInvalid={getPasswordError(password) !== null}
+            label="Mot de passe"
+            labelPlacement="outside"
+            name="password"
+            placeholder="Saisissez votre mot de passe"
+            type="password"
+          />
+
+          <Link href="/auth/forget-password" className="text-sm text-muted-foreground hover:text-foreground text-blue-500">
+            Vous avez oublié votre mot de passe?
+          </Link>
+
+        </div>
 
         <div className="flex gap-4">
           <Button className="w-full" color="primary" type="submit" disabled={isPending}>
-            Submit
+            VALIDER
           </Button>
-          <Button type="reset" variant="bordered">
-            Reset
+          <Button type="reset" variant="flat">
+            ANNULER
           </Button>
         </div>
       </div>
       <div className="text-sm text-foreground-400">
-          Don't Already have an account?{" "}
-          <Link href="/auth/sign-up" className="hover:text-foreground">
-              Sign Up
+          Vous n'avez pas encore de compte ?{" "}
+          <Link href="/auth/sign-up" className="hover:text-foreground text-blue-500">
+              Inscrivez-vous
           </Link>
       </div>
     </Form>

@@ -1,23 +1,28 @@
-import { betterAuth } from 'better-auth';
-import { prismaAdapter } from 'better-auth/adapters/prisma';
-import { nextCookies } from 'better-auth/next-js';
-import { createAuthMiddleware, APIError } from 'better-auth/api';
-import { admin } from 'better-auth/plugins/admin';
+import { betterAuth, type BetterAuthOptions } from "better-auth";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import { nextCookies } from "better-auth/next-js";
+import { createAuthMiddleware, APIError } from "better-auth/api";
+import { admin, customSession } from "better-auth/plugins";
 
 import { hashPassword, verifyPassword } from "@/app/lib/argon2";
-import prisma from '../lib/prisma';
-import { getValidDomains, normalizeName } from './utils';
-import { UserRole } from '@prisma/client';
+import prisma from "../lib/prisma";
+import { getValidDomains, normalizeName } from "./utils";
+import { UserRole } from "@prisma/client";
 import { ac, roles } from "@/app/lib/permissions";
+import { sendEmailAction } from "../actions/send-email.action";
 
-export const auth = betterAuth({
+const options = {
   database: prismaAdapter(prisma, {
-    provider: 'postgresql',
+    provider: "postgresql",
   }),
   socialProviders: {
-    google: { 
-        clientId: process.env.GOOGLE_CLIENT_ID as string, 
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET as string, 
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    },
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
     },
   },
   emailAndPassword: {
@@ -26,14 +31,42 @@ export const auth = betterAuth({
     autoSignIn: false,
     password: {
       hash: hashPassword,
-      verify: verifyPassword
-    }
+      verify: verifyPassword,
+    },
+    requireEmailVerification: true,
+    sendResetPassword: async ({user, url, token}, request) => {
+      await sendEmailAction({
+        to: user.email,
+        subject: "Réinitialiser votre mot de passe",
+        meta: {
+          description: `Click the link to reset your password`,
+          link: String(url),
+        } 
+      });
+    },
+    onPasswordReset: async ({ user }, request) => {
+      // your logic here
+      console.log(`Password for user ${user.email} has been reset.`);
+    },
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: false,
+    sendVerificationEmail: async ({ user, url }) => {
+      await sendEmailAction({
+        to: user.email,
+        subject: "Vérification de votre adresse email",
+        meta: {
+          description:
+            "Please verify your email address to complete registration.",
+          link: url,
+        },
+      });
+    },
   },
   hooks: {
     before: createAuthMiddleware(async (ctx) => {
-
-      if(ctx.path === "/sign-up/email") {
-
+      if (ctx.path === "/sign-up/email") {
         const email = String(ctx.body.email);
         const domain = email.split("@")[1];
 
@@ -52,38 +85,47 @@ export const auth = betterAuth({
             ...ctx,
             body: {
               ...ctx.body,
-              name
+              name,
             },
-          }
-        }
+          },
+        };
       }
-    })
+    }),
   },
   databaseHooks: {
     user: {
       create: {
         before: async (user) => {
-          const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(';') ?? [];
+          const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(";") ?? [];
 
           if (ADMIN_EMAILS.includes(user.email)) {
-            return { data: { ...user, role: UserRole.ADMIN } }
+            return { data: { ...user, role: UserRole.ADMIN } };
           }
 
           return { data: user };
-        }
-      }
-    }
+        },
+      },
+    },
   },
   user: {
     additionalFields: {
       role: {
         type: ["USER", "ADMIN"] as Array<UserRole>,
         input: false,
-      }
-    }
+      },
+    },
   },
   session: {
     expiresIn: 30 * 24 * 60 * 60,
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60,
+    }
+  },
+  account: {
+    accountLinking: {
+      enabled: false,
+    },
   },
   plugins: [
     nextCookies(),
@@ -93,6 +135,30 @@ export const auth = betterAuth({
       ac,
       roles,
     }),
+  ],
+} satisfies BetterAuthOptions;
+
+export const auth = betterAuth({
+  ...options,
+  plugins: [
+    ...(options.plugins ?? []),
+    customSession(async ({ user, session }) => {
+      return {
+        session: {
+          expiresAt: session.expiresAt,
+          token: session.token,
+          userAgent: session.userAgent
+        },
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          createdAt: user.createdAt,
+          role: user.role,
+        },
+      };
+    }, options),
   ],
 });
 
