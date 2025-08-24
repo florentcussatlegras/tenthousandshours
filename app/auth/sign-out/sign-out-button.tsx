@@ -24,6 +24,7 @@ export const SignOutButton = () => {
                 },
                 onSuccess: () => {
                     router.push("/auth/sign-in");
+                    router.refresh();
                 }
             }
         });
@@ -31,7 +32,7 @@ export const SignOutButton = () => {
 
     return (
         <Button onPress={handleClick} color="primary" disabled={isPending}>
-            Sign out
+            DECONNEXION
         </Button>
     );
 }

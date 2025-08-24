@@ -15,7 +15,7 @@ function GetStartedButton() {
 
   if(isPending) {
     return (
-        <Button>Get Started</Button>
+        <Button className="text-xl">Get Started</Button>
     )
   }
 
@@ -31,13 +31,11 @@ function GetStartedButton() {
                     Welcome back, {session.user.name}!
                 </p>
             )}
-            <Link
-                className={buttonStyles({
-                    color: "primary",
-                })}
-                href={href}>
-                    Get Started
-            </Link>
+            <Button className="text-xl" color="primary">
+                <Link href={href} className="text-white">
+                        GET STARTED
+                </Link>
+            </Button>
     </div>;
 }
 

@@ -48,18 +48,18 @@ export default function SignUpForm() {
 
     if (error) {
       addToast({
-        title: "Erreur registration",
+        title: "Erreur inscription",
         description: error,
         color: "danger",
       });
       setIsPending(false);
     } else {
       addToast({
-        title: "Success registration",
-        description: "Registration complete. You're all set",
+        title: "Succès inscription",
+        description: "Inscription complète. Merci de vérifier vos emails",
         color: "success",
       });
-      router.push("/auth/sign-in");
+      router.push("/auth/sign-up/success");
     }
 
     // const data = Object.fromEntries(new FormData(e.currentTarget));
@@ -131,10 +131,10 @@ export default function SignUpForm() {
 
           //   return errors.name;
           // }}
-          label="Name"
+          label="Nom"
           labelPlacement="outside"
           name="name"
-          placeholder="Enter your name"
+          placeholder="Saisissez votre nom"
         />
 
         <Input
@@ -150,17 +150,17 @@ export default function SignUpForm() {
           label="Email"
           labelPlacement="outside"
           name="email"
-          placeholder="Enter your email"
+          placeholder="Saisissez votre email"
         />
 
         <Input
           // isRequired
           // errorMessage={getPasswordError(password)}
           // isInvalid={getPasswordError(password) !== null}
-          label="Password"
+          label="Mot de passe"
           labelPlacement="outside"
           name="password"
-          placeholder="Enter your password"
+          placeholder="Saisissez votre mot de passe"
           type="password"
           // value={password}
           // onValueChange={setPassword}
@@ -191,24 +191,24 @@ export default function SignUpForm() {
           value="true"
           // onValueChange={() => setErrors((prev) => ({...prev, terms: undefined}))}
         >
-          I agree to the terms and conditions
+          J'accepte les termes et les conditions d'utilisation
         </Checkbox>
 
         {/* {errors.terms && <span className="text-danger text-tiny">{errors.terms}</span>} */}
 
         <div className="flex gap-4">
           <Button className="w-full" color="primary" type="submit">
-            Submit
+            Valider
           </Button>
           <Button type="reset" variant="bordered">
-            Reset
+            Annuler
           </Button>
         </div>
       </div>
       <div className="text-sm text-foreground-400">
-          Already have an account?{" "}
-          <Link href="/auth/sign-in" className="hover:text-foreground">
-              Sign In
+          Vous avez déja un compte ?{" "}
+          <Link href="/auth/sign-in" className="hover:text-foreground text-blue-500">
+              Connectez-vous
           </Link>
       </div>
     </Form>

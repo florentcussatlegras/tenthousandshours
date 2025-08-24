@@ -1,8 +1,9 @@
 "use server";
 
-import { auth } from "@/app/lib/auth";
+import { auth, ErrorCode } from "@/app/lib/auth";
 import { headers } from "next/headers";
 import { APIError } from "better-auth/api";
+import { redirect } from "next/navigation";
 
 async function signInEmailAction(formData: FormData) {
 
@@ -28,7 +29,14 @@ async function signInEmailAction(formData: FormData) {
         return { error: null }
     }catch (err) {
         if (err instanceof APIError) {
-            return { error: err.message };
+            const errCode = err.body ? (err.body.code as ErrorCode) : "UNKNOWN";
+
+            switch(errCode) {
+                case "EMAIL_NOT_VERIFIED":
+                    redirect("/auth/verify?error=email_not_verified");
+                default:
+                    return { error: err.message }
+            }
         }
 
         return { error: "Internal Server Error" };
