@@ -73,17 +73,17 @@ export default function TableListTopic({ topics }: { topics: Promise<Topic[]> })
       case "actions":
         return (
           <div className="relative flex items-center gap-2 justify-center">
-            <Tooltip content="Details">
+            {/* <Tooltip content="Details">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EyeIcon />
               </span>
-            </Tooltip>
-            <Tooltip content="Edit user">
+            </Tooltip> */}
+            <Tooltip content="Modifier une matière">
               <Link href={`/topic/edit/${topic.slug}`} className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditIcon />
               </Link>
             </Tooltip>
-            <Tooltip color="danger" content="Delete user">
+            <Tooltip color="danger" content="Supprimer une matière">
               <Link href={`/topic/delete/${topic.slug}`} className="text-lg text-danger cursor-pointer active:opacity-50">
                 <DeleteIcon />
               </Link>

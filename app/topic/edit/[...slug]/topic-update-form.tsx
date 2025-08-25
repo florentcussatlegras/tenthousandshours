@@ -1,24 +1,38 @@
 "use client";
 
-import { updateCategoryTopic } from "@/app/actions/update-category-topic.action";
-import { Form, Input, Button, Textarea, addToast } from "@heroui/react";
-import { CategoryTopic } from "@prisma/client";
-import { useRouter } from "next/navigation";
+import { updateTopic } from "@/app/actions/update-topic.action";
+import {
+  Form,
+  Input,
+  Button,
+  Textarea,
+  addToast,
+  Select,
+  SelectItem,
+} from "@heroui/react";
+import { CategoryTopic, Topic } from "@prisma/client";
 import { useActionState, useState } from "react";
 
-export default function CategoryTopicUpdateForm({
-  categoryTopic,
+export default function TopicUpdateForm({
+  topic,
+  categoriesTopic,
 }: {
-  categoryTopic: CategoryTopic;
+  topic: Topic;
+  categoriesTopic: CategoryTopic[];
 }) {
-  const [formState, formAction] = useActionState(updateCategoryTopic, {
+  const [formState, formAction] = useActionState(updateTopic, {
     errors: {},
   });
 
-  const { id, name, description } = categoryTopic;
+  const { id, name, description } = topic;
 
   const [currentName, setCurrentName] = useState(name);
   const [currentDescription, setCurrentDescription] = useState(description);
+  const [currentCategoryTopicId, setCurrentCategoryTopicId] = useState(
+    categoriesTopic.filter(
+      (category) => category.id === topic.categoryTopicId
+    )[0].id
+  );
 
   return (
     <Form action={formAction} className="gap-4">
@@ -33,7 +47,7 @@ export default function CategoryTopicUpdateForm({
         type="text"
         value={currentName}
         onChange={(e) => {
-          setCurrentName(e.currentTarget.value)
+          setCurrentName(e.currentTarget.value);
         }}
       />
       {formState.errors.name ? (
@@ -53,7 +67,7 @@ export default function CategoryTopicUpdateForm({
         value={currentDescription}
         type="text"
         onChange={(e) => {
-          setCurrentDescription(e.currentTarget.value)
+          setCurrentDescription(e.currentTarget.value);
         }}
       />
       {formState.errors.description ? (
@@ -61,6 +75,26 @@ export default function CategoryTopicUpdateForm({
           {formState.errors.description?.join(", ")}
         </div>
       ) : null}
+
+      <Select
+        className="max-w-xs"
+        items={categoriesTopic}
+        label="Catégorie de la matière"
+        placeholder="Selectionnez une catégorie"
+        name="categoryTopicId"
+        selectedKeys={[currentCategoryTopicId]}
+      >
+        {(categoryTopic) => (
+          <SelectItem
+            key={categoryTopic.id}
+            onClick={(e) => {
+              setCurrentCategoryTopicId(categoryTopic.id);
+            }}
+          >
+            {categoryTopic.name}
+          </SelectItem>
+        )}
+      </Select>
 
       {formState.errors?._form ? (
         <div className="text-danger text-sm">

@@ -83,3 +83,20 @@ export async function getListCategoryTopic() {
 
   return categories;
 }
+
+export async function getTopic(slug) {
+  const topic = await prisma.topic.findFirst({
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      status: true,
+      categoryTopicId: true,
+    },
+    where: {
+      slug
+    }
+  });
+
+  return topic;
+}

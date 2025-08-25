@@ -1,21 +1,21 @@
 "use client";
 
-import { deleteCategoryTopic } from "@/app/actions/delete-category-topic.action";
+import { deleteTopic } from "@/app/actions/delete-topic.action";
 import { Form, Input, Button, Textarea, addToast } from "@heroui/react";
-import { CategoryTopic } from "@prisma/client";
+import { Topic } from "@prisma/client";
 import Link from "next/link";
 
-export default function CategoryTopicDeleteForm({
-  categoryTopic,
+export default function TopicDeleteForm({
+  topic,
 }: {
-  categoryTopic: CategoryTopic;
+  topic: Topic;
 }) {
 
-  const { id, name, description } = categoryTopic;
+  const { id, name, description } = topic;
 
   return (
-    <Form action={deleteCategoryTopic} className="gap-4">
-      Etes-vous sûr de vouloir supprimer la catégorie {name} ?
+    <Form action={deleteTopic} className="gap-4">
+      Etes-vous sûr de vouloir supprimer la matière {name} ?
 
       <Input type="hidden" value={id} name="id" />
 

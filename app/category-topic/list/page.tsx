@@ -3,6 +3,7 @@ import prisma from "@/app/lib/prisma";
 import { Button } from "@heroui/button";
 import { Link } from "@heroui/link";
 
+
 export default async function App() {
   const categories = await prisma.categoryTopic.findMany();
 
