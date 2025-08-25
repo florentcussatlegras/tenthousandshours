@@ -34,10 +34,10 @@ model CategoryTopic {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  title       String  @unique
+  name       String  @unique
   slug        String  @unique
   description String
-  status String
+  status String @default("active")
   topics      Topic[]
 }
 
@@ -46,9 +46,10 @@ model Topic {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  title       String @unique
+  name       String @unique
   slug        String @unique
   description String
+  status String @default("active")
 
   studyProcesses StudyProcess[]
 
@@ -61,7 +62,7 @@ model StudyProcess {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  title   String
+  name   String
   content String
 
   topicId String

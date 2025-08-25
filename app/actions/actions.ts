@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import prisma from "@/app/lib/prisma";
 
 const SignUpFormSchema = z.object({
     name: z.string().min(5),
@@ -58,4 +59,27 @@ export async function signupAction(formState: any, formData: FormData) {
 
     redirect('/dashboard');
 
+}
+
+export async function getCategoryTopic(slug) {
+  const categoryTopic = await prisma.categoryTopic.findFirst({
+    where: {
+      slug
+    }
+  });
+
+  return categoryTopic;
+}
+
+export async function getListCategoryTopic() {
+  const categories = await prisma.categoryTopic.findMany({
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      status: true
+    }
+  });
+
+  return categories;
 }

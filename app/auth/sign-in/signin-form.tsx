@@ -59,7 +59,7 @@ export default function SignInForm() {
           //   }
           // }}
           label="Email"
-          labelPlacement="outside"
+          labelPlacement="inside"
           name="email"
           placeholder="Saisissez votre email"
         />
@@ -71,7 +71,7 @@ export default function SignInForm() {
             // errorMessage={getPasswordError(password)}
             // isInvalid={getPasswordError(password) !== null}
             label="Mot de passe"
-            labelPlacement="outside"
+            labelPlacement="inside"
             name="password"
             placeholder="Saisissez votre mot de passe"
             type="password"

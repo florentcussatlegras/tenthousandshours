@@ -14,13 +14,14 @@ import {
 } from "@heroui/react";
 
 import { EyeIcon, EditIcon, DeleteIcon } from '@/components/icons'
-import { CategoryTopic } from "@prisma/client";
+import { Topic } from "@prisma/client";
 import Link from "next/link";
 
 export const columns = [
   {name: "ID", uid: "id"},  
   {name: "NAME", uid: "name"},
   {name: "DESCRIPTION", uid: "description"},
+  {name: "CATEGORY", uid: "category"},
   {name: "STATUS", uid: "status"},
   {name: "ACTIONS", uid: "actions"},
 ];
@@ -31,34 +32,41 @@ const statusColorMap = {
   vacation: "warning",
 };
 
-export default function TableListCategoryTopic({ categories }: { categories: Promise<CategoryTopic[]> }) {
+export default function TableListTopic({ topics }: { topics: Promise<Topic[]> }) {
 
-  const renderCell = React.useCallback((category, columnKey) => {
-    const cellValue = category[columnKey];
+  const renderCell = React.useCallback((topic, columnKey) => {
+
+    const cellValue = topic[columnKey];
 
     switch (columnKey) {
       case "id":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize">{cellValue}</p>
-            <p className="text-bold text-sm capitalize text-default-400">{category.id.slice(8)}</p>
+            <p className="text-bold text-sm capitalize text-default-400">{topic.id.slice(8)}</p>
           </div>
         );
       case "name":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize">{category.name}</p>
+            <p className="text-bold text-sm capitalize">{topic.name}</p>
           </div>
         );
       case "description":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize text-default-400">{category.description}</p>
+            <p className="text-bold text-sm capitalize text-default-400">{topic.description}</p>
+          </div>
+        );
+      case "category":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-sm capitalize text-default-400">{topic.category.name}</p>
           </div>
         );
       case "status":
         return (
-          <Chip className="capitalize" color={statusColorMap[category.status]} size="sm" variant="flat">
+          <Chip className="capitalize" color={statusColorMap[topic.status]} size="sm" variant="flat">
             {cellValue}
           </Chip>
         );
@@ -71,12 +79,12 @@ export default function TableListCategoryTopic({ categories }: { categories: Pro
               </span>
             </Tooltip>
             <Tooltip content="Edit user">
-              <Link href={`/category-topic/edit/${category.slug}`} className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Link href={`/topic/edit/${topic.slug}`} className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditIcon />
               </Link>
             </Tooltip>
             <Tooltip color="danger" content="Delete user">
-              <Link href={`/category-topic/delete/${category.slug}`} className="text-lg text-danger cursor-pointer active:opacity-50">
+              <Link href={`/topic/delete/${topic.slug}`} className="text-lg text-danger cursor-pointer active:opacity-50">
                 <DeleteIcon />
               </Link>
             </Tooltip>
@@ -88,7 +96,7 @@ export default function TableListCategoryTopic({ categories }: { categories: Pro
   }, []);
 
   return (
-    <Table aria-label="List table category topics">
+    <Table aria-label="List table topic">
       <TableHeader columns={columns}>
         {(column) => (
           <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
@@ -96,7 +104,7 @@ export default function TableListCategoryTopic({ categories }: { categories: Pro
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={categories}>
+      <TableBody items={topics}>
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

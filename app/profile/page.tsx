@@ -62,14 +62,14 @@ export default async function Page() {
 
       <div className="space-x-4">
         {TOPIC_ACCESS.success && (
-          <Button variant="solid" color="primary">
-            TOPICS
+          <Button color="primary">
+            <Link href="/topic/list" className="text-white">TOPICS</Link>
           </Button>
         )}
 
         {CATEGORY_TOPIC_ACCESS.success && (
-          <Button>
-            <Link href="/category-topic/">CATEGORY TOPICS</Link>
+          <Button color="primary">
+            <Link href="/category-topic/list" className="text-white">CATEGORY TOPICS</Link>
           </Button>
         )}
 
