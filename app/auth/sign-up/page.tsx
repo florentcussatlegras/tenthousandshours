@@ -11,7 +11,7 @@ export default function SignUpPage() {
 
         <div className="space-y-8 w-full flex flex-col items-center">
 
-             <Card className="w-1/2 py-6">
+             <Card className="w-2/3 py-6">
                 <CardHeader className="flex flex-col">
                     <h1 className="text-2xl font-bold mb-4">Inscription</h1>
                     <div className="flex max-w-full gap-4 items-center">

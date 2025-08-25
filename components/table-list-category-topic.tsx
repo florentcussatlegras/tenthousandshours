@@ -65,11 +65,11 @@ export default function TableListCategoryTopic({ categories }: { categories: Pro
       case "actions":
         return (
           <div className="relative flex items-center gap-2 justify-center">
-            <Tooltip content="Details">
+            {/* <Tooltip content="Details">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EyeIcon />
               </span>
-            </Tooltip>
+            </Tooltip> */}
             <Tooltip content="Edit user">
               <Link href={`/category-topic/edit/${category.slug}`} className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditIcon />

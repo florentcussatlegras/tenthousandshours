@@ -178,7 +178,7 @@ export default function NavBarPage() {
           <AcmeLogo />
           <p className="hidden sm:block font-bold text-inherit">ACME</p>
         </NavbarBrand>
-        <NavbarContent className="hidden sm:flex gap-3">
+        {/* <NavbarContent className="hidden sm:flex gap-3">
           <NavbarItem>
             <Link color="foreground" href="#">
               Features
@@ -193,6 +193,23 @@ export default function NavBarPage() {
             <Link color="foreground" href="#">
               Integrations
             </Link>
+          </NavbarItem>
+        </NavbarContent> */}
+        <NavbarContent className="flex-row flex-nowrap items-center data-[justify=start]:justify-start data-[justify=start]:flex-grow data-[justify=start]:basis-0 data-[justify=center]:justify-center data-[justify=end]:justify-end data-[justify=end]:flex-grow data-[justify=end]:basis-0 bg-content2 dark:bg-content1 ml-4 hidden h-12 w-full max-w-fit gap-4 rounded-full px-4 sm:flex" data-justify="start">
+          <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
+            <Link className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit" href="#" tabindex="0" data-react-aria-pressable="true" role="link">Dashboard</Link>
+          </NavbarItem>
+          <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary" data-active="true">
+            <Link className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit" href="#" tabindex="0" data-react-aria-pressable="true" role="link" aria-current="page">Deployments</Link>
+          </NavbarItem>
+          <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
+            <Link className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit" href="#" tabindex="0" data-react-aria-pressable="true" role="link">Analytics</Link>
+          </NavbarItem>
+          <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
+            <Link className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit" href="#" tabindex="0" data-react-aria-pressable="true" role="link">Team</Link>
+          </NavbarItem>
+          <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
+            <Link className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit" href="#" tabindex="0" data-react-aria-pressable="true" role="link">Settings</Link>
           </NavbarItem>
         </NavbarContent>
       </NavbarContent>
@@ -214,20 +231,26 @@ export default function NavBarPage() {
             />
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
+              {session.user.image ?
               <Avatar
                 isBordered
                 as="button"
-                className="transition-transform"
-                color="secondary"
+                className="transition-transform cursor-pointer"
+                color="primary"
                 name="Jason Hughes"
                 size="sm"
-                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                src={session.user.image}
               />
+              :
+              <button className="w-10 h-10 rounded-full border flex items-center justify-center bg-blue-500 text-white cursor-pointer">
+                {session.user.name.slice(0,1)}
+              </button>
+              }
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
               <DropdownItem key="profile" className="h-14 gap-2">
                 <p className="font-semibold">Signed in as</p>
-                <p className="font-semibold">zoey@example.com</p>
+                <p className="font-semibold">{session.user.email}</p>
               </DropdownItem>
               <DropdownItem key="settings">My Settings</DropdownItem>
               <DropdownItem key="team_settings">Team Settings</DropdownItem>
