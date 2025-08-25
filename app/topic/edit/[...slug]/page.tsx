@@ -1,12 +1,14 @@
 
 
 import * as actions from "@/app/actions/actions";
-import CategoryTopicUpdateForm from "./category-topic-update-form";
+import TopicUpdateForm from "./topic-update-form";
 
-export default async function CategoryTopicUpdatePage({ params }) {
+export default async function TopicUpdatePage({ params }) {
 
     const { slug } = await params;
-    const categoryTopic = await actions.getCategoryTopic(String(slug));
+    const topic = await actions.getTopic(String(slug));
 
-    return <CategoryTopicUpdateForm categoryTopic={categoryTopic}  />;
+    const categoriesTopic = await actions.getListCategoryTopic();
+
+    return <TopicUpdateForm topic={topic} categoriesTopic={categoriesTopic}  />;
 }

@@ -8,6 +8,7 @@ export default async function App() {
     select: {
       id: true,
       name: true,
+      slug: true,
       description: true,
       status: true,
       category: true

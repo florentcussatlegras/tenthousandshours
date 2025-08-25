@@ -17,6 +17,7 @@ export const {
   forgetPassword,
   resetPassword,
   updateUser,
+  getSession
 } = createAuthClient({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   plugins: [

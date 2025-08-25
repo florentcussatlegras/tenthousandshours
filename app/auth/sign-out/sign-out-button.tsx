@@ -31,8 +31,8 @@ export const SignOutButton = () => {
     }
 
     return (
-        <Button onPress={handleClick} color="primary" disabled={isPending}>
-            DECONNEXION
+        <Button onPress={handleClick} color="light" disabled={isPending} className="p-0 h-4">
+            Déconnexion
         </Button>
     );
 }
