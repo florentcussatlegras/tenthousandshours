@@ -11,7 +11,7 @@ export default function BlogLayout({
   return (
     <section className="flex flex-col gap-6 py-8 md:py-10">
       <Breadcrumb steps={['Catégories de matières', 'Nouvelle catégorie']} />
-      <h1 className={title()}>Ajouter une catégorie de matière</h1>
+      <h1  className="text-3xl font-bold">Ajouter une catégorie de matière</h1>
       <div className="inline-block w-1/2 text-center justify-center">
         {children}
       </div>

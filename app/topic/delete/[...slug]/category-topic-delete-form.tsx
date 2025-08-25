@@ -15,7 +15,11 @@ export default function TopicDeleteForm({
 
   return (
     <Form action={deleteTopic} className="gap-4">
-      Etes-vous sûr de vouloir supprimer la matière {name} ?
+
+      <div className="flex items-center">
+        <span>Etes-vous sûr de vouloir supprimer la matière</span>
+        <span className="font-bold ml-2">{name}</span> ?
+      </div> 
 
       <Input type="hidden" value={id} name="id" />
 
