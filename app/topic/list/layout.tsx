@@ -1,3 +1,6 @@
+"use client";
+
+import { Breadcrumb } from "@/components/breadcrumb";
 import { title } from "@/components/primitives";
 
 export default function BlogLayout({
@@ -6,8 +9,9 @@ export default function BlogLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex flex-col items-center justify-center gap-6 py-8 md:py-10">
-      <h1 className={title()}>Liste des matières</h1>
+    <section className="flex flex-col items-start gap-6 py-8 md:py-10">
+      <Breadcrumb steps={['Catégories de matières']} />
+      <h1 className="text-3xl font-bold">Liste des matières</h1>
       <div className="inline-block w-full text-center justify-center">
         {children}
       </div>
