@@ -1,5 +1,5 @@
+import CategoryTopicCreateForm from "./category-topic-create-form";
+
 export default function CategoryTopicCreatePage() {
-    return <div>
-        Create a Category Topic
-    </div>
+    return <CategoryTopicCreateForm />;
 }
