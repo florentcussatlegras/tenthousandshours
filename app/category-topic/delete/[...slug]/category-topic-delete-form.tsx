@@ -15,11 +15,15 @@ export default function CategoryTopicDeleteForm({
 
   return (
     <Form action={deleteCategoryTopic} className="gap-4">
-      Etes-vous sûr de vouloir supprimer la catégorie {name} ?
+      
+      <div className="flex items-center">
+        <span>Etes-vous sûr de vouloir supprimer la catégorie</span>
+        <span className="font-bold ml-2">{name}</span> ?
+      </div> 
 
       <Input type="hidden" value={id} name="id" />
 
-      <div className="flex gap-6">
+      <div className="flex gap-4">
         <Button type="submit" color="danger">
           Valider
         </Button>

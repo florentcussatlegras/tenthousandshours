@@ -132,7 +132,7 @@ export default function SignUpForm() {
           //   return errors.name;
           // }}
           label="Nom"
-          labelPlacement="outside"
+          labelPlacement="inside"
           name="name"
           placeholder="Saisissez votre nom"
         />
@@ -148,7 +148,7 @@ export default function SignUpForm() {
           //   }
           // }}
           label="Email"
-          labelPlacement="outside"
+          labelPlacement="inside"
           name="email"
           placeholder="Saisissez votre email"
         />
@@ -158,7 +158,7 @@ export default function SignUpForm() {
           // errorMessage={getPasswordError(password)}
           // isInvalid={getPasswordError(password) !== null}
           label="Mot de passe"
-          labelPlacement="outside"
+          labelPlacement="inside"
           name="password"
           placeholder="Saisissez votre mot de passe"
           type="password"

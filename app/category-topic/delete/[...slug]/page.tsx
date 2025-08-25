@@ -1,12 +1,12 @@
 
 
-import { getCategoryTopic } from "@/app/actions/update-category-topic.action";
+import * as actions from "@/app/actions/actions";
 import CategoryTopicDeleteForm from "./category-topic-delete-form";
 
 export default async function CategoryTopicDeletePage({ params }) {
 
     const { slug } = await params;
-    const categoryTopic = await getCategoryTopic(String(slug));
+    const categoryTopic = await actions.getCategoryTopic(String(slug));
 
     return <CategoryTopicDeleteForm categoryTopic={categoryTopic}  />;
 }
