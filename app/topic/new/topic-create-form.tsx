@@ -33,8 +33,7 @@ export default function TopicCreateForm({
         type="text"
         size="lg"
         classNames={{
-          base: "items-start",
-          input: "w-full"
+          label: "self-start"
         }}
       />
       {formState.errors.name ? (
