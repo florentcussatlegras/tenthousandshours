@@ -1,6 +1,7 @@
 import {Card, Input} from "@heroui/react";
 import { useState } from "react";
 import Trie from "@/app/lib/trie";
+import Link from "next/link";
 
 const dictionary = {
   words: ['hello','helium','world','car','carpet','test','this','that','those','working','is']
@@ -81,8 +82,8 @@ export default function SearchBarHomepage() {
   };
 
   return (
-    <div className="w-full h-[100vh] flex flex-col gap-4 items-center mt-[30vh]">
-      <h1 className="text-3xl font-bold">Saisissez la matière que vous souhaitez étudier</h1>
+    <div className="w-full h-full flex flex-col gap-10 items-start justify-center pr-12">
+      <h1 className="text-5xl font-bold text-sky-500 dark:text-white/90">Quelle matière voulez-vous maitriser?</h1>
       {/* <Input
         name="search-bar"
         id="search-bar"
@@ -138,16 +139,20 @@ export default function SearchBarHomepage() {
           value={prefix}
           onChange={onChange}
           onKeyDown={handleKeyDown}
-          className="bg-transparent wrap-break-word rounded-full absolute w-full h-16 px-10 outline-0"
+          className="bg-transparent wrap-break-word rounded-full absolute w-full h-16 px-10 outline-0 text-black/90 dark:text-white/90 shadow-md cursor-text"
         />
         <input
           type="text"
           name="search-bar"
           id="search-bar2"
           value={suggestion}
-          className="text-gray-500 cursor-none h-16 px-10 w-full bg-content2 rounded-full"
+          className="text-gray-500 cursor-none h-16 px-10 w-full rounded-full bg-white"
+          style={{ "border": "1px solid #EAF5F8" }}
         />
       </div>
+      <button className="bg-sky-500 text-white px-8 py-4 text-xl font-bold rounded-xl cursor-pointer">
+        <Link href="#">C'est parti !</Link>
+      </button>
     </div>
   );
 }

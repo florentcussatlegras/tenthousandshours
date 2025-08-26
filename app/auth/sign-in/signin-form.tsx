@@ -41,11 +41,11 @@ export default function SignInForm() {
 
   return (
     <Form
-      className="justify-center items-start space-y-4 mx-auto w-2/3"
+      className="justify-center items-start mx-auto w-2/3"
       // validationErrors={errors}
       onSubmit={onSubmit}
     >
-      <div className="flex flex-col gap-4 w-full">
+      <div className="flex flex-col gap-8 w-full">
         {/* {globalErrors !== '' && (
           <div className="text-danger text-tiny mt-4 justify-start w-full">
             {globalErrors}
@@ -59,9 +59,9 @@ export default function SignInForm() {
           //   }
           // }}
           label="Email"
-          labelPlacement="inside"
+          labelPlacement="outside-top"
           name="email"
-          placeholder="Saisissez votre email"
+          size="lg"
         />
 
         <div className="space-y-2">
@@ -71,30 +71,30 @@ export default function SignInForm() {
             // errorMessage={getPasswordError(password)}
             // isInvalid={getPasswordError(password) !== null}
             label="Mot de passe"
-            labelPlacement="inside"
+            labelPlacement="outside-top"
             name="password"
-            placeholder="Saisissez votre mot de passe"
             type="password"
+            size="lg"
           />
 
-          <Link href="/auth/forget-password" className="text-sm text-muted-foreground hover:text-foreground text-blue-500">
+          <Link href="/auth/forget-password" className="text-sm text-muted-foreground hover:text-foreground text-sky-500">
             Vous avez oublié votre mot de passe?
           </Link>
 
         </div>
 
         <div className="flex gap-4">
-          <Button className="w-full" color="primary" type="submit" disabled={isPending}>
+          <Button className="bg-sky-500 text-white font-bold" type="submit" disabled={isPending}>
             VALIDER
           </Button>
-          <Button type="reset" variant="flat">
+          <Button className="font-bold" type="reset" variant="flat">
             ANNULER
           </Button>
         </div>
       </div>
-      <div className="text-sm text-foreground-400">
+      <div className="text-sm text-foreground-400 mt-6">
           Vous n'avez pas encore de compte ?{" "}
-          <Link href="/auth/sign-up" className="hover:text-foreground text-blue-500">
+          <Link href="/auth/sign-up" className="hover:text-foreground text-sky-500 font-bold">
               Inscrivez-vous
           </Link>
       </div>
