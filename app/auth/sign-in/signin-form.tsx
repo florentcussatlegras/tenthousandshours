@@ -41,11 +41,11 @@ export default function SignInForm() {
 
   return (
     <Form
-      className="justify-center items-start mx-auto w-2/3"
+      className="justify-center items-start mx-auto"
       // validationErrors={errors}
       onSubmit={onSubmit}
     >
-      <div className="flex flex-col gap-8 w-full">
+      <div className="flex flex-col gap-6 w-full">
         {/* {globalErrors !== '' && (
           <div className="text-danger text-tiny mt-4 justify-start w-full">
             {globalErrors}
