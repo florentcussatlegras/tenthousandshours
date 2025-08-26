@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface UpdateUserFormProps {
-  name: string;
-  image: string;
+  name?: string;
+  image?: string;
 }
 
 export const UpdateUserForm = ({ name, image }: UpdateUserFormProps) => {
@@ -59,20 +59,20 @@ export const UpdateUserForm = ({ name, image }: UpdateUserFormProps) => {
   }
 
   return (
-    <Form onSubmit={handleSubmit} className="max-w-sm w-full space-y-4 p-4">
-      <div className="flex flex-col gap-2 w-full">
-        <label htmlFor="name">Nom</label>
-        <Input id="name" name="name" defaultValue={name}></Input>
-      </div>
+    <Form onSubmit={handleSubmit} className="space-y-4 mt-4">
 
-      <div className="flex flex-col gap-2 w-full">
-        <label htmlFor="image">Image</label>
-        <Input type="url" id="image" name="image" defaultValue={image} />
-      </div>
+      <Input id="name" name="name" defaultValue={name} label="Nom" labelPlacement="outside-top" size="lg" />
 
-      <Button type="submit" disabled={isPending} color="primary">
+      <Input type="url" id="image" name="image" defaultValue={image} label="Image" labelPlacement="outside-top" size="lg" />
+ 
+      <Button
+        type="submit"
+        disabled={isPending}
+        className="bg-sky-500 text-white uppercase font-bold"
+      >
         Valider
       </Button>
+
     </Form>
   );
 };

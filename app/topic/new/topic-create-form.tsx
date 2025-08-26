@@ -27,10 +27,15 @@ export default function TopicCreateForm({
       <Input
         color={formState.errors.name !== undefined ? "danger" : "default"}
         label="Nom"
-        labelPlacement="inside"
+        labelPlacement="outside-top"
         name="name"
         placeholder="Saisissez un titre"
         type="text"
+        size="lg"
+        classNames={{
+          base: "items-start",
+          input: "w-full"
+        }}
       />
       {formState.errors.name ? (
         <div className="text-danger text-sm">
@@ -43,10 +48,15 @@ export default function TopicCreateForm({
           formState.errors.description !== undefined ? "danger" : "default"
         }
         label="Description"
-        labelPlacement="inside"
+        labelPlacement="outside-top"
         name="description"
         placeholder="Saisissez une description"
         type="text"
+        size="lg"
+        classNames={{
+          base: "items-start",
+          input: "py-6"
+        }}
       />
       {formState.errors.description ? (
         <div className="text-danger text-sm">
@@ -55,11 +65,12 @@ export default function TopicCreateForm({
       ) : null}
 
       <Select
-        className="max-w-xs"
         items={categoriesTopic}
         label="Catégorie de la matière"
+        labelPlacement="outside"
         placeholder="Selectionnez une catégorie"
         name="categoryTopicId"
+        size="lg"
       >
         {(categoryTopic) => <SelectItem>{categoryTopic.name}</SelectItem>}
       </Select>
@@ -70,7 +81,7 @@ export default function TopicCreateForm({
         </div>
       ) : null}
 
-      <Button type="submit" color="primary">
+      <Button type="submit" className="font-bold uppercase bg-sky-500 text-white dark:text-black dark:bg-default-600">
         Valider
       </Button>
     </Form>

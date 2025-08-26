@@ -49,32 +49,8 @@ export default async function Page() {
 
   return (
     <div className="py-8 container mx-auto max-w-screen-lg space-y-8">
-      <Breadcrumb steps={[{"label": "Profile"}]} />
-      <div className="space-y-8">
-         <div className="flex gap-4">
-
-        {session.user.image ? (
-          <img
-            src={session.user.image}
-            alt="User Image"
-            className="size-16 border border-primary rounded-full object-cover"
-          />
-        ) : (
-          <div className="size-16 border border-primary rounded-full bg-primary text-primary-foreground flex items-center justify-center">
-            <span className="uppercase text-lg font-bold">
-              {session.user.name.slice(0, 2)}
-            </span>
-          </div>
-        )}
-
-        <div className="flex flex-col justify-center">
-          <span className="text-md">{session.user.name}</span>
-          <span className="text-sm text-default-400">{session.user.email}</span>
-        </div>
-
-      </div>
-      </div>
-
+      <Breadcrumb steps={[]} />
+      
       <div className="flex items-center gap-2">
         {session.user.role === "ADMIN" && (
           <Button>
@@ -112,25 +88,6 @@ export default async function Page() {
       {/* <pre className="text-sm overflow-clip">
         {JSON.stringify(session, null, 2)}
       </pre> */}
-
-      <div className="flex flex-col md:flex-row gap-6">
-
-        <Card className="p-6 w-full md:w-1/2">
-          <h2 className="text-2xl font-bold">Modification de l'utilisateur</h2>
-
-          <UpdateUserForm
-            name={session.user.name}
-            image={session.user.image ?? ""}
-          />
-        </Card>
-
-        <Card className="p-6 w-full md:w-1/2">
-          <h2 className="text-2xl font-bold">Modification du mot de passe</h2>
-
-          <ChangePasswordForm />
-        </Card>
-
-      </div>
 
     </div>
   );

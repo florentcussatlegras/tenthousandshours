@@ -94,7 +94,7 @@ export default function SignInForm() {
       </div>
       <div className="text-sm text-foreground-400 mt-6">
           Vous n'avez pas encore de compte ?{" "}
-          <Link href="/auth/sign-up" className="hover:text-foreground text-sky-500 font-bold">
+          <Link href="/auth/sign-up" className="hover:text-foreground text-sky-500">
               Inscrivez-vous
           </Link>
       </div>

@@ -22,16 +22,21 @@ export default function CategoryTopicUpdateForm({
 
   return (
     <Form action={formAction} className="gap-4">
+
       <Input type="hidden" name="id" value={id} />
 
       <Input
         color={formState.errors.name !== undefined ? "danger" : "default"}
         label="Nom"
-        labelPlacement="inside"
+        labelPlacement="outside-top"
         name="name"
         placeholder="Saisissez un titre"
         type="text"
         value={currentName}
+        size="lg"
+        classNames={{
+          base: "items-start"
+        }}
         onChange={(e) => {
           setCurrentName(e.currentTarget.value)
         }}
@@ -47,11 +52,16 @@ export default function CategoryTopicUpdateForm({
           formState.errors.description !== undefined ? "danger" : "default"
         }
         label="Description"
-        labelPlacement="inside"
+        labelPlacement="outside-top"
         name="description"
         placeholder="Saisissez une description"
         value={currentDescription}
         type="text"
+        size="lg"
+        classNames={{
+          base: "items-start",
+          input: "py-4"
+        }}
         onChange={(e) => {
           setCurrentDescription(e.currentTarget.value)
         }}
@@ -68,7 +78,7 @@ export default function CategoryTopicUpdateForm({
         </div>
       ) : null}
 
-      <Button type="submit" color="primary">
+      <Button type="submit" className="uppercase text-white bg-sky-500 font-bold dark:text-black dark:bg-default-600">
         Valider
       </Button>
     </Form>

@@ -1,27 +1,21 @@
-import { ReturnButton } from "@/components/return-button";
+"use client";
+
 import { ForgetPasswordForm } from "./forget-password-form";
+import { Card, CardBody, CardHeader, Divider } from "@heroui/react";
 
 export default async function ForgetPasswordPage() {
     
   return (
-
-        <div className="px-8 container mx-auto max-w-screen-lg space-y-8">
-
-            <div className="space-y-8 w-full flex flex-col items-center">
-
-                <ReturnButton href="/auth/sign-in" label="Sign In" />
-
-                <h1 className="text-2xl font-bold">Mot de passe oublié</h1>
-
-                <p className="text-mute-foreground">
+        <Card className="w-2/3 flex flex-col items-center py-6" shadow="none">
+          <CardHeader className="flex flex-col gap-2 mb-4 items-start">
+              <h1 className="text-4xl font-bold mb-4 text-default-600">Mot de passe oublié</h1>
+              <p className="text-mute-foreground">
                     Merci de saisir votre adresse email afin de recevoir un lien pour resaisir votre mot de passe.
                 </p>
-
-                <ForgetPasswordForm />
-
-            </div>
-
-        </div>
-
+          </CardHeader>
+          <CardBody>
+              <ForgetPasswordForm />
+          </CardBody>
+      </Card>
   );
 }

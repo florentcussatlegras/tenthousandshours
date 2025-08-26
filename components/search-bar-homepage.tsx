@@ -1,11 +1,23 @@
-import {Card, Input} from "@heroui/react";
+import { Card, Input } from "@heroui/react";
 import { useState } from "react";
 import Trie from "@/app/lib/trie";
 import Link from "next/link";
 
 const dictionary = {
-  words: ['hello','helium','world','car','carpet','test','this','that','those','working','is']
-}
+  words: [
+    "hello",
+    "helium",
+    "world",
+    "car",
+    "carpet",
+    "test",
+    "this",
+    "that",
+    "those",
+    "working",
+    "is",
+  ],
+};
 
 export const SearchIcon = (props) => {
   return (
@@ -37,18 +49,38 @@ export const SearchIcon = (props) => {
   );
 };
 
+export const MoveRightIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      className="lucide lucide-move-right-icon lucide-move-right"
+    >
+      <path d="M18 8L22 12L18 16" />
+      <path d="M2 12H22" />
+    </svg>
+  );
+};
+
 export default function SearchBarHomepage() {
   const [prefix, setPrefix] = useState("");
   const [suggestion, setSuggestion] = useState("");
 
   var myTrie = new Trie();
 
-  (async()=>{
+  (async () => {
     // const dictionary = await getWords();
     const words = dictionary.words;
     for (let i = 0; i < words.length; i++) {
-        const word = words[i];
-        myTrie.insert(word)
+      const word = words[i];
+      myTrie.insert(word);
     }
   })();
 
@@ -82,8 +114,10 @@ export default function SearchBarHomepage() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col gap-10 items-start justify-center pr-12">
-      <h1 className="text-5xl font-bold text-sky-500 dark:text-white/90">Quelle matière voulez-vous maitriser?</h1>
+    <div className="w-full h-full flex flex-col gap-10 items-start justify-center pr-24">
+      <h1 className="text-5xl font-bold text-default-600 dark:text-white/90">
+        Quel domaine souhaitez-vous <span className="text-sky-500">maîtriser</span> ?
+      </h1>
       {/* <Input
         name="search-bar"
         id="search-bar"
@@ -147,12 +181,15 @@ export default function SearchBarHomepage() {
           id="search-bar2"
           value={suggestion}
           className="text-gray-500 cursor-none h-16 px-10 w-full rounded-full bg-white"
-          style={{ "border": "1px solid #EAF5F8" }}
+          style={{ border: "1px solid #EAF5F8" }}
         />
       </div>
-      <button className="bg-sky-500 text-white px-8 py-4 text-xl font-bold rounded-xl cursor-pointer">
-        <Link href="#">C'est parti !</Link>
-      </button>
+
+      <Link href="#" className="bg-sky-500 text-white px-8 py-4 text-xl font-bold rounded-xl cursor-pointer flex items-center gap-4">
+        <span>C'est parti !</span>
+        <MoveRightIcon />
+      </Link>
+ 
     </div>
   );
 }

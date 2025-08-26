@@ -41,11 +41,16 @@ export default function TopicUpdateForm({
       <Input
         color={formState.errors.name !== undefined ? "danger" : "default"}
         label="Nom"
-        labelPlacement="inside"
+        labelPlacement="outside-top"
         name="name"
         placeholder="Saisissez un titre"
         type="text"
         value={currentName}
+        classNames={{
+          base: "items-start",
+          input: "w-80"
+        }}
+        size= "lg"
         onChange={(e) => {
           setCurrentName(e.currentTarget.value);
         }}
@@ -61,7 +66,12 @@ export default function TopicUpdateForm({
           formState.errors.description !== undefined ? "danger" : "default"
         }
         label="Description"
-        labelPlacement="inside"
+        labelPlacement="outside-top"
+        classNames={{
+          base: "items-start",
+          input: "py-4"
+        }}
+        size= "lg"
         name="description"
         placeholder="Saisissez une description"
         value={currentDescription}
@@ -82,6 +92,8 @@ export default function TopicUpdateForm({
         label="Catégorie de la matière"
         placeholder="Selectionnez une catégorie"
         name="categoryTopicId"
+        labelPlacement="outside"
+        size="lg"
         selectedKeys={[currentCategoryTopicId]}
       >
         {(categoryTopic) => (
@@ -102,7 +114,7 @@ export default function TopicUpdateForm({
         </div>
       ) : null}
 
-      <Button type="submit" color="primary">
+      <Button type="submit" className="font-bold text-white bg-sky-500 dark:text-black dark:bg-default-600 uppercase">
         Valider
       </Button>
     </Form>

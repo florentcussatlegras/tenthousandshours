@@ -38,22 +38,23 @@ export const ChangePasswordForm = () => {
   }
 
   return (
-    <Form onSubmit={handleSubmit} className="max-w-sm w-full space-y-4 p-4">
-      
-      <div className="flex flex-col gap-2 w-full">
-        <label htmlFor="currentPassword">Mot de passe actuel</label>
-        <Input type="password" id="currentPassword" name="currentPassword" />
-      </div>
 
-      <div className="flex flex-col gap-2 w-full">
-        <label htmlFor="newPassword">Nouveau mot de passe</label>
-        <Input type="password" id="newPassword" name="newPassword" />
-      </div>
+    <Form onSubmit={handleSubmit} className="space-y-4 mt-4">
+    
+      <Input type="password" id="currentPassword" name="currentPassword" label="Mot de passe actuel" labelPlacement="outside-top" size="lg" />
 
-      <Button type="submit" disabled={isPending} color="primary">
+      <Input type="password" id="newPassword" name="newPassword" label="Nouveau mot de passe" labelPlacement="outside-top" size="lg" />
+  
+      <Button
+        type="submit"
+        disabled={isPending}
+        className="bg-sky-500 text-white uppercase font-bold"
+      >
         Valider
       </Button>
 
     </Form>
+
   );
+  
 };
