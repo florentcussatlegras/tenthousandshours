@@ -47,8 +47,7 @@ export default function TopicUpdateForm({
         type="text"
         value={currentName}
         classNames={{
-          base: "items-start",
-          input: "w-80"
+          label: "self-start"
         }}
         size= "lg"
         onChange={(e) => {
@@ -87,7 +86,6 @@ export default function TopicUpdateForm({
       ) : null}
 
       <Select
-        className="max-w-xs"
         items={categoriesTopic}
         label="Catégorie de la matière"
         placeholder="Selectionnez une catégorie"

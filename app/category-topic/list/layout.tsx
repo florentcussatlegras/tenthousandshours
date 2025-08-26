@@ -1,8 +1,6 @@
 "use client";
 
 import { Breadcrumb } from "@/components/breadcrumb";
-import { title } from "@/components/primitives";
-import { BreadcrumbItem, Breadcrumbs } from "@heroui/react";
 
 export default function BlogLayout({
   children,

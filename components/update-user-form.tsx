@@ -60,11 +60,31 @@ export const UpdateUserForm = ({ name, image }: UpdateUserFormProps) => {
 
   return (
     <Form onSubmit={handleSubmit} className="space-y-4 mt-4">
+      <Input
+        id="name"
+        name="name"
+        defaultValue={name}
+        label="Nom"
+        labelPlacement="outside-top"
+        classNames={{
+          label: "self-start"
+        }}
+        size="lg"
+      />
 
-      <Input id="name" name="name" defaultValue={name} label="Nom" labelPlacement="outside-top" size="lg" />
+      <Input
+        type="url"
+        id="image"
+        name="image"
+        defaultValue={image}
+        label="Image"
+        labelPlacement="outside-top"
+        classNames={{
+          label: "self-start"
+        }}
+        size="lg"
+      />
 
-      <Input type="url" id="image" name="image" defaultValue={image} label="Image" labelPlacement="outside-top" size="lg" />
- 
       <Button
         type="submit"
         disabled={isPending}
@@ -72,7 +92,6 @@ export const UpdateUserForm = ({ name, image }: UpdateUserFormProps) => {
       >
         Valider
       </Button>
-
     </Form>
   );
 };

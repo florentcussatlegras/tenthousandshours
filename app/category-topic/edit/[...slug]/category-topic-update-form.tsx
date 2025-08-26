@@ -35,7 +35,7 @@ export default function CategoryTopicUpdateForm({
         value={currentName}
         size="lg"
         classNames={{
-          base: "items-start"
+          label: "self-start"
         }}
         onChange={(e) => {
           setCurrentName(e.currentTarget.value)

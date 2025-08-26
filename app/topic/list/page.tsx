@@ -2,6 +2,7 @@ import TableListTopic from "@/components/table-list-topic";
 import prisma from "@/app/lib/prisma";
 import { Button } from "@heroui/button";
 import { Link } from "@heroui/link";
+import { AddIcon } from "@/components/icons";
 
 export default async function App() {
   const topics = await prisma.topic.findMany({
@@ -19,7 +20,10 @@ export default async function App() {
     <div>
         <div className="justify-self-end mb-6">
             <Button className="bg-black dark:bg-default-600">
-                <Link href="/topic/new" className="text-white dark:text-black">Ajouter une matière</Link>
+                <Link href="/topic/new" className="text-white dark:text-black gap-2">
+                  <AddIcon />
+                  <span>Ajouter une matière</span>
+                </Link>
             </Button>
         </div>
         <TableListTopic topics={topics} />

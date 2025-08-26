@@ -16,35 +16,53 @@ export const ChangePasswordForm = () => {
     setIsPending(false);
 
     const formData = new FormData(evt.target as HTMLFormElement);
-    
+
     const { error } = await changePasswordAction(formData);
     console.log(error);
     if (error) {
-        addToast({
-            title: "Erreur changement mot de passe",
-            description: error,
-            color: "danger",
-        });
+      addToast({
+        title: "Erreur changement mot de passe",
+        description: error,
+        color: "danger",
+      });
     } else {
-        addToast({
-            title: "Succès changement mot de passe",
-            description: "Votre mot de passe a bien été modifié",
-            color: "success",
-        });
-        (evt.target as HTMLFormElement).reset();
+      addToast({
+        title: "Succès changement mot de passe",
+        description: "Votre mot de passe a bien été modifié",
+        color: "success",
+      });
+      (evt.target as HTMLFormElement).reset();
     }
 
     setIsPending(false);
   }
 
   return (
-
     <Form onSubmit={handleSubmit} className="space-y-4 mt-4">
-    
-      <Input type="password" id="currentPassword" name="currentPassword" label="Mot de passe actuel" labelPlacement="outside-top" size="lg" />
+      <Input
+        type="password"
+        id="currentPassword"
+        name="currentPassword"
+        label="Mot de passe actuel"
+        labelPlacement="outside-top"
+        classNames={{
+          label: "self-start"
+        }}
+        size="lg"
+      />
 
-      <Input type="password" id="newPassword" name="newPassword" label="Nouveau mot de passe" labelPlacement="outside-top" size="lg" />
-  
+      <Input
+        type="password"
+        id="newPassword"
+        name="newPassword"
+        label="Nouveau mot de passe"
+        labelPlacement="outside-top"
+        classNames={{
+          label: "self-start"
+        }}
+        size="lg"
+      />
+
       <Button
         type="submit"
         disabled={isPending}
@@ -52,9 +70,6 @@ export const ChangePasswordForm = () => {
       >
         Valider
       </Button>
-
     </Form>
-
   );
-  
 };

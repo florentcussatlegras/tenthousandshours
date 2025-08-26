@@ -24,7 +24,7 @@ export default function CategoryTopicCreateForm() {
         placeholder="Saisissez un titre"
         type="text"
         classNames={{
-          base: "items-start"
+          label: "self-start"
         }}
         size="lg"
       />
