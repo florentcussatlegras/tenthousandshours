@@ -2,16 +2,22 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import {Form, Input, Select, SelectItem, Checkbox, Button} from "@heroui/react";
+import {
+  Form,
+  Input,
+  Select,
+  SelectItem,
+  Checkbox,
+  Button,
+} from "@heroui/react";
 import { signUp } from "../../lib/auth-client";
 import { redirect } from "next/navigation";
 import signUpEmailAction from "../../actions/sign-up-email.action";
 // import { toast } from "sonner";
-import { addToast, ToastProvider } from "@heroui/react"; 
+import { addToast, ToastProvider } from "@heroui/react";
 import Link from "next/link";
 
 export default function SignUpForm() {
-
   const [isPending, setIsPending] = React.useState(false);
   const router = useRouter();
 
@@ -37,7 +43,6 @@ export default function SignUpForm() {
   // };
 
   async function onSubmit(evt: React.FormEvent<HTMLFormElement>) {
-    
     evt.preventDefault();
 
     setIsPending(true);
@@ -106,17 +111,16 @@ export default function SignUpForm() {
     //       setGlobalErrors(ctx.error?.message);
     //   },
     // });
-
   }
 
   return (
     <Form
-      className="justify-center items-start space-y-4 mx-auto w-2/3"
+      className="justify-center items-start mx-auto"
       // validationErrors={errors}
       // onReset={() => setSubmitted(null)}
       onSubmit={onSubmit}
     >
-      <div className="flex flex-col gap-4 w-full">
+      <div className="flex flex-col gap-6 w-full">
         {/* {globalErrors !== '' && (
           <div className="text-danger text-tiny mt-4 justify-start w-full">
             {globalErrors}
@@ -132,9 +136,9 @@ export default function SignUpForm() {
           //   return errors.name;
           // }}
           label="Nom"
-          labelPlacement="inside"
+          labelPlacement="outside-top"
           name="name"
-          placeholder="Saisissez votre nom"
+          size="lg"
         />
 
         <Input
@@ -148,9 +152,9 @@ export default function SignUpForm() {
           //   }
           // }}
           label="Email"
-          labelPlacement="inside"
+          labelPlacement="outside-top"
           name="email"
-          placeholder="Saisissez votre email"
+          size="lg"
         />
 
         <Input
@@ -158,27 +162,13 @@ export default function SignUpForm() {
           // errorMessage={getPasswordError(password)}
           // isInvalid={getPasswordError(password) !== null}
           label="Mot de passe"
-          labelPlacement="inside"
+          labelPlacement="outside-top"
           name="password"
-          placeholder="Saisissez votre mot de passe"
           type="password"
+          size="lg"
           // value={password}
           // onValueChange={setPassword}
         />
-
-        {/* <Select
-          isRequired
-          label="Country"
-          labelPlacement="outside"
-          name="country"
-          placeholder="Select country"
-        >
-          <SelectItem key="ar">Argentina</SelectItem>
-          <SelectItem key="us">United States</SelectItem>
-          <SelectItem key="ca">Canada</SelectItem>
-          <SelectItem key="uk">United Kingdom</SelectItem>
-          <SelectItem key="au">Australia</SelectItem>
-        </Select> */}
 
         <Checkbox
           isRequired
@@ -197,21 +187,27 @@ export default function SignUpForm() {
         {/* {errors.terms && <span className="text-danger text-tiny">{errors.terms}</span>} */}
 
         <div className="flex gap-4">
-          <Button className="w-full" color="primary" type="submit">
-            Valider
+          <Button
+            className="bg-sky-500 text-white font-bold"
+            type="submit"
+            disabled={isPending}
+          >
+            VALIDER
           </Button>
-          <Button type="reset" variant="bordered">
-            Annuler
+          <Button className="font-bold" type="reset" variant="flat">
+            ANNULER
           </Button>
         </div>
       </div>
-      <div className="text-sm text-foreground-400">
-          Vous avez déja un compte ?{" "}
-          <Link href="/auth/sign-in" className="hover:text-foreground text-blue-500">
-              Connectez-vous
-          </Link>
+      <div className="text-sm text-foreground-400 mt-6">
+        Vous avez déja un compte ?{" "}
+        <Link
+          href="/auth/sign-in"
+          className="hover:text-foreground text-sky-500"
+        >
+          Connectez-vous
+        </Link>
       </div>
     </Form>
   );
 }
-

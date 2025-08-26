@@ -1,4 +1,3 @@
-
 // import {
 //   Navbar as HeroUINavbar,
 //   NavbarContent,
@@ -102,7 +101,6 @@
 //   );
 // }
 
-
 "use client";
 
 import { SignOutButton } from "@/app/auth/sign-out/sign-out-button";
@@ -120,9 +118,10 @@ import {
   Dropdown,
   DropdownMenu,
   Avatar,
-  Button
+  Button,
 } from "@heroui/react";
-
+import { ThemeSwitch } from "./theme-switch";
+import { GithubIcon } from "./icons";
 
 export const AcmeLogo = () => {
   return (
@@ -137,7 +136,13 @@ export const AcmeLogo = () => {
   );
 };
 
-export const SearchIcon = ({size = 24, strokeWidth = 1.5, width, height, ...props}) => {
+export const SearchIcon = ({
+  size = 24,
+  strokeWidth = 1.5,
+  width,
+  height,
+  ...props
+}) => {
   return (
     <svg
       aria-hidden="true"
@@ -168,39 +173,103 @@ export const SearchIcon = ({size = 24, strokeWidth = 1.5, width, height, ...prop
 };
 
 export default function NavBarPage() {
-
   const { data: session } = useSession();
 
   return (
-    <Navbar className="bg-white" maxWidth="2xl">
-      <NavbarContent>
-        <NavbarBrand className="mr-4">
+    <Navbar className="bg-white dark:bg-black/90 p-0 m-0" maxWidth="2xl" classNames={{wrapper: "px-0"}}>
+      <NavbarContent className="w-1/3">
+        <NavbarBrand>
           <Link href="/" className="text-default-600">
             <AcmeLogo />
-            <p className="hidden sm:block font-bold text-default-600 text-xl">Ten Thousands Hours</p>
+            <p className="hidden sm:block font-bold text-default-600 text-xl">
+              Ten Thousands Hours
+            </p>
           </Link>
         </NavbarBrand>
-        <NavbarContent className="flex-row flex-nowrap items-center data-[justify=start]:justify-start data-[justify=start]:flex-grow data-[justify=start]:basis-0 data-[justify=center]:justify-center data-[justify=end]:justify-end data-[justify=end]:flex-grow data-[justify=end]:basis-0 bg-content2 dark:bg-content1 ml-4 hidden h-12 w-full max-w-fit gap-4 rounded-full px-4 sm:flex" data-justify="start">
-          <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
-            <Link className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit" href="#" data-react-aria-pressable="true" role="link">Dashboard</Link>
-          </NavbarItem>
-          <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary" data-active="true">
-            <Link className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit" href="#" data-react-aria-pressable="true" role="link" aria-current="page">Deployments</Link>
-          </NavbarItem>
-          <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
-            <Link className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit" href="#" data-react-aria-pressable="true" role="link">Analytics</Link>
-          </NavbarItem>
-          <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
-            <Link className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit" href="#" data-react-aria-pressable="true" role="link">Team</Link>
-          </NavbarItem>
-          <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
-            <Link className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit" href="#" data-react-aria-pressable="true" role="link">Settings</Link>
-          </NavbarItem>
-        </NavbarContent>
       </NavbarContent>
+
+      <NavbarContent
+        className="flex-row flex-nowrap items-center data-[justify=start]:justify-start data-[justify=start]:flex-grow data-[justify=start]:basis-0 data-[justify=center]:justify-center data-[justify=end]:justify-end data-[justify=end]:flex-grow data-[justify=end]:basis-0 bg-content2 dark:bg-content1 ml-4 hidden h-12 w-full max-w-fit gap-4 rounded-full px-4 sm:flex"
+        data-justify="start"
+      >
+        <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
+          <Link
+            className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
+            href="#"
+            data-react-aria-pressable="true"
+            role="link"
+          >
+            Dashboard
+          </Link>
+        </NavbarItem>
+        <NavbarItem
+          className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary"
+          data-active="true"
+        >
+          <Link
+            className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
+            href="#"
+            data-react-aria-pressable="true"
+            role="link"
+            aria-current="page"
+          >
+            Deployments
+          </Link>
+        </NavbarItem>
+        <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
+          <Link
+            className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
+            href="#"
+            data-react-aria-pressable="true"
+            role="link"
+          >
+            Analytics
+          </Link>
+        </NavbarItem>
+        <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
+          <Link
+            className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
+            href="#"
+            data-react-aria-pressable="true"
+            role="link"
+          >
+            Team
+          </Link>
+        </NavbarItem>
+        <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
+          <Link
+            className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
+            href="#"
+            data-react-aria-pressable="true"
+            role="link"
+          >
+            Settings
+          </Link>
+        </NavbarItem>
+      </NavbarContent>
+
       {session !== null ? (
         <NavbarContent justify="end">
-            {/* <Input
+          <GithubIcon />
+          <ThemeSwitch />
+          <Link href="/settings">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="lucide lucide-settings-icon lucide-settings text-default-500"
+            >
+              <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </Link>
+          {/* <Input
               classNames={{
                 base: "max-w-full sm:max-w-[10rem] h-10",
                 mainWrapper: "h-full",
@@ -215,33 +284,36 @@ export default function NavBarPage() {
             /> */}
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
-              {session.user.image ?
-              <Avatar
-                isBordered
-                as="button"
-                className="transition-transform cursor-pointer"
-                color="primary"
-                name="Jason Hughes"
-                size="sm"
-                src={session.user.image}
-              />
-              :
-              <button className="w-10 h-10 rounded-full border flex items-center justify-center bg-sky-500 text-white cursor-pointer">
-                {session.user.name.slice(0,1)}
-              </button>
-              }
+              {session.user.image ? (
+                <Avatar
+                  isBordered
+                  as="button"
+                  className="transition-transform cursor-pointer"
+                  color="primary"
+                  name="Jason Hughes"
+                  size="sm"
+                  src={session.user.image}
+                />
+              ) : (
+                <button className="w-10 h-10 rounded-full border flex items-center justify-center bg-sky-500 text-white cursor-pointer">
+                  {session.user.name.slice(0, 1)}
+                </button>
+              )}
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
               <DropdownItem key="profile" className="h-14 gap-2">
-                <p className="font-semibold">Signed in as</p>
-                <p className="font-semibold">{session.user.email}</p>
+                <Link href="/profile">
+                  <p className="font-semibold">{session.user.email}</p>
+                </Link>
               </DropdownItem>
               <DropdownItem key="settings">My Settings</DropdownItem>
               <DropdownItem key="team_settings">Team Settings</DropdownItem>
               <DropdownItem key="analytics">Analytics</DropdownItem>
               <DropdownItem key="system">System</DropdownItem>
               <DropdownItem key="configurations">Configurations</DropdownItem>
-              <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
+              <DropdownItem key="help_and_feedback">
+                Help & Feedback
+              </DropdownItem>
               <DropdownItem key="logout" color="danger">
                 <SignOutButton />
               </DropdownItem>
@@ -250,13 +322,26 @@ export default function NavBarPage() {
         </NavbarContent>
       ) : (
         <NavbarContent justify="end">
+          <GithubIcon />
+          <ThemeSwitch />
           <NavbarItem className="hidden lg:flex">
-            <Button as={Link} className="border-2 border-sky-500 text-sky-500 font-bold" variant="bordered" href="/auth/sign-in" radius="sm">
+            <Button
+              as={Link}
+              className="border-2 border-sky-500 text-sky-500 font-bold"
+              variant="bordered"
+              href="/auth/sign-in"
+              radius="sm"
+            >
               CONNEXION
             </Button>
           </NavbarItem>
           <NavbarItem>
-            <Button as={Link} className="bg-sky-500 text-white font-bold" href="/auth/sign-up" radius="sm">
+            <Button
+              as={Link}
+              className="bg-sky-500 text-white font-bold"
+              href="/auth/sign-up"
+              radius="sm"
+            >
               INSCRIPTION
             </Button>
           </NavbarItem>
@@ -265,4 +350,3 @@ export default function NavBarPage() {
     </Navbar>
   );
 }
-

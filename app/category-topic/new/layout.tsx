@@ -9,7 +9,7 @@ export default function BlogLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex flex-col gap-6 py-8 md:py-10">
+    <section className="flex flex-col gap-6 py-8 md:py-10 mx-auto max-w-[1536px]">
       <Breadcrumb steps={[{"label": "Les catégories de matières", "url": "/category-topic/list"}, {"label": "Ajout"}]} />
       <h1 className="text-3xl font-bold">Ajouter une catégorie de matière</h1>
       <div className="inline-block w-1/2 text-center justify-center">

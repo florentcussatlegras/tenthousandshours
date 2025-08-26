@@ -19,10 +19,14 @@ export default function CategoryTopicCreateForm() {
       <Input
         color={formState.errors.name !== undefined ? "danger" : "default"}
         label="Nom"
-        labelPlacement="inside"
+        labelPlacement="outside-top"
         name="name"
         placeholder="Saisissez un titre"
         type="text"
+        classNames={{
+          base: "items-start"
+        }}
+        size="lg"
       />
       {formState.errors.name ? (
         <div className="text-danger text-sm">
@@ -33,10 +37,15 @@ export default function CategoryTopicCreateForm() {
       <Textarea
         color={formState.errors.description !== undefined ? "danger" : "default"}
         label="Description"
-        labelPlacement="inside"
+        labelPlacement="outside-top"
         name="description"
         placeholder="Saisissez une description"
         type="text"
+        size="lg"
+        classNames={{
+          base: "items-start",
+          input: "py-4"
+        }}
       />
       {formState.errors.description ? (
         <div className="text-danger text-sm">
@@ -50,7 +59,7 @@ export default function CategoryTopicCreateForm() {
         </div>
       ) : null}
 
-      <Button type="submit" color="primary">
+      <Button type="submit" className="uppercase text-white bg-sky-500 font-bold dark:text-black dark:bg-default-600">
         Valider
       </Button>
       

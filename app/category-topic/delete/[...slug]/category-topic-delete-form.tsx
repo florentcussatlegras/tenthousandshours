@@ -24,10 +24,10 @@ export default function CategoryTopicDeleteForm({
       <Input type="hidden" value={id} name="id" />
 
       <div className="flex gap-4">
-        <Button type="submit" color="danger">
+        <Button type="submit" color="danger" className="uppercase font-bold">
           Valider
         </Button>
-        <Button type="submit" color="default" variant="flat">
+        <Button type="submit" color="default" variant="flat" className="uppercase font-bold">
           <Link href="/category-topic/list">Annuler</Link>
         </Button>
       </div>
