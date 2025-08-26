@@ -59,13 +59,13 @@ export const UpdateUserForm = ({ name, image }: UpdateUserFormProps) => {
   }
 
   return (
-    <Form onSubmit={handleSubmit} className="max-w-sm w-full space-y-4">
-      <div className="flex flex-col gap-2">
+    <Form onSubmit={handleSubmit} className="max-w-sm w-full space-y-4 p-4">
+      <div className="flex flex-col gap-2 w-full">
         <label htmlFor="name">Nom</label>
         <Input id="name" name="name" defaultValue={name}></Input>
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 w-full">
         <label htmlFor="image">Image</label>
         <Input type="url" id="image" name="image" defaultValue={image} />
       </div>

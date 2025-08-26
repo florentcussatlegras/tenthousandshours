@@ -78,12 +78,12 @@ export default function TableListTopic({ topics }: { topics: Promise<Topic[]> })
                 <EyeIcon />
               </span>
             </Tooltip> */}
-            <Tooltip content="Modifier une matière">
+            <Tooltip content="Modifier la matière">
               <Link href={`/topic/edit/${topic.slug}`} className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditIcon />
               </Link>
             </Tooltip>
-            <Tooltip color="danger" content="Supprimer une matière">
+            <Tooltip color="danger" content="Supprimer la matière">
               <Link href={`/topic/delete/${topic.slug}`} className="text-lg text-danger cursor-pointer active:opacity-50">
                 <DeleteIcon />
               </Link>
