@@ -172,29 +172,14 @@ export default function NavBarPage() {
   const { data: session } = useSession();
 
   return (
-    <Navbar isBordered>
-      <NavbarContent justify="start">
+    <Navbar className="bg-white" maxWidth="2xl">
+      <NavbarContent>
         <NavbarBrand className="mr-4">
-          <AcmeLogo />
-          <p className="hidden sm:block font-bold text-inherit">ACME</p>
+          <Link href="/" className="text-default-600">
+            <AcmeLogo />
+            <p className="hidden sm:block font-bold text-default-600 text-xl">Ten Thousands Hours</p>
+          </Link>
         </NavbarBrand>
-        {/* <NavbarContent className="hidden sm:flex gap-3">
-          <NavbarItem>
-            <Link color="foreground" href="#">
-              Features
-            </Link>
-          </NavbarItem>
-          <NavbarItem isActive>
-            <Link aria-current="page" color="secondary" href="#">
-              Customers
-            </Link>
-          </NavbarItem>
-          <NavbarItem>
-            <Link color="foreground" href="#">
-              Integrations
-            </Link>
-          </NavbarItem>
-        </NavbarContent> */}
         <NavbarContent className="flex-row flex-nowrap items-center data-[justify=start]:justify-start data-[justify=start]:flex-grow data-[justify=start]:basis-0 data-[justify=center]:justify-center data-[justify=end]:justify-end data-[justify=end]:flex-grow data-[justify=end]:basis-0 bg-content2 dark:bg-content1 ml-4 hidden h-12 w-full max-w-fit gap-4 rounded-full px-4 sm:flex" data-justify="start">
           <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
             <Link className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit" href="#" data-react-aria-pressable="true" role="link">Dashboard</Link>
@@ -213,10 +198,9 @@ export default function NavBarPage() {
           </NavbarItem>
         </NavbarContent>
       </NavbarContent>
-
       {session !== null ? (
         <NavbarContent justify="end">
-            <Input
+            {/* <Input
               classNames={{
                 base: "max-w-full sm:max-w-[10rem] h-10",
                 mainWrapper: "h-full",
@@ -228,7 +212,7 @@ export default function NavBarPage() {
               size="sm"
               startContent={<SearchIcon size={18} />}
               type="search"
-            />
+            /> */}
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
               {session.user.image ?
@@ -242,7 +226,7 @@ export default function NavBarPage() {
                 src={session.user.image}
               />
               :
-              <button className="w-10 h-10 rounded-full border flex items-center justify-center bg-blue-500 text-white cursor-pointer">
+              <button className="w-10 h-10 rounded-full border flex items-center justify-center bg-sky-500 text-white cursor-pointer">
                 {session.user.name.slice(0,1)}
               </button>
               }
@@ -267,18 +251,17 @@ export default function NavBarPage() {
       ) : (
         <NavbarContent justify="end">
           <NavbarItem className="hidden lg:flex">
-            <Button as={Link} color="primary" variant="bordered" href="/auth/sign-in" radius="sm">
+            <Button as={Link} className="border-2 border-sky-500 text-sky-500 font-bold" variant="bordered" href="/auth/sign-in" radius="sm">
               CONNEXION
             </Button>
           </NavbarItem>
           <NavbarItem>
-            <Button as={Link} color="primary" href="/auth/sign-up" radius="sm">
+            <Button as={Link} className="bg-sky-500 text-white font-bold" href="/auth/sign-up" radius="sm">
               INSCRIPTION
             </Button>
           </NavbarItem>
         </NavbarContent>
       )}
-
     </Navbar>
   );
 }
