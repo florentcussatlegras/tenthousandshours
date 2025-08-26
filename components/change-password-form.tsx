@@ -38,13 +38,14 @@ export const ChangePasswordForm = () => {
   }
 
   return (
-    <Form onSubmit={handleSubmit} className="max-w-sm w-full space-y-4">
-      <div className="flex flex-col gap-2">
+    <Form onSubmit={handleSubmit} className="max-w-sm w-full space-y-4 p-4">
+      
+      <div className="flex flex-col gap-2 w-full">
         <label htmlFor="currentPassword">Mot de passe actuel</label>
         <Input type="password" id="currentPassword" name="currentPassword" />
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 w-full">
         <label htmlFor="newPassword">Nouveau mot de passe</label>
         <Input type="password" id="newPassword" name="newPassword" />
       </div>
@@ -52,6 +53,7 @@ export const ChangePasswordForm = () => {
       <Button type="submit" disabled={isPending} color="primary">
         Valider
       </Button>
+
     </Form>
   );
 };

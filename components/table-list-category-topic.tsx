@@ -70,12 +70,12 @@ export default function TableListCategoryTopic({ categories }: { categories: Pro
                 <EyeIcon />
               </span>
             </Tooltip> */}
-            <Tooltip content="Edit user">
+            <Tooltip content="Modifier la catégorie">
               <Link href={`/category-topic/edit/${category.slug}`} className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditIcon />
               </Link>
             </Tooltip>
-            <Tooltip color="danger" content="Delete user">
+            <Tooltip color="danger" content="Supprimer la catégorie">
               <Link href={`/category-topic/delete/${category.slug}`} className="text-lg text-danger cursor-pointer active:opacity-50">
                 <DeleteIcon />
               </Link>
