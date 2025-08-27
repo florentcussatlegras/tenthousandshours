@@ -1,9 +1,10 @@
 "use client";
 
-import {Autocomplete, AutocompleteItem, Avatar, Button} from "@heroui/react";
-import Link from "next/link";
+import {Autocomplete, AutocompleteItem, Avatar, Button, Form} from "@heroui/react";
+import { useForm, SubmitHandler, SubmitErrorHandler } from "react-hook-form";
 import { MoveRightIcon } from "./icons";
 import { Topic } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 const SearchIcon = ({size = 24, strokeWidth = 1.5, width, height, ...props}) => {
   return (
@@ -35,210 +36,25 @@ const SearchIcon = ({size = 24, strokeWidth = 1.5, width, height, ...props}) => 
   );
 };
 
-// export const getTopics = [
-//   {
-//     id: 1,
-//     name: "Tony Reichert",
-//     role: "CEO",
-//     team: "Management",
-//     status: "active",
-//     age: "29",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/1.png",
-//     email: "tony.reichert@example.com",
-//   },
-//   {
-//     id: 2,
-//     name: "Zoey Lang",
-//     role: "Tech Lead",
-//     team: "Development",
-//     status: "paused",
-//     age: "25",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/1.png",
-//     email: "zoey.lang@example.com",
-//   },
-//   {
-//     id: 3,
-//     name: "Jane Fisher",
-//     role: "Sr. Dev",
-//     team: "Development",
-//     status: "active",
-//     age: "22",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/2.png",
-//     email: "jane.fisher@example.com",
-//   },
-//   {
-//     id: 4,
-//     name: "William Howard",
-//     role: "C.M.",
-//     team: "Marketing",
-//     status: "vacation",
-//     age: "28",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/2.png",
-//     email: "william.howard@example.com",
-//   },
-//   {
-//     id: 5,
-//     name: "Kristen Copper",
-//     role: "S. Manager",
-//     team: "Sales",
-//     status: "active",
-//     age: "24",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/3.png",
-//     email: "kristen.cooper@example.com",
-//   },
-//   {
-//     id: 6,
-//     name: "Brian Kim",
-//     role: "P. Manager",
-//     team: "Management",
-//     age: "29",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/3.png",
-//     email: "brian.kim@example.com",
-//     status: "active",
-//   },
-//   {
-//     id: 7,
-//     name: "Michael Hunt",
-//     role: "Designer",
-//     team: "Design",
-//     status: "paused",
-//     age: "27",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/4.png",
-//     email: "michael.hunt@example.com",
-//   },
-//   {
-//     id: 8,
-//     name: "Samantha Brooks",
-//     role: "HR Manager",
-//     team: "HR",
-//     status: "active",
-//     age: "31",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/4.png",
-//     email: "samantha.brooks@example.com",
-//   },
-//   {
-//     id: 9,
-//     name: "Frank Harrison",
-//     role: "F. Manager",
-//     team: "Finance",
-//     status: "vacation",
-//     age: "33",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/5.png",
-//     email: "frank.harrison@example.com",
-//   },
-//   {
-//     id: 10,
-//     name: "Emma Adams",
-//     role: "Ops Manager",
-//     team: "Operations",
-//     status: "active",
-//     age: "35",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/5.png",
-//     email: "emma.adams@example.com",
-//   },
-//   {
-//     id: 11,
-//     name: "Brandon Stevens",
-//     role: "Jr. Dev",
-//     team: "Development",
-//     status: "active",
-//     age: "22",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/7.png",
-//     email: "brandon.stevens@example.com",
-//   },
-//   {
-//     id: 12,
-//     name: "Megan Richards",
-//     role: "P. Manager",
-//     team: "Product",
-//     status: "paused",
-//     age: "28",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/7.png",
-//     email: "megan.richards@example.com",
-//   },
-//   {
-//     id: 13,
-//     name: "Oliver Scott",
-//     role: "S. Manager",
-//     team: "Security",
-//     status: "active",
-//     age: "37",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/8.png",
-//     email: "oliver.scott@example.com",
-//   },
-//   {
-//     id: 14,
-//     name: "Grace Allen",
-//     role: "M. Specialist",
-//     team: "Marketing",
-//     status: "active",
-//     age: "30",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/8.png",
-//     email: "grace.allen@example.com",
-//   },
-//   {
-//     id: 15,
-//     name: "Noah Carter",
-//     role: "IT Specialist",
-//     team: "I. Technology",
-//     status: "paused",
-//     age: "31",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/9.png",
-//     email: "noah.carter@example.com",
-//   },
-//   {
-//     id: 16,
-//     name: "Ava Perez",
-//     role: "Manager",
-//     team: "Sales",
-//     status: "active",
-//     age: "29",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/9.png",
-//     email: "ava.perez@example.com",
-//   },
-//   {
-//     id: 17,
-//     name: "Liam Johnson",
-//     role: "Data Analyst",
-//     team: "Analysis",
-//     status: "active",
-//     age: "28",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/11.png",
-//     email: "liam.johnson@example.com",
-//   },
-//   {
-//     id: 18,
-//     name: "Sophia Taylor",
-//     role: "QA Analyst",
-//     team: "Testing",
-//     status: "active",
-//     age: "27",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/11.png",
-//     email: "sophia.taylor@example.com",
-//   },
-//   {
-//     id: 19,
-//     name: "Lucas Harris",
-//     role: "Administrator",
-//     team: "Information Technology",
-//     status: "paused",
-//     age: "32",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/12.png",
-//     email: "lucas.harris@example.com",
-//   },
-//   {
-//     id: 20,
-//     name: "Mia Robinson",
-//     role: "Coordinator",
-//     team: "Operations",
-//     status: "active",
-//     age: "26",
-//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/12.png",
-//     email: "mia.robinson@example.com",
-//   },
-// ];
-
 export default function SearchBarHomepage({ topics }: { topics: Topic[] }) {
+
+    const router = useRouter();
+
+    type FormValues = {
+      topicName: string
+    }
+
+    const { register, handleSubmit } = useForm<FormValues>()
+
+    const onSubmit: SubmitHandler<FormValues> = (data) => {
+      localStorage.setItem('new_study_process', data.topicName);
+
+      router.push('/study-process/new');
+    }
+
+    const onError: SubmitErrorHandler<FormValues> = (errors) =>
+      console.log(errors)
+
 
     return (
         <div className="w-full h-full flex flex-col gap-10 items-start justify-center pr-24">
@@ -246,78 +62,83 @@ export default function SearchBarHomepage({ topics }: { topics: Topic[] }) {
           <h1 className="text-5xl font-bold text-default-600 dark:text-white/90">
               Quel domaine souhaitez-vous <span className="text-sky-500">maîtriser</span> ?
           </h1>
-          
-          <div className="w-full relative place-items-center grid">
-              <Autocomplete
-                  aria-label="Selectionner une matière"
-                  classNames={{
-                      base: "max-w-full]",
-                      listboxWrapper: "max-h-[320px]",
-                      selectorButton: "text-default-500",
-                  }}
-                  defaultItems={topics}
-                  inputProps={{
-                      classNames: {
-                      input: "ml-4 text-base text-default-600",
-                      inputWrapper: "h-[60px] border-1 border-default-100 shadow-lg dark:bg-content1",
-                      },
-                  }}
-                  listboxProps={{
-                      hideSelectedIcon: true,
-                      itemClasses: {
-                      base: [
-                          "rounded-medium",
-                          "text-default-500",
-                          "transition-opacity",
-                          "data-[hover=true]:text-foreground",
-                          "dark:data-[hover=true]:bg-default-50",
-                          "data-[pressed=true]:opacity-70",
-                          "data-[hover=true]:bg-default-200",
-                          "data-[selectable=true]:focus:bg-default-100",
-                          "data-[focus-visible=true]:ring-default-500",
-                      ],
-                      },
-                  }}
-                  placeholder="Exple: saxophone, javascript, maçonnerie..."
-                  popoverProps={{
-                      offset: 10,
-                      classNames: {
-                      base: "rounded-large",
-                      content: "p-1 border-small border-default-100 bg-background",
-                      },
-                  }}
-                  radius="full"
-                  startContent={<SearchIcon className="text-default-400" size={20} strokeWidth={2.5} />}
-                  variant="bordered"
-              >
-                  {(item) => (
-                      <AutocompleteItem key={item.id} textValue={item.name}>
-                        <div className="flex justify-between items-center">
-                            <div className="flex gap-2 items-center">
-                            {/* <Avatar alt={item.name} className="shrink-0" size="sm" src={item.avatar} /> */}
-                            <div className="flex flex-col">
-                                <span className="text-base">{item.name}</span>
-                                {/* <span className="text-tiny text-default-400">{item.team}</span> */}
-                            </div>
-                            </div>
-                            {/* <Button
-                            className="border-small mr-0.5 font-medium shadow-small"
-                            radius="full"
-                            size="sm"
-                            variant="bordered"
-                            >
-                            Add
-                            </Button> */}
-                        </div>
-                      </AutocompleteItem>
-                  )}
-              </Autocomplete>
-          </div>
 
-          <Link href="#" className="bg-sky-500 text-white px-8 py-2 text-xl font-bold rounded-lg cursor-pointer flex items-center gap-4 dark:bg-default-500 dark:text-white">
-              <span>C'est parti !</span>
-              <MoveRightIcon />
-          </Link>
+          <Form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-8 w-[750px]">
+          
+            <div className="w-full relative place-items-center grid">
+                <Autocomplete
+                    {...register("topicName")}
+                    aria-label="Selectionner une matière"
+                    classNames={{
+                        base: "max-w-full]",
+                        listboxWrapper: "max-h-[320px]",
+                        selectorButton: "text-default-500",
+                    }}
+                    defaultItems={topics}
+                    inputProps={{
+                        classNames: {
+                        input: "ml-4 text-base text-default-600",
+                        inputWrapper: "h-[60px] border-1 border-default-100 shadow-lg dark:bg-content1",
+                        },
+                    }}
+                    listboxProps={{
+                        hideSelectedIcon: true,
+                        itemClasses: {
+                        base: [
+                            "rounded-medium",
+                            "text-default-500",
+                            "transition-opacity",
+                            "data-[hover=true]:text-foreground",
+                            "dark:data-[hover=true]:bg-default-50",
+                            "data-[pressed=true]:opacity-70",
+                            "data-[hover=true]:bg-default-200",
+                            "data-[selectable=true]:focus:bg-default-100",
+                            "data-[focus-visible=true]:ring-default-500",
+                        ],
+                        },
+                    }}
+                    placeholder="Exple: saxophone, javascript, maçonnerie..."
+                    popoverProps={{
+                        offset: 10,
+                        classNames: {
+                        base: "rounded-large",
+                        content: "p-1 border-small border-default-100 bg-background",
+                        },
+                    }}
+                    radius="full"
+                    startContent={<SearchIcon className="text-default-400" size={20} strokeWidth={2.5} />}
+                    variant="bordered"
+                >
+                    {(item) => (
+                        <AutocompleteItem key={item.id} textValue={item.name}>
+                          <div className="flex justify-between items-center">
+                              <div className="flex gap-2 items-center">
+                              {/* <Avatar alt={item.name} className="shrink-0" size="sm" src={item.avatar} /> */}
+                              <div className="flex flex-col">
+                                  <span className="text-base">{item.name}</span>
+                                  {/* <span className="text-tiny text-default-400">{item.team}</span> */}
+                              </div>
+                              </div>
+                              {/* <Button
+                              className="border-small mr-0.5 font-medium shadow-small"
+                              radius="full"
+                              size="sm"
+                              variant="bordered"
+                              >
+                              Add
+                              </Button> */}
+                          </div>
+                        </AutocompleteItem>
+                    )}
+                </Autocomplete>
+            </div>
+
+            <Button type="submit" className="bg-sky-500 text-white px-8 py-6 text-xl font-bold rounded-lg cursor-pointer flex items-center gap-4 dark:bg-default-500 dark:text-white">
+                <span>C'est parti !</span>
+                <MoveRightIcon />
+            </Button>
+
+          </Form>
     
         </div>
     );
