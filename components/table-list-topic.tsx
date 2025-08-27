@@ -79,12 +79,12 @@ export default function TableListTopic({ topics }: { topics: Promise<Topic[]> })
               </span>
             </Tooltip> */}
             <Tooltip content="Modifier la matière">
-              <Link href={`/topic/edit/${topic.slug}`} className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Link href={`/admin/dashboard/topic/edit/${topic.slug}`} className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditIcon />
               </Link>
             </Tooltip>
             <Tooltip color="danger" content="Supprimer la matière">
-              <Link href={`/topic/delete/${topic.slug}`} className="text-lg text-danger cursor-pointer active:opacity-50">
+              <Link href={`/admin/dashboard/topic/delete/${topic.slug}`} className="text-lg text-danger cursor-pointer active:opacity-50">
                 <DeleteIcon />
               </Link>
             </Tooltip>
@@ -96,7 +96,7 @@ export default function TableListTopic({ topics }: { topics: Promise<Topic[]> })
   }, []);
 
   return (
-    <Table aria-label="List table topic">
+    <Table aria-label="List table topic" className="border-none" shadow="none" radius="none">
       <TableHeader columns={columns}>
         {(column) => (
           <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>

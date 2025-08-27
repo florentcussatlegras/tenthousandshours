@@ -71,12 +71,12 @@ export default function TableListCategoryTopic({ categories }: { categories: Pro
               </span>
             </Tooltip> */}
             <Tooltip content="Modifier la catégorie">
-              <Link href={`/category-topic/edit/${category.slug}`} className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Link href={`/admin/dashboard/category-topic/edit/${category.slug}`} className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditIcon />
               </Link>
             </Tooltip>
             <Tooltip color="danger" content="Supprimer la catégorie">
-              <Link href={`/category-topic/delete/${category.slug}`} className="text-lg text-danger cursor-pointer active:opacity-50">
+              <Link href={`/admin/dashboard/category-topic/delete/${category.slug}`} className="text-lg text-danger cursor-pointer active:opacity-50">
                 <DeleteIcon />
               </Link>
             </Tooltip>
@@ -88,7 +88,7 @@ export default function TableListCategoryTopic({ categories }: { categories: Pro
   }, []);
 
   return (
-    <Table aria-label="List table category topics">
+    <Table aria-label="List table category topics" className="border-none" shadow="none" radius="none">
       <TableHeader columns={columns}>
         {(column) => (
           <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>

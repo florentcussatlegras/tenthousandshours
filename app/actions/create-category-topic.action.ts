@@ -70,5 +70,5 @@ export async function createCategoryTopic(
   }
 
   revalidateTag("categoryTopic");
-  redirect("/category-topic/list");
+  redirect("/admin/dashboard/category-topic/list");
 }

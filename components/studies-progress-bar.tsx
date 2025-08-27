@@ -7,10 +7,9 @@ export default function StudiesProgressbar() {
   return (
     <Card className="h-full rounded-none">
       <CardBody className="p-6">
-        <h1 className="text-default-600 text-xl">Mes progrès</h1>
         <div className="flex flex-col gap-2 h-full justify-center">
             <span>Javascript</span>
-            <Progress aria-label="Loading..." className="w-full" value={60} />
+            <Progress aria-label="Loading..." className="w-full" classNames={{indicator: "text-sky-500"}} value={60} />
             <span>PHP</span>
             <Progress aria-label="Loading..." className="w-full" value={30} />
             <span>Laravel</span>
