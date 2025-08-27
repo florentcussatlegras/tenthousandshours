@@ -74,5 +74,5 @@ export async function createTopic(
   }
 
   revalidateTag("topic");
-  redirect("/topic/list");
+  redirect("/admin/dashboard/topic/list");
 }

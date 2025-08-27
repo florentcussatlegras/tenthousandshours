@@ -52,7 +52,15 @@ export default async function Page() {
     <div className="py-8 container mx-auto max-w-[1536px] space-y-8">
       <Breadcrumb steps={[{ label: "Mon profile" }]} />
 
-      <div className="grid grid-flow-col grid-col-3 gap-4 h-[356px]">
+      <div className="flex items-center gap-2">
+        {session.user.role === "ADMIN" && (
+          <Button className="bg-sky-500">
+            <Link href="/admin/dashboard" className="text-white">Admin Dashboard</Link>
+          </Button>
+        )}
+      </div>
+
+      <div className="grid grid-flow-col grid-col-4 gap-4 h-[356px]">
         <div>
           <Card className="h-full rounded-none relative">
             <CardBody className="flex-col items-center justify-center gap-4">
@@ -79,10 +87,9 @@ export default async function Page() {
                 Full Stack Developer
               </span>
 
-              
-                <Link href="/settings">
-                  <EditIcon className="text-default-600" />
-                </Link>
+              <Link href="/settings">
+                <EditIcon className="text-default-600" />
+              </Link>
           
               {/* <Link
                 href="/"
@@ -94,7 +101,7 @@ export default async function Page() {
             </CardBody>
           </Card>
         </div>
-        <div className="col-span-2">
+        <div className="col-span-3">
           <StudiesProgressBar />
         </div>
       </div>

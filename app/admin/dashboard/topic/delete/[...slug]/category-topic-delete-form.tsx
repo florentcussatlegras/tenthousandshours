@@ -28,7 +28,7 @@ export default function TopicDeleteForm({
           Valider
         </Button>
         <Button type="submit" color="default" variant="flat" className="font-bold uppercase">
-          <Link href="/topic/list">Annuler</Link>
+          <Link href="/admin/dashboard/topic/list">Annuler</Link>
         </Button>
       </div>
     </Form>

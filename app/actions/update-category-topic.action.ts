@@ -74,5 +74,5 @@ export async function updateCategoryTopic(
   }
 
   revalidateTag("categoryTopic");
-  redirect("/category-topic/list");
+  redirect("/admin/dashboard/category-topic/list");
 }
