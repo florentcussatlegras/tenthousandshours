@@ -86,7 +86,7 @@ export const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
         <Button
             type="submit"
             disabled={isPending}
-            className="bg-sky-500 text-white font-bold uppercase"
+            className="bg-sky-500 text-white font-bold uppercase dark:bg-default-500 dark:text-white"
         >
             Réinitialiser le mot de passe
         </Button>

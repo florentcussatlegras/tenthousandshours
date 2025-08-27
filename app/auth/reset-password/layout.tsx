@@ -8,7 +8,7 @@ export default function SignInLayout({
   children: React.ReactNode;
 }) {
   return (
-      <section className="flex items-center h-full justify-center gap-4 bg-white">
+      <section className="flex items-center h-full justify-center gap-4 bg-white dark:bg-black/90">
         <div className="flex flex-row w-full h-full items-stretch justify-center flex-1/2">
             <div className="hidden flex-1/2 items-center md:flex justify-center">
                 <Hero imageUrl={urlImageHero} imageAlt="Books and watches on a desk" />

@@ -3,10 +3,10 @@
 import { ForgetPasswordForm } from "./forget-password-form";
 import { Card, CardBody, CardHeader, Divider } from "@heroui/react";
 
-export default async function ForgetPasswordPage() {
+export default function ForgetPasswordPage() {
     
   return (
-        <Card className="w-2/3 flex flex-col items-center py-6" shadow="none">
+        <Card className="w-2/3 flex flex-col items-center p-6" shadow="none">
           <CardHeader className="flex flex-col gap-2 mb-4 items-start">
               <h1 className="text-4xl font-bold mb-4 text-default-600">Mot de passe oublié</h1>
               <p className="text-mute-foreground">
