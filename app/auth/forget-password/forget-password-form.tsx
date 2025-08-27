@@ -62,7 +62,7 @@ export const ForgetPasswordForm = () => {
       <Button
         type="submit"
         disabled={isPending}
-        className="bg-sky-500 text-white font-bold"
+        className="bg-sky-500 text-white font-bold dark:bg-default-500 dark:text-white uppercase"
       >
         Envoyer un lien de réinitialisation de votre mot de passe
       </Button>

@@ -327,7 +327,7 @@ export default function NavBarPage() {
           <NavbarItem className="hidden lg:flex">
             <Button
               as={Link}
-              className="border-2 border-sky-500 text-sky-500 font-bold"
+              className="border-2 border-sky-500 text-sky-500 font-bold dark:border-default-500 dark:text-white"
               variant="bordered"
               href="/auth/sign-in"
               radius="sm"
@@ -338,7 +338,7 @@ export default function NavBarPage() {
           <NavbarItem>
             <Button
               as={Link}
-              className="bg-sky-500 text-white font-bold"
+              className="bg-sky-500 text-white font-bold dark:bg-default-500 dark:text-white"
               href="/auth/sign-up"
               radius="sm"
             >

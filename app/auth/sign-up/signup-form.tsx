@@ -188,7 +188,7 @@ export default function SignUpForm() {
 
         <div className="flex gap-4">
           <Button
-            className="bg-sky-500 text-white font-bold"
+            className="bg-sky-500 text-white font-bold dark:bg-default-500 dark:text-white"
             type="submit"
             disabled={isPending}
           >

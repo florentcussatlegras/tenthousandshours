@@ -84,7 +84,7 @@ export default function SignInForm() {
         </div>
 
         <div className="flex gap-4">
-          <Button className="bg-sky-500 text-white font-bold" type="submit" disabled={isPending}>
+          <Button className="bg-sky-500 text-white font-bold dark:bg-default-500 dark:text-white" type="submit" disabled={isPending}>
             VALIDER
           </Button>
           <Button className="font-bold" type="reset" variant="flat">

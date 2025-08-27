@@ -100,3 +100,15 @@ export async function getTopic(slug) {
 
   return topic;
 }
+
+export async function getListTopics() {
+  const topics = await prisma.categoryTopic.findMany({
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      status: true
+    }
+  });
+
+  return topics;

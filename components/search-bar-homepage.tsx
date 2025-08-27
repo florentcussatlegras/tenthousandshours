@@ -1,34 +1,20 @@
-import { Card, Input } from "@heroui/react";
-import { useState } from "react";
-import Trie from "@/app/lib/trie";
+"use client";
+
+import {Autocomplete, AutocompleteItem, Avatar, Button} from "@heroui/react";
 import Link from "next/link";
+import { MoveRightIcon } from "./icons";
+import { Topic } from "@prisma/client";
 
-const dictionary = {
-  words: [
-    "hello",
-    "helium",
-    "world",
-    "car",
-    "carpet",
-    "test",
-    "this",
-    "that",
-    "those",
-    "working",
-    "is",
-  ],
-};
-
-export const SearchIcon = (props) => {
+const SearchIcon = ({size = 24, strokeWidth = 1.5, width, height, ...props}) => {
   return (
     <svg
       aria-hidden="true"
       fill="none"
       focusable="false"
-      height="1em"
+      height={height || size}
       role="presentation"
       viewBox="0 0 24 24"
-      width="1em"
+      width={width || size}
       {...props}
     >
       <path
@@ -36,160 +22,304 @@ export const SearchIcon = (props) => {
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth="2"
+        strokeWidth={strokeWidth}
       />
       <path
         d="M22 22L20 20"
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth="2"
+        strokeWidth={strokeWidth}
       />
     </svg>
   );
 };
 
-export const MoveRightIcon = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      className="lucide lucide-move-right-icon lucide-move-right"
-    >
-      <path d="M18 8L22 12L18 16" />
-      <path d="M2 12H22" />
-    </svg>
-  );
-};
+// export const getTopics = [
+//   {
+//     id: 1,
+//     name: "Tony Reichert",
+//     role: "CEO",
+//     team: "Management",
+//     status: "active",
+//     age: "29",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/1.png",
+//     email: "tony.reichert@example.com",
+//   },
+//   {
+//     id: 2,
+//     name: "Zoey Lang",
+//     role: "Tech Lead",
+//     team: "Development",
+//     status: "paused",
+//     age: "25",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/1.png",
+//     email: "zoey.lang@example.com",
+//   },
+//   {
+//     id: 3,
+//     name: "Jane Fisher",
+//     role: "Sr. Dev",
+//     team: "Development",
+//     status: "active",
+//     age: "22",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/2.png",
+//     email: "jane.fisher@example.com",
+//   },
+//   {
+//     id: 4,
+//     name: "William Howard",
+//     role: "C.M.",
+//     team: "Marketing",
+//     status: "vacation",
+//     age: "28",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/2.png",
+//     email: "william.howard@example.com",
+//   },
+//   {
+//     id: 5,
+//     name: "Kristen Copper",
+//     role: "S. Manager",
+//     team: "Sales",
+//     status: "active",
+//     age: "24",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/3.png",
+//     email: "kristen.cooper@example.com",
+//   },
+//   {
+//     id: 6,
+//     name: "Brian Kim",
+//     role: "P. Manager",
+//     team: "Management",
+//     age: "29",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/3.png",
+//     email: "brian.kim@example.com",
+//     status: "active",
+//   },
+//   {
+//     id: 7,
+//     name: "Michael Hunt",
+//     role: "Designer",
+//     team: "Design",
+//     status: "paused",
+//     age: "27",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/4.png",
+//     email: "michael.hunt@example.com",
+//   },
+//   {
+//     id: 8,
+//     name: "Samantha Brooks",
+//     role: "HR Manager",
+//     team: "HR",
+//     status: "active",
+//     age: "31",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/4.png",
+//     email: "samantha.brooks@example.com",
+//   },
+//   {
+//     id: 9,
+//     name: "Frank Harrison",
+//     role: "F. Manager",
+//     team: "Finance",
+//     status: "vacation",
+//     age: "33",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/5.png",
+//     email: "frank.harrison@example.com",
+//   },
+//   {
+//     id: 10,
+//     name: "Emma Adams",
+//     role: "Ops Manager",
+//     team: "Operations",
+//     status: "active",
+//     age: "35",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/5.png",
+//     email: "emma.adams@example.com",
+//   },
+//   {
+//     id: 11,
+//     name: "Brandon Stevens",
+//     role: "Jr. Dev",
+//     team: "Development",
+//     status: "active",
+//     age: "22",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/7.png",
+//     email: "brandon.stevens@example.com",
+//   },
+//   {
+//     id: 12,
+//     name: "Megan Richards",
+//     role: "P. Manager",
+//     team: "Product",
+//     status: "paused",
+//     age: "28",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/7.png",
+//     email: "megan.richards@example.com",
+//   },
+//   {
+//     id: 13,
+//     name: "Oliver Scott",
+//     role: "S. Manager",
+//     team: "Security",
+//     status: "active",
+//     age: "37",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/8.png",
+//     email: "oliver.scott@example.com",
+//   },
+//   {
+//     id: 14,
+//     name: "Grace Allen",
+//     role: "M. Specialist",
+//     team: "Marketing",
+//     status: "active",
+//     age: "30",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/8.png",
+//     email: "grace.allen@example.com",
+//   },
+//   {
+//     id: 15,
+//     name: "Noah Carter",
+//     role: "IT Specialist",
+//     team: "I. Technology",
+//     status: "paused",
+//     age: "31",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/9.png",
+//     email: "noah.carter@example.com",
+//   },
+//   {
+//     id: 16,
+//     name: "Ava Perez",
+//     role: "Manager",
+//     team: "Sales",
+//     status: "active",
+//     age: "29",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/9.png",
+//     email: "ava.perez@example.com",
+//   },
+//   {
+//     id: 17,
+//     name: "Liam Johnson",
+//     role: "Data Analyst",
+//     team: "Analysis",
+//     status: "active",
+//     age: "28",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/11.png",
+//     email: "liam.johnson@example.com",
+//   },
+//   {
+//     id: 18,
+//     name: "Sophia Taylor",
+//     role: "QA Analyst",
+//     team: "Testing",
+//     status: "active",
+//     age: "27",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/11.png",
+//     email: "sophia.taylor@example.com",
+//   },
+//   {
+//     id: 19,
+//     name: "Lucas Harris",
+//     role: "Administrator",
+//     team: "Information Technology",
+//     status: "paused",
+//     age: "32",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/12.png",
+//     email: "lucas.harris@example.com",
+//   },
+//   {
+//     id: 20,
+//     name: "Mia Robinson",
+//     role: "Coordinator",
+//     team: "Operations",
+//     status: "active",
+//     age: "26",
+//     avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/12.png",
+//     email: "mia.robinson@example.com",
+//   },
+// ];
 
-export default function SearchBarHomepage() {
-  const [prefix, setPrefix] = useState("");
-  const [suggestion, setSuggestion] = useState("");
+export default function SearchBarHomepage({ topics }: { topics: Topic[] }) {
 
-  var myTrie = new Trie();
+    return (
+        <div className="w-full h-full flex flex-col gap-10 items-start justify-center pr-24">
 
-  (async () => {
-    // const dictionary = await getWords();
-    const words = dictionary.words;
-    for (let i = 0; i < words.length; i++) {
-      const word = words[i];
-      myTrie.insert(word);
-    }
-  })();
+          <h1 className="text-5xl font-bold text-default-600 dark:text-white/90">
+              Quel domaine souhaitez-vous <span className="text-sky-500">maîtriser</span> ?
+          </h1>
+          
+          <div className="w-full relative place-items-center grid">
+              <Autocomplete
+                  aria-label="Selectionner une matière"
+                  classNames={{
+                      base: "max-w-full]",
+                      listboxWrapper: "max-h-[320px]",
+                      selectorButton: "text-default-500",
+                  }}
+                  defaultItems={topics}
+                  inputProps={{
+                      classNames: {
+                      input: "ml-4 text-base text-default-600",
+                      inputWrapper: "h-[60px] border-1 border-default-100 shadow-lg dark:bg-content1",
+                      },
+                  }}
+                  listboxProps={{
+                      hideSelectedIcon: true,
+                      itemClasses: {
+                      base: [
+                          "rounded-medium",
+                          "text-default-500",
+                          "transition-opacity",
+                          "data-[hover=true]:text-foreground",
+                          "dark:data-[hover=true]:bg-default-50",
+                          "data-[pressed=true]:opacity-70",
+                          "data-[hover=true]:bg-default-200",
+                          "data-[selectable=true]:focus:bg-default-100",
+                          "data-[focus-visible=true]:ring-default-500",
+                      ],
+                      },
+                  }}
+                  placeholder="Exple: saxophone, javascript, maçonnerie..."
+                  popoverProps={{
+                      offset: 10,
+                      classNames: {
+                      base: "rounded-large",
+                      content: "p-1 border-small border-default-100 bg-background",
+                      },
+                  }}
+                  radius="full"
+                  startContent={<SearchIcon className="text-default-400" size={20} strokeWidth={2.5} />}
+                  variant="bordered"
+              >
+                  {(item) => (
+                      <AutocompleteItem key={item.id} textValue={item.name}>
+                        <div className="flex justify-between items-center">
+                            <div className="flex gap-2 items-center">
+                            {/* <Avatar alt={item.name} className="shrink-0" size="sm" src={item.avatar} /> */}
+                            <div className="flex flex-col">
+                                <span className="text-base">{item.name}</span>
+                                {/* <span className="text-tiny text-default-400">{item.team}</span> */}
+                            </div>
+                            </div>
+                            {/* <Button
+                            className="border-small mr-0.5 font-medium shadow-small"
+                            radius="full"
+                            size="sm"
+                            variant="bordered"
+                            >
+                            Add
+                            </Button> */}
+                        </div>
+                      </AutocompleteItem>
+                  )}
+              </Autocomplete>
+          </div>
 
-  const onChange = (e) => {
-    var value = e.target.value;
-    setPrefix(value);
-    var words = value.split(" ");
-    var trie_prefix = words[words.length - 1].toLowerCase();
-    var found_words = myTrie.find(trie_prefix).sort((a, b) => {
-      return a.length - b.length;
-    });
-    var first_word = found_words[0];
-    if (
-      found_words.length !== 0 &&
-      value !== "" &&
-      value[value.length - 1] !== " "
-    ) {
-      if (first_word != null) {
-        var remainder = first_word.slice(trie_prefix.length);
-        setSuggestion(value + remainder);
-      }
-    } else {
-      setSuggestion(value);
-    }
-  };
+          <Link href="#" className="bg-sky-500 text-white px-8 py-2 text-xl font-bold rounded-lg cursor-pointer flex items-center gap-4 dark:bg-default-500 dark:text-white">
+              <span>C'est parti !</span>
+              <MoveRightIcon />
+          </Link>
+    
+        </div>
+    );
 
-  const handleKeyDown = (e) => {
-    if (e.keyCode === 39) {
-      setPrefix(suggestion);
-    }
-  };
-
-  return (
-    <div className="w-full h-full flex flex-col gap-10 items-start justify-center pr-24">
-      <h1 className="text-5xl font-bold text-default-600 dark:text-white/90">
-        Quel domaine souhaitez-vous <span className="text-sky-500">maîtriser</span> ?
-      </h1>
-      {/* <Input
-        name="search-bar"
-        id="search-bar"
-        isClearable
-        classNames={{
-          label: "uppercase text-xl text-black/90 dark:text-white/90",
-          input: [
-            "bg-transparent absolute top-0",
-            "text-black/90 dark:text-white/90",
-            "placeholder:text-default-700/50 dark:placeholder:text-white/60",
-          ], 
-          innerWrapper: "bg-transparent",
-          inputWrapper: [
-            "shadow-sm",
-            "bg-default-200/50",
-            "dark:bg-default/60",
-            "backdrop-blur-xl",
-            "backdrop-saturate-200",
-            "hover:bg-default-200/70",
-            "dark:hover:bg-default/70",
-            "group-data-[focus=true]:bg-default-200/50",
-            "dark:group-data-[focus=true]:bg-default/60",
-            "cursor-text!",
-          ],
-        }}
-        label="Choisissez la matière que vous souhaitez étudier"
-        placeholder="Exple: saxophone, javascript, céramique..."
-        size="lg"
-        radius="full"
-        labelPlacement="outside-top"
-        startContent={
-          <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none shrink-0" />
-        }
-        value={prefix}
-        onChange={onChange}
-        onKeyDown={handleKeyDown}
-      />
-      <Input
-        type="text"
-        name="search-bar"
-        id="search-bar2"
-        value={suggestion}
-        classNames={{
-          input: "-z-10"
-        }}
-      /> */}
-      <div className="w-full relative place-items-center grid">
-        <input
-          type="text"
-          name="search-bar"
-          id="search-bar"
-          placeholder="Exple: saxophone, javascript, maçonnerie..."
-          value={prefix}
-          onChange={onChange}
-          onKeyDown={handleKeyDown}
-          className="bg-transparent wrap-break-word rounded-full absolute w-full h-16 px-10 outline-0 text-black/90 dark:text-white/90 shadow-md cursor-text"
-        />
-        <input
-          type="text"
-          name="search-bar"
-          id="search-bar2"
-          value={suggestion}
-          className="text-gray-500 cursor-none h-16 px-10 w-full rounded-full bg-white"
-          style={{ border: "1px solid #EAF5F8" }}
-        />
-      </div>
-
-      <Link href="#" className="bg-sky-500 text-white px-8 py-4 text-xl font-bold rounded-xl cursor-pointer flex items-center gap-4">
-        <span>C'est parti !</span>
-        <MoveRightIcon />
-      </Link>
- 
-    </div>
-  );
 }
