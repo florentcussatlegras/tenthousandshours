@@ -33,13 +33,13 @@ export default function SettingsPage () {
                 )}
 
                 <div className="flex flex-col items-start justify-center">
-                    <span className="text-xl font-bold text-default-600">{session?.user.name}</span>
-                    <span className="text-sm text-sky-500 font-bold">{session?.user.email}</span>
+                    <span className="text-xl font-light text-default-600">{session?.user.name}</span>
+                    <span className="text-sm text-sky-500">{session?.user.email}</span>
                 </div>
 
             </div>
 
-            <div className="ml-auto text-default-800 text-sm rounded-full bg-success/20 text-success-700 px-4 py-2">
+            <div className="ml-auto text-sm rounded-full bg-success/20 text-success-700 px-4 py-2">
                 Inscris le { JSON.stringify(session?.user.createdAt) }
             </div>
 
@@ -47,7 +47,7 @@ export default function SettingsPage () {
 
         <div className="flex flex-col md:flex-row gap-6">
 
-            <Card className="p-6 w-full md:w-1/2 flex flex-col">
+            <Card className="p-6 w-full md:w-1/2 flex flex-col rounded-none">
 
             <h2 className="text-2xl font-bold text-default-600">Modification de l'utilisateur</h2>
 
@@ -57,7 +57,7 @@ export default function SettingsPage () {
             />
             </Card>
 
-            <Card className="p-6 w-full md:w-1/2">
+            <Card className="p-6 w-full md:w-1/2 rounded-none">
             <h2 className="text-2xl font-bold text-default-600">Modification du mot de passe</h2>
 
             <ChangePasswordForm />

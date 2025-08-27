@@ -102,7 +102,7 @@ export async function getTopic(slug) {
 }
 
 export async function getListTopics() {
-  const topics = await prisma.categoryTopic.findMany({
+  const topics = await prisma.topic.findMany({
     select: {
       id: true,
       name: true,
@@ -112,3 +112,4 @@ export async function getListTopics() {
   });
 
   return topics;
+}

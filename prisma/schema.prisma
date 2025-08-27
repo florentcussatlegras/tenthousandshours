@@ -30,14 +30,14 @@ model Post {
 }
 
 model CategoryTopic {
-  id          String  @id @default(cuid())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name       String  @unique
+  name        String  @unique
   slug        String  @unique
   description String
-  status String @default("active")
+  status      String  @default("active")
   topics      Topic[]
 }
 
@@ -46,10 +46,10 @@ model Topic {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name       String @unique
+  name        String @unique
   slug        String @unique
   description String
-  status String @default("active")
+  status      String @default("active")
 
   studyProcesses StudyProcess[]
 
@@ -62,14 +62,36 @@ model StudyProcess {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name   String
-  content String
+  name        String
+  description String
+
+  totalHours Int
+
+  forecastedtotalHoursPerDay  Int?
+  forecastedtotalHoursPerWeek Int?
+  forecastedAimReachedAt      DateTime?
 
   topicId String
   topic   Topic  @relation(fields: [topicId], references: [id])
 
+  studySessions StudySession[]
+
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model StudySession {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  description String
+
+  startedAt  DateTime
+  finishedAt DateTime
+  totalHours Int
+
+  studyProcessId String
+  studyProcess   StudyProcess @relation(fields: [studyProcessId], references: [id])
 }
 
 model User {
@@ -78,10 +100,10 @@ model User {
   updatedAt DateTime
 
   name          String
-  email         String   @unique
+  email         String    @unique
   emailVerified Boolean
   image         String?
-  role          UserRole @default(USER)
+  role          UserRole  @default(USER)
   banned        Boolean?
   banReason     String?
   banExpires    DateTime?
@@ -98,10 +120,10 @@ model Session {
   createdAt DateTime
   updatedAt DateTime
 
-  expiresAt DateTime
-  token     String   @unique
-  ipAddress String?
-  userAgent String?
+  expiresAt      DateTime
+  token          String   @unique
+  ipAddress      String?
+  userAgent      String?
   impersonatedBy String?
 
   userId String

@@ -66,7 +66,7 @@ export const ChangePasswordForm = () => {
       <Button
         type="submit"
         disabled={isPending}
-        className="bg-sky-500 text-white uppercase font-bold"
+        className="bg-sky-500 text-white uppercase font-bold dark:text-black dark:bg-default-600"
       >
         Valider
       </Button>
