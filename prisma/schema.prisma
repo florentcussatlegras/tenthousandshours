@@ -65,10 +65,10 @@ model StudyProcess {
   name        String
   description String
 
-  totalHours Int
+  totalHours Int @default(0)
 
-  forecastedtotalHoursPerDay  Int?
-  forecastedtotalHoursPerWeek Int?
+  forecastedDedicatedHours  Int?
+  forecastedDedicatedHoursPeriod String?
   forecastedAimReachedAt      DateTime?
 
   topicId String
