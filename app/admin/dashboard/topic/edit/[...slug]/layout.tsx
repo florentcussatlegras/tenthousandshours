@@ -12,7 +12,8 @@ export default function BlogLayout({
     <div className="w-full space-y-8">
       <Breadcrumb
         steps={[
-          { label: "Les matières", url: "/topic/list" },
+          { label: "Tableau de bord administrateur" },
+          { label: "Les matières", url: "/admin/dashboard/topic/list" },
           { label: "Modification" },
         ]}
       />

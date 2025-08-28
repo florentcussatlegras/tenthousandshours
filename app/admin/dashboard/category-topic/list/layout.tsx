@@ -13,29 +13,35 @@ export default function BlogLayout({
 }) {
   return (
     <div className="w-full space-y-8">
-
-      <Breadcrumb steps={[{"label": "Les catégories de matières"}]} />
+      <Breadcrumb
+        steps={[
+          { label: "Tableau de bord administrateur" },
+          { label: "Les catégories de matières" },
+        ]}
+      />
 
       <div className="flex">
         <h1 className="text-3xl font-bold">Liste des catégories de matière</h1>
 
         <Button className="bg-black dark:bg-default-600 ml-auto">
-            <Link href="/admin/dashboard/category-topic/new" className="flex flex-row items-center text-white dark:text-black gap-2">
-              <AddIcon />
-              <span>Ajouter une catégorie</span>
-            </Link>
+          <Link
+            href="/admin/dashboard/category-topic/new"
+            className="flex flex-row items-center text-white dark:text-black gap-2"
+          >
+            <AddIcon />
+            <span>Ajouter une catégorie</span>
+          </Link>
         </Button>
       </div>
 
       <div className="flex gap-4">
-          <div className="w-1/4">
-              <MenuAdminDashBoard keySelected="category-topic" />
-          </div>
-          <div className="w-3/4 bg-white box-border shadow-medium">
-            {children}
-          </div>
+        <div className="w-1/4">
+          <MenuAdminDashBoard keySelected="category-topic" />
+        </div>
+        <div className="w-3/4 bg-white box-border shadow-medium">
+          {children}
+        </div>
       </div>
-
     </div>
   );
 }

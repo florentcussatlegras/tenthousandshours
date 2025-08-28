@@ -2,7 +2,6 @@
 
 import { Breadcrumb } from "@/components/breadcrumb";
 import MenuAdminDashBoard from "@/components/menu-admin-dashboard";
-import { title } from "@/components/primitives";
 
 export default function BlogLayout({
   children,
@@ -13,7 +12,11 @@ export default function BlogLayout({
     <div className="w-full space-y-8">
       <Breadcrumb
         steps={[
-          { label: "Les catégories de matières", url: "/category-topic/list" },
+          { label: "Tableau de bord administrateur" },
+          {
+            label: "Les catégories de matières",
+            url: "/admin/dashboards/category-topic/list",
+          },
           { label: "Ajout" },
         ]}
       />

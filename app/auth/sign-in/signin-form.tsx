@@ -59,9 +59,9 @@ export default function SignInForm() {
           //   }
           // }}
           label="Email"
-          labelPlacement="outside-top"
+          labelPlacement="inside"
           name="email"
-          size="lg"
+          size="md"
         />
 
         <div className="space-y-2">
@@ -71,10 +71,10 @@ export default function SignInForm() {
             // errorMessage={getPasswordError(password)}
             // isInvalid={getPasswordError(password) !== null}
             label="Mot de passe"
-            labelPlacement="outside-top"
+            labelPlacement="inside"
             name="password"
             type="password"
-            size="lg"
+            size="md"
           />
 
           <Link href="/auth/forget-password" className="text-sm text-muted-foreground hover:text-foreground text-sky-500">

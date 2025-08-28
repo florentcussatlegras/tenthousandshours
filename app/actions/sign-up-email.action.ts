@@ -36,18 +36,24 @@ async function signUpEmailAction(formData: FormData) {
     //     //     return { error: "Please enter a valid email adress" };
     //     // }
     // }
+    console.log(formData);
+
+    const firstname = String(formData.get("firstname"));
+    if (!firstname) {
+        return { error: "Veuillez saisir votre prénom" };
+    }
 
     const name = String(formData.get("name"));
     if (!name) {
-        return { error: "Please enter your name" };
+        return { error: "Veuillez saisir votre nom" };
     }
 
     const email = String(formData.get("email"));
     if (!email) {
-        return { error: "Please enter your email" };
+        return { error: "Veuillez saisir votre adresse email" };
     }
     if (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email) == false) {
-        return { error: "Please enter a valid email adress" };
+        return { error: "Veuillez saisir une adresse email valide" };
     }
 
     const password = String(formData.get("password"));
@@ -72,6 +78,7 @@ async function signUpEmailAction(formData: FormData) {
     try {
         await auth.api.signUpEmail({
             body: {
+                firstname,
                 name,
                 email,
                 password

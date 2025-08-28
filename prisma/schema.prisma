@@ -99,6 +99,7 @@ model User {
   createdAt DateTime
   updatedAt DateTime
 
+  firstname     String
   name          String
   email         String    @unique
   emailVerified Boolean
