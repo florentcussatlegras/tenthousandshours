@@ -8,7 +8,10 @@ import { useSession } from '../lib/auth-client'
 
 export default function SettingsPage () {
 
-    const { data: session } = useSession();
+  const { data: session } = useSession();
+
+  console.log('here');
+  console.log(session);
 
   return (
 
@@ -27,13 +30,13 @@ export default function SettingsPage () {
                     ) : (
                     <div className="size-16 border border-primary rounded-full bg-sky-500 text-primary-foreground flex items-center justify-center">
                         <span className="uppercase text-lg font-bold">
-                        {session?.user.name.slice(0, 2)}
+                            {session?.user.firstname.slice(0, 2)}
                         </span>
                     </div>
                 )}
 
                 <div className="flex flex-col items-start justify-center">
-                    <span className="text-xl font-light text-default-600">{session?.user.name}</span>
+                    <span className="text-xl text-default-600 font-medium">{session?.user.firstname} {session?.user.name}</span>
                     <span className="text-sm text-sky-500">{session?.user.email}</span>
                 </div>
 
@@ -53,6 +56,7 @@ export default function SettingsPage () {
 
             <UpdateUserForm
                 name={session?.user.name}
+                firstname={session?.user.firstname}
                 image={session?.user.image ?? ""}
             />
             </Card>

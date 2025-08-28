@@ -195,11 +195,11 @@ export default function NavBarPage() {
         <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
           <Link
             className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
-            href="#"
+            href="/profile"
             data-react-aria-pressable="true"
             role="link"
           >
-            Dashboard
+            Mes progrès
           </Link>
         </NavbarItem>
         <NavbarItem
@@ -213,37 +213,17 @@ export default function NavBarPage() {
             role="link"
             aria-current="page"
           >
-            Deployments
+            Qui sommes-nous?
           </Link>
         </NavbarItem>
         <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
           <Link
             className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
-            href="#"
+            href="/contact"
             data-react-aria-pressable="true"
             role="link"
           >
-            Analytics
-          </Link>
-        </NavbarItem>
-        <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
-          <Link
-            className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
-            href="#"
-            data-react-aria-pressable="true"
-            role="link"
-          >
-            Team
-          </Link>
-        </NavbarItem>
-        <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
-          <Link
-            className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
-            href="#"
-            data-react-aria-pressable="true"
-            role="link"
-          >
-            Settings
+            Nous contacter
           </Link>
         </NavbarItem>
       </NavbarContent>

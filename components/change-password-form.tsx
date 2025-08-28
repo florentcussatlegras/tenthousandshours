@@ -44,11 +44,11 @@ export const ChangePasswordForm = () => {
         id="currentPassword"
         name="currentPassword"
         label="Mot de passe actuel"
-        labelPlacement="outside-top"
+        labelPlacement="inside"
         classNames={{
           label: "self-start"
         }}
-        size="lg"
+        size="md"
       />
 
       <Input
@@ -56,11 +56,11 @@ export const ChangePasswordForm = () => {
         id="newPassword"
         name="newPassword"
         label="Nouveau mot de passe"
-        labelPlacement="outside-top"
+        labelPlacement="inside"
         classNames={{
           label: "self-start"
         }}
-        size="lg"
+        size="md"
       />
 
       <Button

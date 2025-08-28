@@ -135,10 +135,25 @@ export default function SignUpForm() {
 
           //   return errors.name;
           // }}
-          label="Nom"
-          labelPlacement="outside-top"
+          label="Votre prénom"
+          labelPlacement="inside"
+          name="firstname"
+          size="md"
+        />
+
+        <Input
+          // isRequired
+          // errorMessage={({validationDetails}) => {
+          //   if (validationDetails.valueMissing) {
+          //     return "Please enter your name";
+          //   }
+
+          //   return errors.name;
+          // }}
+          label="Votre nom"
+          labelPlacement="inside"
           name="name"
-          size="lg"
+          size="md"
         />
 
         <Input
@@ -151,10 +166,10 @@ export default function SignUpForm() {
           //     return "Please enter a valid email address";
           //   }
           // }}
-          label="Email"
-          labelPlacement="outside-top"
+          label="Votre adresse email"
+          labelPlacement="inside"
           name="email"
-          size="lg"
+          size="md"
         />
 
         <Input
@@ -162,10 +177,10 @@ export default function SignUpForm() {
           // errorMessage={getPasswordError(password)}
           // isInvalid={getPasswordError(password) !== null}
           label="Mot de passe"
-          labelPlacement="outside-top"
+          labelPlacement="inside"
           name="password"
           type="password"
-          size="lg"
+          size="md"
           // value={password}
           // onValueChange={setPassword}
         />

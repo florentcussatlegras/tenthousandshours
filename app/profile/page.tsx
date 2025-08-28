@@ -77,14 +77,14 @@ export default async function Page() {
                   </span>
                 </div>
               )}
-              <span className="font-light text-xl text-default-600">
-                {session.user.name}
+              <span className="text-xl text-default-600 font-medium">
+                {session.user.firstname} {session.user.name}
               </span>
               <span className="font-light text-md text-sky-500">
                 {session.user.email}
               </span>
               <span className="font-light text-sm text-default-400">
-                Full Stack Developer
+                Développeur Full Stack
               </span>
 
               <Link href="/settings">
