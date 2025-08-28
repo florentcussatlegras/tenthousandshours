@@ -51,7 +51,6 @@ export default async function Page() {
   return (
     <div className="py-8 container mx-auto max-w-[1536px] space-y-8">
       <Breadcrumb steps={[{ label: "Mon profile" }]} />
-
       <div className="flex items-center gap-2">
         {session.user.role === "ADMIN" && (
           <Button className="bg-sky-500">

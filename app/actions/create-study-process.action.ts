@@ -1,6 +1,5 @@
 "use server";
 
-
 import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -9,16 +8,16 @@ import { StudyProcess } from "@prisma/client";
 import { auth } from "../lib/auth";
 import { headers } from "next/headers";
 
-
 const createTopicSchema = z.object({
-//   name: z.string(),
-//   description: z.string(),
+  name: z.string(),
+  description: z.string(),
   topicId: z.string(),
 });
 
 interface CreateStudyProcessState {
   errors: {
     name?: string[];
+    description?: string[];
     topicId?: string[];
     _form?: string[];
   };
@@ -57,10 +56,10 @@ export async function createStudyProcess(
 
     studyProcess = await prisma.studyProcess.create({
       data: {
-        name: "",
-        content: "",
+        name: result.data.name,
+        description: result.data.description,
         topicId: result.data.topicId,
-        userId: session.user.id
+        userId: session.user.id,
       },
     });
   } catch (err: unknown) {

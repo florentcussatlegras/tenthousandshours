@@ -199,7 +199,7 @@ export default function NavBarPage() {
             data-react-aria-pressable="true"
             role="link"
           >
-            Mes progrès
+            Mes apprentissages
           </Link>
         </NavbarItem>
         <NavbarItem
