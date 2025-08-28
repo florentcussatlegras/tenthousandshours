@@ -11,6 +11,8 @@ import { headers } from "next/headers";
 const createTopicSchema = z.object({
   name: z.string(),
   description: z.string(),
+  timeDedicated: z.string().nullable(),
+  timeDedicatedPeriod: z.string().nullable(),
   topicId: z.string(),
 });
 
@@ -18,6 +20,7 @@ interface CreateStudyProcessState {
   errors: {
     name?: string[];
     description?: string[];
+    timeDedicated?: string[];
     topicId?: string[];
     _form?: string[];
   };
@@ -36,6 +39,8 @@ export async function createStudyProcess(
 
   if (!session || !session.user) redirect("/auth/sign-in");
 
+  console.log(formData);
+
   const result = createTopicSchema.safeParse(
     Object.fromEntries(formData)
   );
@@ -52,12 +57,13 @@ export async function createStudyProcess(
   let studyProcess: StudyProcess;
 
   try {
-    var slugify = require('slugify');
-
+    // var slugify = require('slugify');
     studyProcess = await prisma.studyProcess.create({
       data: {
         name: result.data.name,
         description: result.data.description,
+        forecastedDedicatedHours: result.data.timeDedicated === '' ? null : Number(result.data.timeDedicated),
+        forecastedDedicatedHoursPeriod: result.data.timeDedicated === '' ? null : result.data.timeDedicatedPeriod,
         topicId: result.data.topicId,
         userId: session.user.id,
       },
@@ -72,7 +78,7 @@ export async function createStudyProcess(
     } else {
         return {
           errors: {
-            _form: ['Une erreur est survenue lors de la création du processus de '],
+            _form: ['Une erreur est survenue lors de la création du processus de création'],
           },
         };
     }

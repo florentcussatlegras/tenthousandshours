@@ -98,7 +98,7 @@ export default function StudyProcessCreateForm({
             <div className="flex flex-row gap-4">
               <NumberInput
                 color={formState.errors.name !== undefined ? "danger" : "default"}
-                name="timeSpended"
+                name="timeDedicated"
                 classNames={{
                   base: "flex-3",
                   // input: "w-[150px]",
@@ -110,6 +110,7 @@ export default function StudyProcessCreateForm({
                 hideStepper
               />
               <RadioGroup
+                name="timeDedicatedPeriod"
                 className="flex items-center justify-end"
                 defaultValue="day"
               >
