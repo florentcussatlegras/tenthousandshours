@@ -1,6 +1,7 @@
 "use client";
 
 import { createStudyProcess } from "@/app/actions/create-study-process.action";
+import SearchBarHomepage from "@/components/search-bar-homepage";
 import {
   Form,
   Input,
@@ -12,8 +13,11 @@ import {
   RadioGroup,
   Radio,
   NumberInput,
+  Autocomplete,
+  AutocompleteItem,
 } from "@heroui/react";
 import { Topic } from "@prisma/client";
+import { SearchIcon } from "lucide-react";
 import { useActionState, useState } from "react";
 
 export default function StudyProcessCreateForm({
@@ -26,61 +30,117 @@ export default function StudyProcessCreateForm({
   });
 
   // const [currentDescription, setCurrentDescription] = useState(description);
-  const topicName = localStorage.getItem("new_study_process")
-  ? localStorage.getItem("new_study_process")
-  : "";
-
+  let topicName: string | null = "";
+  let initialTopicId = null;
+  if (localStorage.getItem("new_study_process")) {
+    topicName = localStorage.getItem("new_study_process");
+    localStorage.removeItem("new_study_process");
+    initialTopicId = topics.filter((topic) => topic.name === topicName)[0].id;
+  } 
+  
   const [currentName, setCurrentName] = useState(`Devenir un expert en ${topicName}`);
+  const [currentTopicId, setCurrentTopicId] = useState(initialTopicId);
+  const [currentTopicName, setCurrentTopicName] = useState(topicName);
 
-  const [currentTopicId, setCurrentTopicId] = useState(
-    topics.filter((topic) => topic.name === topicName)[0].id
-  );
+  function handleTopicChange(value) {
+    setCurrentTopicName(value);
+    setCurrentTopicId(topics.filter((topic) => topic.name === value)[0].id);
+  }
 
   return (
     <div className="space-y-8">
-      <h1 className="uppercase text-2xl font-medium">
-        Je veux devenir une star du <span className="text-sky-500">{topicName}</span>
-      </h1>
 
       <Form action={formAction} className="gap-6">
-        {/* <Select
-          items={topics}
-          label="Matière étudiée"
-          placeholder="Selectionnez une matière"
-          name="topicId"
-          labelPlacement="outside"
-          size="lg"
-          selectedKeys={[currentTopicId]}
-        >
-          {(topic) => (
-            <SelectItem
-              key={topic.id}
-              onClick={(e) => {
-                setCurrentTopicId(topic.id);
-              }}
-            >
-              {topic.name}
-            </SelectItem>
-          )}
-        </Select> */}
 
         <Input type="hidden" name="topicId" value={currentTopicId} />
 
+        <Autocomplete
+            aria-label="Selectionner une matière"
+            inputValue={currentTopicName}
+            classNames={{
+                base: "max-w-full mb-8",
+                listboxWrapper: "max-h-[320px]",
+                selectorButton: "text-default-500",
+            }}
+            defaultItems={topics}
+            inputProps={{
+                classNames: {
+                  input: "ml-4 text-base text-default-600",
+                  inputWrapper: "h-[60px] border-1 border-default-100 shadow-lg dark:bg-content1",
+                },
+            }}
+            listboxProps={{
+                hideSelectedIcon: true,
+                itemClasses: {
+                base: [
+                    "rounded-medium",
+                    "text-default-500",
+                    "transition-opacity",
+                    "data-[hover=true]:text-foreground",
+                    "dark:data-[hover=true]:bg-default-50",
+                    "data-[pressed=true]:opacity-70",
+                    "data-[hover=true]:bg-default-200",
+                    "data-[selectable=true]:focus:bg-default-100",
+                    "data-[focus-visible=true]:ring-default-500",
+                ],
+                },
+            }}
+            placeholder="Exple: saxophone, javascript, maçonnerie..."
+            popoverProps={{
+                offset: 10,
+                classNames: {
+                base: "rounded-large",
+                content: "p-1 border-small border-default-100 bg-background",
+                },
+            }}
+            radius="full"
+            startContent={<SearchIcon className="text-default-400" size={20} strokeWidth={2.5} />}
+            variant="bordered"
+            onInputChange={handleTopicChange}
+        >
+            {(item) => (
+                <AutocompleteItem key={item.id} textValue={item.name}>
+                  <div className="flex justify-between items-center">
+                      <div className="flex gap-2 items-center">
+                      {/* <Avatar alt={item.name} className="shrink-0" size="sm" src={item.avatar} /> */}
+                      <div className="flex flex-col">
+                          <span className="text-base">{item.name}</span>
+                          {/* <span className="text-tiny text-default-400">{item.team}</span> */}
+                      </div>
+                      </div>
+                      {/* <Button
+                      className="border-small mr-0.5 font-medium shadow-small"
+                      radius="full"
+                      size="sm"
+                      variant="bordered"
+                      >
+                      Add
+                      </Button> */}
+                  </div>
+                </AutocompleteItem>
+            )}
+        </Autocomplete>
+
         {formState.errors?._form ? (
           <div className="text-danger text-sm">
+            {JSON.stringify(formState.errors)}
             {formState.errors?._form.join(", ")}
           </div>
         ) : null}
 
+        <h1 className="uppercase text-2xl font-medium mb-2">
+          Je veux devenir une star du <span className="text-sky-500">{currentTopicName}</span>
+        </h1>
+
         <Input
           color={formState.errors.name !== undefined ? "danger" : "default"}
-          label="Titre"
-          labelPlacement="outside-top"
+          label="Titre (facultatif)"
+          labelPlacement="outside"
           name="name"
           type="text"
-          value={currentName}
+          value={`Devenir un expert en ${currentTopicName}`}
           classNames={{
-            label: "self-start",
+            label: "self-start pb-2",
             inputWrapper: "h-[60px]"
           }}
           size="lg"

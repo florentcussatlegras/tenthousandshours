@@ -3,7 +3,7 @@
 import { updateUser } from "@/app/lib/auth-client";
 import { addToast, Button, Form, Input } from "@heroui/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 interface UpdateUserFormProps {
   firstname?: string;
@@ -11,18 +11,31 @@ interface UpdateUserFormProps {
   image?: string;
 }
 
-export const UpdateUserForm = ({ firstname, name, image }: UpdateUserFormProps) => {
+export const UpdateUserForm = ({
+  firstname,
+  name,
+  image,
+}: UpdateUserFormProps) => {
   const [isPending, setIsPending] = useState(false);
   const [currentName, setCurrentName] = useState(name);
   const [currentFirstname, setCurrentFirstname] = useState(firstname);
   const [currentImage, setCurrentImage] = useState(image);
-  
-  const router = useRouter();
 
-  console.log(firstname);
+  // const [imageFile, setImageFile] = useState<File | null>(null);
+
+  // const [fileImage, setFileImage] = useState<File | null>(null);
+
+  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (e.target.files) {
+  //     setFileImage(e.target.files[0]);
+  //   }
+  // };
+
+  const router = useRouter();
 
   async function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
+
     const formData = new FormData(evt.target as HTMLFormElement);
     const firstname = String(formData.get("firstname"));
     const name = String(formData.get("name"));
@@ -68,8 +81,9 @@ export const UpdateUserForm = ({ firstname, name, image }: UpdateUserFormProps) 
   }
 
   return (
-
     <Form onSubmit={handleSubmit} className="space-y-4 mt-4">
+
+      {/* <input id="file" type="file" onChange={handleFileChange} /> */}
       <Input
         id="firstname"
         name="firstname"
@@ -77,7 +91,7 @@ export const UpdateUserForm = ({ firstname, name, image }: UpdateUserFormProps) 
         label="Prénom"
         labelPlacement="inside"
         classNames={{
-          label: "self-start"
+          label: "self-start",
         }}
         size="md"
         onChange={(e) => setCurrentFirstname(e.currentTarget.value)}
@@ -90,7 +104,7 @@ export const UpdateUserForm = ({ firstname, name, image }: UpdateUserFormProps) 
         label="Nom"
         labelPlacement="inside"
         classNames={{
-          label: "self-start"
+          label: "self-start",
         }}
         size="md"
         onChange={(e) => setCurrentName(e.currentTarget.value)}
@@ -100,15 +114,17 @@ export const UpdateUserForm = ({ firstname, name, image }: UpdateUserFormProps) 
         type="url"
         id="image"
         name="image"
-        value={currentImage}
         label="Image"
         labelPlacement="inside"
         classNames={{
-          label: "self-start"
+          label: "self-start",
         }}
         size="md"
+        // onChange={handleFileChange}
         onChange={(e) => setCurrentImage(e.currentTarget.value)}
       />
+
+      {/* <FileUploader /> */}
 
       <Button
         type="submit"

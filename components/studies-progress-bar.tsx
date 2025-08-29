@@ -3,24 +3,39 @@
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
 import { Progress } from "@heroui/react";
 
-export default function StudiesProgressbar() {
+interface StudyProgression {
+  totalHours?: Number;
+  topic?: {
+    name?: String;
+  };
+}
+
+export default function StudiesProgressbar({
+  userStudies,
+}: {
+  userStudies: StudyProgression[];
+}) {
   return (
     <Card className="h-full rounded-none">
       <CardBody className="p-6">
-        <div className="flex flex-col gap-2 h-full justify-center">
-            <span>Javascript</span>
-            <Progress aria-label="Loading..." className="w-full" classNames={{indicator: "text-sky-500"}} value={60} />
-            <span>PHP</span>
-            <Progress aria-label="Loading..." className="w-full" value={30} />
-            <span>Laravel</span>
-            <Progress aria-label="Loading..." className="w-full" value={56} />
-            <span>React</span>
-            <Progress aria-label="Loading..." className="w-full" value={90} />
-            <span>Formule 1</span>
-            <Progress aria-label="Loading..." className="w-full" value={5} />
+        <div className="flex flex-col gap-4 h-full justify-center">
+          {userStudies.map((study) => {
+            const ratioProgress = (Number(study.totalHours) / 10000) * 100;
+            return (
+              <>
+                <Progress
+                  aria-label="Loading..."
+                  label={study?.topic?.name}
+                  className="w-full"
+                  classNames={{ indicator: "bg-sky-500", label: "text-md", track: "drop-shadow-md border border-default", value: "text-foreground/60" }}
+                  value={ratioProgress}
+                  showValueLabel={true}
+                />
+              </>
+            );
+          })}
         </div>
       </CardBody>
     </Card>
   );
 }
-
