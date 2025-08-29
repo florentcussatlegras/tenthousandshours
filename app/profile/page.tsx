@@ -10,6 +10,8 @@ import { Breadcrumb } from "@/components/breadcrumb";
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
 import { EditIcon } from "@/components/icons";
 import StudiesProgressBar from "@/components/studies-progress-bar";
+import prisma from "../lib/prisma";
+import Avatar from "@/components/avatar";
 
 export default async function Page() {
   const headerList = await headers();
@@ -48,6 +50,21 @@ export default async function Page() {
     },
   });
 
+  const userStudies = await prisma.user.findFirst({
+    select: {
+      studyProcesses: {
+        select: {
+          totalHours: true,
+          topic: {
+            select: {
+              name: true
+            }
+          }
+        }
+      }
+    }
+  });
+
   return (
     <div className="py-8 container mx-auto max-w-[1536px] space-y-8">
       <Breadcrumb steps={[{ label: "Mon profile" }]} />
@@ -64,11 +81,7 @@ export default async function Page() {
           <Card className="h-full rounded-none relative">
             <CardBody className="flex-col items-center justify-center gap-4">
               {session?.user.image ? (
-                <img
-                  src={session?.user.image}
-                  alt="User Image"
-                  className="size-26 border-3 border-primary rounded-full object-cover"
-                />
+                <Avatar imgSrc={session?.user.image} />
               ) : (
                 <div className="size-26 border-3 border-primary rounded-full bg-sky-500 text-primary-foreground flex items-center justify-center">
                   <span className="uppercase text-lg font-bold">
@@ -101,7 +114,7 @@ export default async function Page() {
           </Card>
         </div>
         <div className="col-span-3">
-          <StudiesProgressBar />
+          <StudiesProgressBar userStudies={userStudies?.studyProcesses} />
         </div>
       </div>
 
