@@ -63,13 +63,14 @@ model StudyProcess {
   updatedAt DateTime @updatedAt
 
   name        String
+  slug        String
   description String
 
   totalHours Int @default(0)
 
-  forecastedDedicatedHours  Int?
+  forecastedDedicatedHours       Int?
   forecastedDedicatedHoursPeriod String?
-  forecastedAimReachedAt      DateTime?
+  forecastedAimReachedAt         DateTime?
 
   topicId String
   topic   Topic  @relation(fields: [topicId], references: [id])

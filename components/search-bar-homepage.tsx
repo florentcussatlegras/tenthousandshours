@@ -55,7 +55,6 @@ export default function SearchBarHomepage({ topics }: { topics: Topic[] }) {
     const onError: SubmitErrorHandler<FormValues> = (errors) =>
       console.log(errors)
 
-
     return (
       <Form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-8 w-[750px]">
       

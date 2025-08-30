@@ -23,7 +23,6 @@ interface CreateStudyProcessState {
     timeDedicated?: string[];
     topicId?: string[];
     _form?: string[];
-    _existingStudy? : string[]; 
   };
 }
 
@@ -54,19 +53,19 @@ export async function createStudyProcess(
   let studyProcess: StudyProcess;
 
   try {
-    // var slugify = require('slugify');
+    var slugify = require('slugify');
 
-    const studyProcessUser = await prisma.studyProcess.findMany({
+    const studyProcessUser = await prisma.studyProcess.findFirst({
       where: {
         userId: session.user.id,
         topicId: result.data.topicId,
       }
     });
 
-    if (studyProcessUser) {
+    if (studyProcessUser !== null) {
       return {
           errors: {
-            _existingStudy: ["Vous êtes déja en train d'apprendre cette matière. Veuillez en choisir une nouvelle."],
+            _form: ["Vous êtes déja en train d'apprendre cette matière. Veuillez en choisir une nouvelle."],
           },
         };
     }
@@ -74,6 +73,7 @@ export async function createStudyProcess(
     studyProcess = await prisma.studyProcess.create({
       data: {
         name: result.data.name,
+        slug: slugify(result.data.name),
         description: result.data.description,
         forecastedDedicatedHours: result.data.timeDedicated === '' ? null : Number(result.data.timeDedicated),
         forecastedDedicatedHoursPeriod: result.data.timeDedicated === '' ? null : result.data.timeDedicatedPeriod,
