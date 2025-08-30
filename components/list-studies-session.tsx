@@ -29,15 +29,16 @@ export default function ListStudiesSession({
 
   return (
     <Card className="h-full rounded-none relative">
-      <CardHeader className="flex flex-col gap-2 p-4">
+      <CardHeader className="flex flex-col gap-2 pb-4 px-4">
         <div className="flex flex-row justify-between w-full items-center">
-            <h1 className="text-xl font-medium text-default-600">
+            <h1 className="text-xl font-medium">
                 Vos sessions de travail
             </h1>
             <div>
-            <Button color="primary" onPress={onOpen}>
-                <AddIcon />
-                <Link href="">Ajouter une session</Link>
+            <Button className="bg-sky-500 dark:bg-default-900" onPress={onOpen}>
+                <Link href="" className="flex flex-row items-center text-white dark:text-black gap-2">
+                    <AddIcon />
+                </Link>
             </Button>
             <Modal
                 isOpen={isOpen}

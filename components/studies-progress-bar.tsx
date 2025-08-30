@@ -72,7 +72,7 @@ export default function StudiesProgressbar({
   return (
     <Card className="h-full rounded-none">
       <CardHeader className="flex flex-col items-start gap-3 p-4">
-        <h1 className="text-xl font-medium text-default-600">
+        <h1 className="text-xl font-medium text-black/90">
           Mes apprentissages
         </h1>
         <Divider />

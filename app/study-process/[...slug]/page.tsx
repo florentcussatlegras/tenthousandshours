@@ -41,12 +41,10 @@ export default async function studyProcessDetailPage({ params }) {
     }
   });
 
-  console.log(studyProcess);
-
   return (
     <div className="w-full space-y-6">
       <Breadcrumb steps={[{ label: "Mes apprentissages", url: "/profile" }, { label: `${studyProcess?.topic.name}` }]} />
-      <h1 className="text-3xl font-bold text-default-600">
+      <h1 className="text-3xl font-bold">
         Mes apprentissages
       </h1>
       <div className="grid grid-cols-3 w-full gap-4">
