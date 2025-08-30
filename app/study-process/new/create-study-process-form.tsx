@@ -123,7 +123,6 @@ export default function StudyProcessCreateForm({
 
         {formState.errors?._form ? (
           <div className="text-danger text-sm">
-            {JSON.stringify(formState.errors)}
             {formState.errors?._form.join(", ")}
           </div>
         ) : null}
