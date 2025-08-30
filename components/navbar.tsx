@@ -122,6 +122,7 @@ import {
 } from "@heroui/react";
 import { ThemeSwitch } from "./theme-switch";
 import { GithubIcon } from "./icons";
+import { GraduationCap, HelpCircle, LogOut, Mail, Settings, User } from "lucide-react";
 
 export const AcmeLogo = () => {
   return (
@@ -172,11 +173,35 @@ export const SearchIcon = ({
   );
 };
 
+export const UserIcon = ({}) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="lucide lucide-user-icon lucide-user text-sky-500 border"
+    >
+      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
+    </svg>
+  );
+};
+
 export default function NavBarPage() {
   const { data: session } = useSession();
 
   return (
-    <Navbar className="bg-white dark:bg-black/90 p-0 m-0" maxWidth="2xl" classNames={{wrapper: "px-0"}}>
+    <Navbar
+      className="bg-white dark:bg-black/90 p-0 m-0"
+      maxWidth="2xl"
+      classNames={{ wrapper: "px-0" }}
+    >
       <NavbarContent className="w-1/3">
         <NavbarBrand>
           <Link href="/" className="text-default-600">
@@ -199,6 +224,7 @@ export default function NavBarPage() {
             data-react-aria-pressable="true"
             role="link"
           >
+            <GraduationCap />
             Mes apprentissages
           </Link>
         </NavbarItem>
@@ -213,6 +239,7 @@ export default function NavBarPage() {
             role="link"
             aria-current="page"
           >
+            <HelpCircle />
             Qui sommes-nous?
           </Link>
         </NavbarItem>
@@ -223,6 +250,7 @@ export default function NavBarPage() {
             data-react-aria-pressable="true"
             role="link"
           >
+            <Mail />
             Nous contacter
           </Link>
         </NavbarItem>
@@ -281,18 +309,29 @@ export default function NavBarPage() {
               )}
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
-              <DropdownItem key="profile" className="h-14 gap-2">
-                <Link href="/profile">
-                  <p className="font-semibold">{session.user.email}</p>
+              <DropdownItem key="profile" className="gap-2 bg-default-200 flex flex-row">
+                <Link href="/profile" className="font-semibold text-sky-500 text-md items-center gap-1">
+                  <User />
+                  {session.user.email}
                 </Link>
               </DropdownItem>
-              <DropdownItem key="settings">My Settings</DropdownItem>
-              <DropdownItem key="team_settings">Team Settings</DropdownItem>
-              <DropdownItem key="analytics">Analytics</DropdownItem>
-              <DropdownItem key="system">System</DropdownItem>
-              <DropdownItem key="configurations">Configurations</DropdownItem>
-              <DropdownItem key="help_and_feedback">
-                Help & Feedback
+              <DropdownItem key="settings">
+                <Link href="/settings" className="text-md gap-1 text-black">
+                  <Settings />
+                  Mes paramètres
+                </Link>
+              </DropdownItem>
+              <DropdownItem key="contact">
+                <Link href="/profile" className="text-md gap-1 text-black">
+                  <HelpCircle />
+                  Aide
+                </Link>
+              </DropdownItem>
+              <DropdownItem key="contact">
+                <Link href="/profile" className="text-md gap-1 text-black">
+                  <Mail />
+                  Nous contacter
+                </Link>
               </DropdownItem>
               <DropdownItem key="logout" color="danger">
                 <SignOutButton />

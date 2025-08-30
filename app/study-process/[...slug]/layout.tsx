@@ -8,7 +8,7 @@ export default function StudyProcessDetailLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex flex-col items-start py-8 md:py-10 max-w-[1536] mx-auto border">
+    <section className="flex flex-col items-start py-8 md:py-10 max-w-[1536] mx-auto">
       {children}
     </section>
   );

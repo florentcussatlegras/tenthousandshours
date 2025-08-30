@@ -5,6 +5,7 @@ import { Button } from "@heroui/button";
 import { signOut } from "@/app/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { LogOut } from "lucide-react";
 
 export const SignOutButton = () => {
     const [isPending, setIsPending] = React.useState(false);
@@ -31,7 +32,8 @@ export const SignOutButton = () => {
     }
 
     return (
-        <Button onPress={handleClick} color="light" disabled={isPending} className="p-0 h-4">
+        <Button onPress={handleClick} color="light" disabled={isPending} className="p-0 h-6 gap-1">
+            <LogOut />
             Déconnexion
         </Button>
     );
