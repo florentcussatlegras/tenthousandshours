@@ -39,12 +39,12 @@ export default function ListStudiesSession({
   return (
     <Card className="h-full rounded-none relative">
       <CardHeader className="flex flex-col gap-4 items-start">
-        <h2 className="text-md">
+        {/* <h2 className="text-md">
           Nouvelle session de travail du{" "}
           {new Intl.DateTimeFormat("fr-Fr", {
             dateStyle: "full",
           }).format(new Date())}
-        </h2>
+        </h2> */}
         <Form
           action={formAction}
           className="flex flex-col justify-start w-full"
@@ -73,7 +73,7 @@ export default function ListStudiesSession({
               name="description"
             />
           </div>
-          <Button type="submit">Ajouter</Button>
+          <Button type="submit" className="bg-sky-500 text-white">Ajouter une nouvelle session</Button>
         </Form>
         <Divider />
       </CardHeader>

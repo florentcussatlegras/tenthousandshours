@@ -9,6 +9,8 @@ export default function DetailsStudyProcess({
   studyProcess: StudyProcess;
 }) {
   const ratioProgress = (Number(studyProcess.totalHours) / 10000) * 100;
+  console.log(studyProcess);
+
   var intl = new Intl.DateTimeFormat("fr-Fr", {
     "weekday": "long",
     "year": "numeric",
@@ -19,17 +21,18 @@ export default function DetailsStudyProcess({
   return (
     <Card className="h-full rounded-none relative">
       <CardHeader className="flex flex-col items-start gap-6">
-        <h2 className="font-bold">{studyProcess.topic.name}</h2>
-        <Chip isDisabled color="default">Débuté le {intl.format(studyProcess.createdAt)}</Chip>
+        {/* <h2 className="font-bold text-sky-500">{studyProcess.topic.name}</h2> */}
+        <span className="text-default-500 text-sm">Débuté le {intl.format(studyProcess.createdAt)}</span>
       </CardHeader>
       <CardBody>
+        <Chip isDisabled color="secondary">{`${studyProcess.totalHours} heures`}</Chip>
         <Progress
           aria-label="Loading..."
           className="w-full"
           classNames={{
             indicator: "bg-sky-500",
             track: "drop-shadow-md border border-default",
-            value: "ml-auto text-foreground/60",
+            value: "ml-auto text-foreground/60 text-sm",
           }}
           value={ratioProgress}
           showValueLabel={true}
