@@ -16,13 +16,11 @@ export default function DetailsStudyProcess({
     "day": "numeric",
   });
 
-
   return (
     <Card className="h-full rounded-none relative">
-      <CardHeader>
-        <span className="text-">
-          <Chip isDisabled color="default">Débuté le {intl.format(studyProcess.createdAt)}</Chip>
-        </span>
+      <CardHeader className="flex flex-col items-start gap-6">
+        <h2 className="font-bold">{studyProcess.topic.name}</h2>
+        <Chip isDisabled color="default">Débuté le {intl.format(studyProcess.createdAt)}</Chip>
       </CardHeader>
       <CardBody>
         <Progress

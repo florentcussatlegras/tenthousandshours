@@ -89,7 +89,7 @@ model StudySession {
 
   startedAt  DateTime
   finishedAt DateTime
-  totalHours Int
+  totalSeconds Int
 
   studyProcessId String
   studyProcess   StudyProcess @relation(fields: [studyProcessId], references: [id])

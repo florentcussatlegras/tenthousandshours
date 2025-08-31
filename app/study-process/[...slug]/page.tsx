@@ -11,48 +11,56 @@ export default async function studyProcessDetailPage({ params }) {
     headers: await headers(),
   });
 
-  const { slug } = await params.slug;
+  const paramsObj = await params;
+  const { slug } = paramsObj.slug;
 
   const studyProcess = await prisma.studyProcess.findFirst({
     select: {
+      id: true,
       name: true,
       createdAt: true,
       description: true,
       topic: {
         select: {
           name: true,
-        }
+        },
       },
       studySessions: {
-            select: {
-                description: true,
-                id: true, 
-                createdAt: true,
-                totalHours: true, 
-                startedAt: true, 
-                finishedAt: true, 
-                studyProcessId: true,
-            }
-        }
+        select: {
+          description: true,
+          id: true,
+          createdAt: true,
+          totalSeconds: true,
+          startedAt: true,
+          finishedAt: true,
+          studyProcessId: true,
+        },
+      },
     },
     where: {
-        slug,
-        userId: session?.user.id
-    }
+      slug,
+      userId: session?.user.id,
+    },
   });
 
   return (
     <div className="w-full space-y-6">
-      <Breadcrumb steps={[{ label: "Mes apprentissages", url: "/profile" }, { label: `${studyProcess?.topic.name}` }]} />
-      <h1 className="text-3xl font-bold">
-        Mes apprentissages
-      </h1>
+      <Breadcrumb
+        steps={[
+          { label: "Mes apprentissages", url: "/profile" },
+          { label: `${studyProcess?.topic.name}` },
+        ]}
+      />
+      <h1 className="text-3xl font-bold">Mes apprentissages</h1>
       <div className="grid grid-cols-3 w-full gap-4">
         <div className="col-span-1">
-            <DetailsStudyProcess studyProcess={studyProcess} />
+          <DetailsStudyProcess studyProcess={studyProcess} />
         </div>
         <div className="col-span-2">
-            <ListStudiesSession studySessions={studyProcess?.studySessions} />
+          <ListStudiesSession
+            studySessions={studyProcess?.studySessions}
+            studyProcess={studyProcess}
+          />
         </div>
       </div>
     </div>
