@@ -19,10 +19,10 @@ export default function DetailsStudyProcess({
   });
 
   return (
-    <Card className="h-full rounded-none relative">
+    <Card className="rounded-none relative p-4">
       <CardHeader className="flex flex-col items-start gap-6">
         {/* <h2 className="font-bold text-sky-500">{studyProcess.topic.name}</h2> */}
-        <span className="text-default-500 text-sm">Débuté le {intl.format(studyProcess.createdAt)}</span>
+        <span className="text-default-500 text-sm">Apprentissage débuté le {intl.format(studyProcess.createdAt)}</span>
       </CardHeader>
       <CardBody>
         <Chip isDisabled color="secondary">{`${studyProcess.totalHours} heures`}</Chip>
