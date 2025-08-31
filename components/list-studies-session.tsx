@@ -37,7 +37,7 @@ export default function ListStudiesSession({
   console.log(JSON.stringify(studySessions));
 
   return (
-    <Card className="h-full rounded-none relative">
+    <Card className="h-full rounded-none relative p-4">
       <CardHeader className="flex flex-col gap-4 items-start">
         {/* <h2 className="text-md">
           Nouvelle session de travail du{" "}
