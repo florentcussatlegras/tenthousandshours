@@ -20,6 +20,7 @@ export default async function studyProcessDetailPage({ params }) {
       name: true,
       createdAt: true,
       description: true,
+      totalHours: true,
       topic: {
         select: {
           name: true,
@@ -51,7 +52,7 @@ export default async function studyProcessDetailPage({ params }) {
           { label: `${studyProcess?.topic.name}` },
         ]}
       />
-      <h1 className="text-3xl font-bold">Mes apprentissages</h1>
+      <h1 className="text-3xl font-bold">Mes sessions de travail <span className="text-sky-500">{studyProcess.topic.name}</span></h1>
       <div className="grid grid-cols-3 w-full gap-4">
         <div className="col-span-1">
           <DetailsStudyProcess studyProcess={studyProcess} />
