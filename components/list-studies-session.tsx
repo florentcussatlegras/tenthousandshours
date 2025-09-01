@@ -49,6 +49,11 @@ export default function ListStudiesSession({
           action={formAction}
           className="flex flex-col justify-start w-full"
         >
+          {formState.errors._form ? (
+            <div className="text-danger text-sm">
+              {formState.errors._form?.join(", ")}
+            </div>
+          ) : null}
           <div className="flex flex-row w-full gap-3">
             <Input
               type="hidden"
