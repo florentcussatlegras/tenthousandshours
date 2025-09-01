@@ -113,3 +113,32 @@ export async function getListTopics() {
 
   return topics;
 }
+
+export async function fetchFilterStudySessions(yearStart: number, monthStart: number, dayStart: number, yearEnd: number, monthEnd: number, dayEnd: number) {
+
+  const dateStartFilter = new Date(yearStart, monthStart - 1, dayStart + 1, -22, 0, 0);
+  const dateEndFilter = new Date(yearEnd, monthEnd - 1, dayEnd + 1, 1, 59, 0);
+
+  console.log("dans function fetch");
+  console.log(dateStartFilter, dateEndFilter);
+
+  const studySessions = await prisma.$queryRaw`SELECT * FROM public."StudySession" WHERE "createdAt" >= ${dateStartFilter} AND "createdAt" <= ${dateEndFilter}`;
+  console.log(studySessions);
+
+  return studySessions;
+}
+
+
+// export async function getFilterStudySessions(dateStartFilter: Date, dateEndFilter: Date) {
+
+//     const response = await fetchFilterStudySessions(dateStartFilter, dateEndFilter);
+
+//     console.log('ici', response);
+
+//     if (!response.ok) throw new Error("Failed to fetch users");
+
+//     const studySessions = await response.json();
+
+//     return studySessions;
+  
+// }
