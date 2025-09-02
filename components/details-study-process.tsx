@@ -9,7 +9,6 @@ export default function DetailsStudyProcess({
   studyProcess: StudyProcess;
 }) {
   const ratioProgress = (Number(studyProcess.totalHours) / 10000) * 100;
-  console.log(studyProcess);
 
   var intl = new Intl.DateTimeFormat("fr-Fr", {
     "weekday": "long",
@@ -24,7 +23,7 @@ export default function DetailsStudyProcess({
         {/* <h2 className="font-bold text-sky-500">{studyProcess.topic.name}</h2> */}
         <span className="text-default-500 text-sm">Apprentissage débuté le {intl.format(studyProcess.createdAt)}</span>
       </CardHeader>
-      <CardBody>
+      <CardBody className="flex flex-col h-[170px]">
         <Chip isDisabled color="secondary">{`${studyProcess.totalHours} heures`}</Chip>
         <Progress
           aria-label="Loading..."
