@@ -119,13 +119,19 @@ export async function fetchFilterStudySessions(yearStart: number, monthStart: nu
   const dateStartFilter = new Date(yearStart, monthStart - 1, dayStart + 1, -22, 0, 0);
   const dateEndFilter = new Date(yearEnd, monthEnd - 1, dayEnd + 1, 1, 59, 0);
 
-  console.log("dans function fetch");
-  console.log(dateStartFilter, dateEndFilter);
-
   const studySessions = await prisma.$queryRaw`SELECT * FROM public."StudySession" WHERE "createdAt" >= ${dateStartFilter} AND "createdAt" <= ${dateEndFilter}`;
-  console.log(studySessions);
 
   return studySessions;
+}
+
+export async function getStudySession(studySessionId: string) {
+  const studySession = await prisma.studySession.findFirst({
+    where: {
+      id: studySessionId
+    }
+  });
+
+  return studySession;
 }
 
 

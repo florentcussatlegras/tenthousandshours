@@ -141,6 +141,13 @@ import {
   DatePicker,
   DateInput,
   DateRangePicker,
+  Card,
+  CardHeader,
+  Form,
+  TimeInput,
+  Textarea,
+  Divider,
+  CardBody,
 } from "@heroui/react";
 
 import {CalendarDate} from "@internationalized/date";
@@ -185,15 +192,11 @@ const INITIAL_VISIBLE_COLUMNS = [
 ];
 
 export default function ListStudiesSession({
+  onEditClick,
   studySessions,
-  studyProcess,
 }: {
   studySessions: StudySession[];
-  studyProcess: StudyProcess;
 }) {
-  const [formState, formAction] = useActionState(createStudySessionAction, {
-    errors: {},
-  });
 
   const [filterValue, setFilterValue] = React.useState("");
   const [filteredItems, setFilteredItems] = React.useState(studySessions);
@@ -289,7 +292,7 @@ export default function ListStudiesSession({
         );
       case "actions":
         return (
-          <div className="relative flex justify-end items-center gap-2">
+          <div className="relative flex justify-end items-center gap-2 w-3/5">
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
@@ -298,7 +301,7 @@ export default function ListStudiesSession({
               </DropdownTrigger>
               <DropdownMenu>
                 <DropdownItem key="view">View</DropdownItem>
-                <DropdownItem key="edit">Edit</DropdownItem>
+                <DropdownItem key="edit" onClick={() => onEditClick(studySession.id)}>Edit</DropdownItem>
                 <DropdownItem key="delete">Delete</DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -329,13 +332,8 @@ export default function ListStudiesSession({
   const onSearchChange = React.useCallback(async (value) => {
     if (value) {
       setFilterValue(value);
-
-      console.log("dans onsearchchange");
-
       const result = await fetchFilterStudySessions(value.start.year, value.start.month, value.start.day, value.end.year, value.end.month, value.end.day);
-      console.log(result);
       setFilteredItems(result);
-
       setPage(1);
     } else {
       setFilterValue("");
@@ -344,7 +342,7 @@ export default function ListStudiesSession({
 
   const onClear = React.useCallback(() => {
     setFilterValue("");
-    // setPage(1);
+    setPage(1);
   }, []);
 
   const topContent = React.useMemo(() => {
@@ -394,7 +392,7 @@ export default function ListStudiesSession({
                 ))}
               </DropdownMenu>
             </Dropdown> */}
-            <Dropdown>
+            {/* <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button
                   endContent={<ChevronDownIcon className="text-small" />}
@@ -417,10 +415,7 @@ export default function ListStudiesSession({
                   </DropdownItem>
                 ))}
               </DropdownMenu>
-            </Dropdown>
-            <Button color="primary" endContent={<PlusIcon />}>
-              Add New
-            </Button>
+            </Dropdown> */}
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -428,7 +423,7 @@ export default function ListStudiesSession({
             Total {studySessions.length} sessions
           </span>
           <label className="flex items-center text-default-400 text-small">
-            Rows per page:
+            Lignes par page:
             <select
               className="bg-transparent outline-solid outline-transparent text-default-400 text-small"
               onChange={onRowsPerPageChange}
@@ -456,17 +451,19 @@ export default function ListStudiesSession({
       <div className="py-2 px-2 flex justify-between items-center">
         <span className="w-[30%] text-small text-default-400">
           {selectedKeys === "all"
-            ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
+            ? "Toutes les sessions sélectionnées"
+            : `${selectedKeys.size} of ${filteredItems.length} selectionné`}
         </span>
         <Pagination
           isCompact
           showControls
           showShadow
-          color="primary"
           page={page}
           total={pages}
           onChange={setPage}
+          classNames={{
+            cursor: "bg-sky-500"
+          }}
         />
         <div className="hidden sm:flex w-[30%] justify-end gap-2">
           <Button
@@ -475,7 +472,7 @@ export default function ListStudiesSession({
             variant="flat"
             onPress={onPreviousPage}
           >
-            Previous
+            Précédent
           </Button>
           <Button
             isDisabled={pages === 1}
@@ -483,7 +480,7 @@ export default function ListStudiesSession({
             variant="flat"
             onPress={onNextPage}
           >
-            Next
+            Suivant
           </Button>
         </div>
       </div>
@@ -499,6 +496,7 @@ export default function ListStudiesSession({
       classNames={{
         wrapper: "max-h-[382px]",
       }}
+      radius="none"
       selectedKeys={selectedKeys}
       selectionMode="multiple"
       sortDescriptor={sortDescriptor}
@@ -518,7 +516,7 @@ export default function ListStudiesSession({
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No users found"} items={sortedItems}>
+      <TableBody emptyContent={"Aucune session trouvées"} items={sortedItems}>
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (

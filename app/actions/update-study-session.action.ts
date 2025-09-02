@@ -8,14 +8,15 @@ import { StudyProcess, Prisma, User } from "@prisma/client";
 import { auth } from "../lib/auth";
 import { headers } from "next/headers";
 
-const createStudySessionSchema = z.object({
+const updateStudySessionSchema = z.object({
   description: z.string(),
   startedAt: z.string().nullable(),
   finishedAt: z.string().nullable(),
+  studySessionId: z.string(),
   studyProcessId: z.string(),
 });
 
-interface CreateStudySessionState {
+interface UpdateStudySessionState {
   errors: {
     description?: string[];
     startedAt?: string[];
@@ -24,10 +25,10 @@ interface CreateStudySessionState {
   };
 }
 
-export async function createStudySessionAction(
-  formState: CreateStudySessionState,
+export async function updateStudySessionAction(
+  formState: updateStudySessionSchema,
   formData: FormData
-): Promise<CreateStudySessionState> {
+): Promise<updateStudySessionSchema> {
   const headerList = await headers();
 
   const session = await auth.api.getSession({
@@ -36,7 +37,7 @@ export async function createStudySessionAction(
 
   if (!session || !session.user) redirect("/auth/sign-in");
 
-  const result = createStudySessionSchema.safeParse(
+  const result = updateStudySessionSchema.safeParse(
     Object.fromEntries(formData)
   );
 
@@ -46,25 +47,6 @@ export async function createStudySessionAction(
       errors: z.flattenError(result.error).fieldErrors,
     };
   }
-
-  
-
-//   console.log(dateFinishedAt.toISOString());
-
-//   const rawSql = `SELECT * FROM "public"."StudyProcess" WHERE ("${dateStartedAt}" >= "startedAt" AND "${dateStartedAt}" <= "finishedAt") OR ("${dateFinishedAt}" >= "startedAt" AND "${dateFinishedAt}" <= "finishedAt")`;
-//   console.log(rawSql);
-
-//   studyProcess = await prisma.$queryRaw`select * from public."StudySession" 
-//    WHERE ("startedAt" <=  ${dateStartedAt.toISOString()} AND "finishedAt" >= ${dateStartedAt.toISOString()})
-//    OR ("startedAt" <=  ${dateFinishedAt.toISOString()} AND "finishedAt" >= ${dateFinishedAt.toISOString()})
-//  `;
-
-
-  // const date = new Date(2025, 6, 31, 10, 15, 0, 0);
-  // console.log(date);
-  // const myresult = await prisma.$queryRaw(Prisma.sql`SELECT * FROM public."StudySession" WHERE "startedAt" = ${date}`);
-
-  // console.log(myresult);
 
   try {
     var slugify = require("slugify");
@@ -105,6 +87,16 @@ export async function createStudySessionAction(
 
     studyProcess = await prisma.$queryRaw(Prisma.sql`SELECT * FROM public."StudySession" WHERE ("startedAt" <= ${dateStartedAt} AND "finishedAt" >= ${dateStartedAt}) OR ("startedAt" <= ${dateFinishedAt} AND "finishedAt" >= ${dateFinishedAt})`);
 
+    // studyProcess =
+    //   await prisma.$queryRaw`SELECT * FROM "public"."StudyProcess" WHERE (${dateStartedAt} >= "startedAt" AND ${dateStartedAt} <= "finishedAt") OR (${dateFinishedAt} >= "startedAt" AND ${dateFinishedAt} <= "finishedAt")`;
+
+    // studyProcess =
+    //   await prisma.$queryRaw`SELECT * FROM "public"."StudyProcess" WHERE (${date} >= "startedAt"  AND ${date} <= "finishedAt") OR (${date} >= "startedAt" AND ${date} <= "finishedAt")`;
+
+    // console.log(Array.from(studyProcess));
+    // console.log(Array.from(studyProcess).length);
+    // console.log(studyProcess);
+
     if (Array.from(studyProcess).length !== 0) {
       console.log("Cette session dans cette tranche horaire existe dèja.");
       return {
@@ -114,7 +106,8 @@ export async function createStudySessionAction(
       };
     }
 
-    const studySession = await prisma.studySession.create({
+    const studySession = await prisma.studySession.update({
+      where: {id: studySessionId},
       data: {
         description: result.data.description,
         startedAt: dateStartedAt,
@@ -124,12 +117,8 @@ export async function createStudySessionAction(
         studyProcessId: result.data.studyProcessId,
       },
     });
-
-    return {
-        errors: {},
-    };
-
   } catch (err: unknown) {
+    console.log(err);
     if (err instanceof Error) {
       return {
         errors: {

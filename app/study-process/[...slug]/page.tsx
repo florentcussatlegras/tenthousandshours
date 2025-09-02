@@ -3,6 +3,8 @@ import prisma from "@/app/lib/prisma";
 import { Breadcrumb } from "@/components/breadcrumb";
 import DetailsStudyProcess from "@/components/details-study-process";
 import ListStudiesSession from "@/components/list-studies-session";
+import { NewStudySession, NewStudySessionForm } from "@/components/new-study-session-form";
+import { StudySessions } from "@/components/study-sessions";
 import { Card } from "@heroui/react";
 import { headers } from "next/headers";
 
@@ -53,17 +55,12 @@ export default async function studyProcessDetailPage({ params }) {
         ]}
       />
       <h1 className="text-3xl font-bold">Mes sessions de travail <span className="text-sky-500">{studyProcess.topic.name}</span></h1>
-      <div className="grid grid-cols-3 w-full gap-4">
-        <div className="col-span-1">
-          <DetailsStudyProcess studyProcess={studyProcess} />
+        <div className="flex flex-col gap-4">
+            <div className="w-full">
+                <DetailsStudyProcess studyProcess={studyProcess} />
+            </div>
+            <StudySessions studyProcess={studyProcess} studySessions={studyProcess?.studySessions} />
         </div>
-        <div className="col-span-2">
-          <ListStudiesSession
-            studySessions={studyProcess?.studySessions}
-            studyProcess={studyProcess}
-          />
-        </div>
-      </div>
     </div>
   );
 }
