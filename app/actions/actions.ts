@@ -125,11 +125,18 @@ export async function fetchFilterStudySessions(yearStart: number, monthStart: nu
 }
 
 export async function getStudySession(studySessionId: string) {
-  const studySession = await prisma.studySession.findFirst({
-    where: {
-      id: studySessionId
-    }
-  });
+
+  let studySession;
+
+  if (studySessionId !== null) {
+    studySession = await prisma.studySession.findFirst({
+      where: {
+        id: studySessionId
+      }
+    });
+  } else {
+    return null;
+  }
 
   return studySession;
 }

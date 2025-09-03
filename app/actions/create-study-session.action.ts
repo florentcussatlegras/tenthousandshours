@@ -10,8 +10,8 @@ import { headers } from "next/headers";
 
 const createStudySessionSchema = z.object({
   description: z.string(),
-  startedAt: z.string().nullable(),
-  finishedAt: z.string().nullable(),
+  startedAt: z.string().min(1, "Veuillez saisir une heure de début"),
+  finishedAt: z.string().min(1, "Veuillez saisir une heure de fin"),
   studyProcessId: z.string(),
 });
 
@@ -47,41 +47,21 @@ export async function createStudySessionAction(
     };
   }
 
-  
+  let studyProcess = await prisma.studyProcess.findFirst({
+    where: {
+      id: result.data.studyProcessId,
+    },
+  });
 
-//   console.log(dateFinishedAt.toISOString());
-
-//   const rawSql = `SELECT * FROM "public"."StudyProcess" WHERE ("${dateStartedAt}" >= "startedAt" AND "${dateStartedAt}" <= "finishedAt") OR ("${dateFinishedAt}" >= "startedAt" AND "${dateFinishedAt}" <= "finishedAt")`;
-//   console.log(rawSql);
-
-//   studyProcess = await prisma.$queryRaw`select * from public."StudySession" 
-//    WHERE ("startedAt" <=  ${dateStartedAt.toISOString()} AND "finishedAt" >= ${dateStartedAt.toISOString()})
-//    OR ("startedAt" <=  ${dateFinishedAt.toISOString()} AND "finishedAt" >= ${dateFinishedAt.toISOString()})
-//  `;
-
-
-  // const date = new Date(2025, 6, 31, 10, 15, 0, 0);
-  // console.log(date);
-  // const myresult = await prisma.$queryRaw(Prisma.sql`SELECT * FROM public."StudySession" WHERE "startedAt" = ${date}`);
-
-  // console.log(myresult);
+  if (studyProcess === null) {
+    return {
+      errors: {
+        _form: ["Cette session n'est liée à aucun apprentissage en cours."],
+      },
+    };
+  }
 
   try {
-    var slugify = require("slugify");
-
-    let studyProcess = await prisma.studyProcess.findFirst({
-      where: {
-        id: result.data.studyProcessId,
-      },
-    });
-
-    if (studyProcess === null) {
-      return {
-        errors: {
-          _form: ["Cette session n'est liée à aucun apprentissage en cours."],
-        },
-      };
-    }
 
     const objStartedAt = result.data.startedAt?.split(":");
     const objFinishedAt = result.data.finishedAt?.split(":");
@@ -103,10 +83,14 @@ export async function createStudySessionAction(
       Number(objFinishedAt[2])
     );
 
-    studyProcess = await prisma.$queryRaw(Prisma.sql`SELECT * FROM public."StudySession" WHERE ("startedAt" <= ${dateStartedAt} AND "finishedAt" >= ${dateStartedAt}) OR ("startedAt" <= ${dateFinishedAt} AND "finishedAt" >= ${dateFinishedAt})`);
+    const studyProcessInThisHours = await prisma.$queryRaw(Prisma.sql`
+        SELECT * FROM public."StudySession" 
+        WHERE ("startedAt" <= ${dateStartedAt} AND "finishedAt" >= ${dateStartedAt}) 
+          OR ("startedAt" <= ${dateFinishedAt} AND "finishedAt" >= ${dateFinishedAt})
+    `);
 
-    if (Array.from(studyProcess).length !== 0) {
-      console.log("Cette session dans cette tranche horaire existe dèja.");
+    if (Array.from(studyProcessInThisHours).length !== 0) {
+      console.log(studyProcessInThisHours);
       return {
         errors: {
           _form: ["Cette session dans cette tranche horaire existe dèja."],
@@ -125,11 +109,8 @@ export async function createStudySessionAction(
       },
     });
 
-    return {
-        errors: {},
-    };
-
   } catch (err: unknown) {
+
     if (err instanceof Error) {
       return {
         errors: {
@@ -147,6 +128,6 @@ export async function createStudySessionAction(
     }
   }
 
-  // revalidateTag("studySession");
-  // redirect(`/study-process/${studyProcess.slug}`);
+  revalidateTag("studySession");
+  redirect(`/study-process/${studyProcess?.slug}`);
 }
