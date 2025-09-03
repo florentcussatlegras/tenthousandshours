@@ -1,8 +1,9 @@
-'use server'
+"use server";
 
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import prisma from "@/app/lib/prisma";
+import { StudySession } from "@prisma/client";
 
 // const SignUpFormSchema = z.object({
 //     name: z.string().min(5),
@@ -12,7 +13,7 @@ import prisma from "@/app/lib/prisma";
 // });
 
 // export async function signupAction(formState: any, formData: FormData) {
-    
+
 //     const data = {
 //         name: formData.get("name") as string,
 //         email: formData.get("email") as string,
@@ -21,7 +22,7 @@ import prisma from "@/app/lib/prisma";
 //     };
 
 //     const result = SignUpFormSchema.safeParse(data);
-    
+
 //     if(!result.success) {
 //         // console.log(console.log(z.flattenError(result.error).fieldErrors));
 //         const flattened = z.flattenError(result.error);
@@ -64,8 +65,8 @@ import prisma from "@/app/lib/prisma";
 export async function getCategoryTopic(slug) {
   const categoryTopic = await prisma.categoryTopic.findFirst({
     where: {
-      slug
-    }
+      slug,
+    },
   });
 
   return categoryTopic;
@@ -77,8 +78,8 @@ export async function getListCategoryTopic() {
       id: true,
       name: true,
       description: true,
-      status: true
-    }
+      status: true,
+    },
   });
 
   return categories;
@@ -94,8 +95,8 @@ export async function getTopic(slug) {
       categoryTopicId: true,
     },
     where: {
-      slug
-    }
+      slug,
+    },
   });
 
   return topic;
@@ -107,32 +108,45 @@ export async function getListTopics() {
       id: true,
       name: true,
       description: true,
-      status: true
-    }
+      status: true,
+    },
   });
 
   return topics;
 }
 
-export async function fetchFilterStudySessions(yearStart: number, monthStart: number, dayStart: number, yearEnd: number, monthEnd: number, dayEnd: number) {
-
-  const dateStartFilter = new Date(yearStart, monthStart - 1, dayStart + 1, -22, 0, 0);
+export async function fetchFilterStudySessions(
+  yearStart: number,
+  monthStart: number,
+  dayStart: number,
+  yearEnd: number,
+  monthEnd: number,
+  dayEnd: number
+) {
+  const dateStartFilter = new Date(
+    yearStart,
+    monthStart - 1,
+    dayStart + 1,
+    -22,
+    0,
+    0
+  );
   const dateEndFilter = new Date(yearEnd, monthEnd - 1, dayEnd + 1, 1, 59, 0);
 
-  const studySessions = await prisma.$queryRaw`SELECT * FROM public."StudySession" WHERE "createdAt" >= ${dateStartFilter} AND "createdAt" <= ${dateEndFilter}`;
+  const studySessions =
+    await prisma.$queryRaw`SELECT * FROM public."StudySession" WHERE "createdAt" >= ${dateStartFilter} AND "createdAt" <= ${dateEndFilter}`;
 
   return studySessions;
 }
 
 export async function getStudySession(studySessionId: string) {
-
   let studySession;
 
   if (studySessionId !== null) {
     studySession = await prisma.studySession.findFirst({
       where: {
-        id: studySessionId
-      }
+        id: studySessionId,
+      },
     });
   } else {
     return null;
@@ -141,6 +155,21 @@ export async function getStudySession(studySessionId: string) {
   return studySession;
 }
 
+export async function getTopicStudySession(studySession: StudySession) {
+  const studyProcess = await prisma.studyProcess.findFirst({
+    where: {
+      id: studySession.studyProcessId,
+    },
+  });
+
+  const topic = await prisma.topic.findFirst({
+    where: {
+      id: studyProcess?.topicId
+    },
+  });
+
+  return topic;
+}
 
 // export async function getFilterStudySessions(dateStartFilter: Date, dateEndFilter: Date) {
 
@@ -153,5 +182,5 @@ export async function getStudySession(studySessionId: string) {
 //     const studySessions = await response.json();
 
 //     return studySessions;
-  
+
 // }

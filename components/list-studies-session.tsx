@@ -148,17 +148,28 @@ import {
   Textarea,
   Divider,
   CardBody,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
 } from "@heroui/react";
 
-import {CalendarDate} from "@internationalized/date";
+import { CalendarDate } from "@internationalized/date";
 
 import { StudyProcess, StudySession } from "@prisma/client";
 import { createStudySessionAction } from "@/app/actions/create-study-session.action";
 import prisma from "@/app/lib/prisma";
 import { Prisma } from "@prisma/client";
-import { fetchFilterStudySessions, getFilterStudySessions } from "@/app/actions/actions";
-import { ChevronDownIcon, PlusIcon, VerticalDotsIcon } from "./icons";
+import { fetchFilterStudySessions } from "@/app/actions/actions";
+import { ChevronDownIcon, EyeIcon, PlusIcon, VerticalDotsIcon } from "./icons";
 import { PrismaClient } from "@prisma/client/scripts/default-index";
+import Link from "next/link";
+import ModalStudySessionView from "./modal-study-session-view";
 
 export const columns = [
   { name: "ID", uid: "id", sortable: true },
@@ -197,6 +208,8 @@ export default function ListStudiesSession({
 }: {
   studySessions: StudySession[];
 }) {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [studySessionToView, setStudySessionToView] = React.useState(null);
 
   const [filterValue, setFilterValue] = React.useState("");
   const [filteredItems, setFilteredItems] = React.useState(studySessions);
@@ -222,7 +235,6 @@ export default function ListStudiesSession({
     );
   }, [visibleColumns]);
 
-
   // const filteredItems = React.useMemo(() => {
   //   let filteredUsers = [...studySessions];
 
@@ -241,7 +253,6 @@ export default function ListStudiesSession({
 
   //   return filteredUsers;
   // }, [studySessions, filterValue, statusFilter]);
-
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage) || 1;
 
@@ -262,6 +273,11 @@ export default function ListStudiesSession({
     });
   }, [sortDescriptor, items]);
 
+  const handleOpenModalView = (studySession: StudySession) => {
+    setStudySessionToView(studySession);
+    onOpen();
+  };
+
   const renderCell = React.useCallback((studySession, columnKey) => {
     const cellValue = studySession[columnKey];
 
@@ -279,17 +295,11 @@ export default function ListStudiesSession({
 
     switch (columnKey) {
       case "createdAt":
-        return (
-          <div>{capitalize(createdAt)}</div>
-        );
+        return <div>{capitalize(createdAt)}</div>;
       case "startedAt":
-        return (
-          <div>{startedAt}</div>
-        );
+        return <div>{startedAt}</div>;
       case "finishedAt":
-        return (
-          <div>{finishedAt}</div>
-        );
+        return <div>{finishedAt}</div>;
       case "actions":
         return (
           <div className="relative flex justify-end items-center gap-2 w-3/5">
@@ -300,9 +310,26 @@ export default function ListStudiesSession({
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
-                <DropdownItem key="view">View</DropdownItem>
-                <DropdownItem key="edit" onClick={() => onEditClick(studySession.id)}>Edit</DropdownItem>
-                <DropdownItem key="delete">Delete</DropdownItem>
+                <DropdownItem key="view">
+                  <Button
+                    onPress={() => handleOpenModalView(studySession)}
+                    className="p-0 bg-white hover:bg-default-300"
+                  >
+                    <EyeIcon />
+                    Voir les détails
+                  </Button>
+                </DropdownItem>
+                <DropdownItem
+                  key="edit"
+                  onClick={() => onEditClick(studySession.id)}
+                >
+                  Edit
+                </DropdownItem>
+                <DropdownItem key="delete">
+                  <Link href={`/study-session/delete/${studySession.id}`}>
+                    Delete
+                  </Link>
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -332,7 +359,14 @@ export default function ListStudiesSession({
   const onSearchChange = React.useCallback(async (value) => {
     if (value) {
       setFilterValue(value);
-      const result = await fetchFilterStudySessions(value.start.year, value.start.month, value.start.day, value.end.year, value.end.month, value.end.day);
+      const result = await fetchFilterStudySessions(
+        value.start.year,
+        value.start.month,
+        value.start.day,
+        value.end.year,
+        value.end.month,
+        value.end.day
+      );
       setFilteredItems(result);
       setPage(1);
     } else {
@@ -366,7 +400,11 @@ export default function ListStudiesSession({
             onValueChange={onSearchChange}
             placeholderValue={new CalendarDate(1995, 11, 6)}
           /> */}
-          <DateRangePicker className="max-w-xs" label="Stay duration" onChange={(onSearchChange)} />
+          <DateRangePicker
+            className="max-w-xs"
+            label="Stay duration"
+            onChange={onSearchChange}
+          />
           <div className="flex gap-3">
             {/* <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
@@ -462,7 +500,7 @@ export default function ListStudiesSession({
           total={pages}
           onChange={setPage}
           classNames={{
-            cursor: "bg-sky-500"
+            cursor: "bg-sky-500",
           }}
         />
         <div className="hidden sm:flex w-[30%] justify-end gap-2">
@@ -488,43 +526,52 @@ export default function ListStudiesSession({
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
   return (
-    <Table
-      isHeaderSticky
-      aria-label="Example table with custom cells, pagination and sorting"
-      bottomContent={bottomContent}
-      bottomContentPlacement="outside"
-      classNames={{
-        wrapper: "max-h-[382px]",
-      }}
-      radius="none"
-      selectedKeys={selectedKeys}
-      selectionMode="multiple"
-      sortDescriptor={sortDescriptor}
-      topContent={topContent}
-      topContentPlacement="outside"
-      onSelectionChange={setSelectedKeys}
-      onSortChange={setSortDescriptor}
-    >
-      <TableHeader columns={headerColumns}>
-        {(column) => (
-          <TableColumn
-            key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}
-            allowsSorting={column.sortable}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody emptyContent={"Aucune session trouvées"} items={sortedItems}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <>
+      <div>
+        <ModalStudySessionView
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          studySession={studySessionToView}
+        />
+      </div>
+      <Table
+        isHeaderSticky
+        aria-label="Example table with custom cells, pagination and sorting"
+        bottomContent={bottomContent}
+        bottomContentPlacement="outside"
+        classNames={{
+          wrapper: "max-h-[382px]",
+        }}
+        radius="none"
+        selectedKeys={selectedKeys}
+        selectionMode="multiple"
+        sortDescriptor={sortDescriptor}
+        topContent={topContent}
+        topContentPlacement="outside"
+        onSelectionChange={setSelectedKeys}
+        onSortChange={setSortDescriptor}
+      >
+        <TableHeader columns={headerColumns}>
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              align={column.uid === "actions" ? "center" : "start"}
+              allowsSorting={column.sortable}
+            >
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody emptyContent={"Aucune session trouvées"} items={sortedItems}>
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </>
   );
 }
