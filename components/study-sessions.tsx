@@ -16,9 +16,17 @@ export function StudySessions({
 }) {
   const [currentStudySession, setCurrentStudySession] = useState(null);
 
-  const handleToggleForm = React.useCallback(async (studySessionId) => {
-      const studySessionToEdit = await getStudySession(studySessionId);
-      setCurrentStudySession(studySessionToEdit);
+  const handleEditForm = React.useCallback(async (studySessionId) => {
+
+    if(studySessionId !== null) {
+        const studySessionToEdit = await getStudySession(studySessionId);
+        setCurrentStudySession(studySessionToEdit);
+    }
+
+  }, []);
+
+  const resetEditForm = React.useCallback(() => {
+        setCurrentStudySession(null);
   }, []);
 
   return (
@@ -26,10 +34,10 @@ export function StudySessions({
       {currentStudySession === null ? (
         <NewStudySessionForm studyProcess={studyProcess} />
       ) : (
-        <UpdateStudySessionForm studySession={currentStudySession} />
+        <UpdateStudySessionForm onReset={resetEditForm} studyProcess={studyProcess} studySession={currentStudySession} />
       )}
       <ListStudiesSession
-        onEditClick={handleToggleForm}
+        onEditClick={handleEditForm}
         studySessions={studyProcess?.studySessions}
       />
     </div>

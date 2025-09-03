@@ -15,6 +15,7 @@ import Link from "next/link";
 import { DeleteIcon } from "./icons";
 
 interface StudyProgression {
+  slug?: String,
   totalHours?: Number;
   topic?: {
     name?: String;
@@ -22,6 +23,7 @@ interface StudyProgression {
 }
 
 import React from "react";
+import { StudyProcess } from "@prisma/client";
 
 export const EyeIcon = () => {
   return (
@@ -104,7 +106,7 @@ export default function StudiesProgressbar({
                   <DropdownMenu aria-label="Static Actions">
                     <DropdownItem key="details">
                       <Link
-                        href={`/study-process/${study.topic?.name}`}
+                        href={`/study-process/${study?.slug}`}
                         className="text-lg cursor-pointer active:opacity-50 flex flex-row items-center gap-2"
                       >
                         <EyeIcon />

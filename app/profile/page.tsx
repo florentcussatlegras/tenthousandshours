@@ -54,6 +54,7 @@ export default async function Page() {
     select: {
       studyProcesses: {
         select: {
+          slug: true,
           totalHours: true,
           topic: {
             select: {
