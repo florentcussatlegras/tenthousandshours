@@ -11,11 +11,8 @@ import {
 import { StudyProcess, StudySession } from "@prisma/client";
 import { PlusIcon } from "lucide-react";
 import { useActionState, useState } from "react";
-import { EditIcon } from "./icons";
-import prisma from "@/app/lib/prisma";
-import { getStudySession } from "@/app/actions/actions";
+import { DeleteIcon, EditIcon } from "./icons";
 import { Time } from "@internationalized/date";
-import { toUpperCase } from "better-auth/*";
 
 export function UpdateStudySessionForm({
   onReset,
@@ -28,6 +25,32 @@ export function UpdateStudySessionForm({
   const [formState, formAction] = useActionState(updateStudySessionAction, {
     errors: {},
   });
+
+  const [urls, setUrls] = useState(studySession.urls.split(","));
+
+  function addUrl() {
+    setUrls([...urls, ""]);
+  }
+
+  function handleUrlRemove(index: number) {
+    setUrls(urls.filter((url, i) =>
+      index !== i
+    ));
+  }
+
+  function handleUrlChange(evt) {
+    const index = Number(evt.currentTarget.dataset.index);
+
+    const nextUrls = urls.map((url, i) => {
+      if (i === index) {
+        return evt.currentTarget.value;
+      } else {
+        return url;
+      }
+    });
+
+    setUrls(nextUrls);
+  }
 
   const [startedAtValue, setStartedAtValue] = useState(
     new Time(
@@ -52,7 +75,7 @@ export function UpdateStudySessionForm({
   }).format(studySession.createdAt);
 
   return (
-    <Card className="h-[425px] rounded-none relative p-4 w-2/5">
+    <Card className="rounded-none relative p-4 w-2/5">
       <CardBody>
         <div className="flex flex-col gap-4">
           <h1>
@@ -69,14 +92,14 @@ export function UpdateStudySessionForm({
               </div>
             ) : null}
             <Input
-                type="hidden"
-                name="studyProcessId"
-                value={studyProcess.id}
+              type="hidden"
+              name="studyProcessId"
+              value={studyProcess.id}
             />
             <Input
-                type="hidden"
-                name="studySessionId"
-                value={studySession.id}
+              type="hidden"
+              name="studySessionId"
+              value={studySession.id}
             />
 
             <div className="flex flex-col w-full">
@@ -111,7 +134,7 @@ export function UpdateStudySessionForm({
                 />
               </div>
             </div>
-            
+
             <Textarea
               className="flex-3"
               label="Veuillez décrire le contenu de votre session"
@@ -119,6 +142,37 @@ export function UpdateStudySessionForm({
               value={descriptionValue}
               onChange={(e) => setDescriptionValue(e.currentTarget.value)}
             />
+
+            <Input type="text" name="urls" value={urls.join(",")} />
+
+            {urls.map((url, index) => {
+              return (
+                <div key={index} className="flex flex-row w-full gap-4">
+                  <Input
+                    id={`url-${index}`}
+                    type="text"
+                    value={urls[index]}
+                    data-index={index}
+                    placeholder="Saisissez l'adresse url d'un contenu utilisé lors de cette session"
+                    onChange={handleUrlChange}
+                  />
+                  <Button
+                    onPress={() => removeUrl(index)}
+                    className="bg-white min-w-15"
+                  >
+                    <DeleteIcon width="1.5em" height="1.5em" />
+                  </Button>
+                </div>
+              );
+            })}
+
+            <Button
+              onPress={addUrl}
+              className="ml-auto bg-secondary-200 text-white min-w-15"
+            >
+              <PlusIcon />
+            </Button>
+
             <div className="flex gap-4">
               <Button
                 type="submit"

@@ -91,6 +91,8 @@ model StudySession {
   finishedAt DateTime
   totalSeconds Int
 
+  urls String
+
   studyProcessId String
   studyProcess   StudyProcess @relation(fields: [studyProcessId], references: [id])
 }

@@ -13,13 +13,25 @@ const createStudySessionSchema = z.object({
   startedAt: z.string().min(1, "Veuillez saisir une heure de début"),
   finishedAt: z.string().min(1, "Veuillez saisir une heure de fin"),
   studyProcessId: z.string(),
+  urls: z.string(),
+}).superRefine(({ startedAt, finishedAt }, ctx) => {
+  if (startedAt !== "" && finishedAt !== "" && finishedAt < startedAt) {
+    ctx.addIssue({
+      code: "custom",
+      message: "L'heure de début doit être inférieure à l'heure de fin",
+      path: ["finishedAt"]
+    });
+  }
 });
+
+createStudySessionSchema.refine((obj) => obj.startedAt < obj.finishedAt);
 
 interface CreateStudySessionState {
   errors: {
     description?: string[];
     startedAt?: string[];
     finishedAt?: string[];
+    urls?: string[];
     _form?: string[];
   };
 }
@@ -106,6 +118,7 @@ export async function createStudySessionAction(
         totalSeconds:
           (dateFinishedAt.getTime() - dateStartedAt.getTime()) / 1000,
         studyProcessId: result.data.studyProcessId,
+        urls: result.data.urls,
       },
     });
 

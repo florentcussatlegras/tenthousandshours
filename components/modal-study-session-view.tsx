@@ -55,15 +55,15 @@ function ModalStudySessionView(props: any) {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                <span className="text-sky-500">{topicName}</span>
-                {dateCreatedAtStr.slice(0, 1).toUpperCase() +
-                  dateCreatedAtStr.slice(1)}
+                <h1 className="text-3xl text-sky-500">{topicName}</h1>
+                <span>{dateCreatedAtStr.slice(0, 1).toUpperCase() + dateCreatedAtStr.slice(1)}</span>
+                <div className="flex flex-row gap-2 text-base">
+                    <span>{hourStartedAtStr}</span>
+                    <span>-</span>
+                    <span>{hourFinishedAtStr}</span>
+                </div>
               </ModalHeader>
               <ModalBody>
-                <div className="flex flex-row gap-4">
-                  <span>Heure de début: {hourStartedAtStr}</span>
-                  <span>Heure de fin: {hourFinishedAtStr}</span>
-                </div>
                 <p>{studySession?.description}</p>
               </ModalBody>
               <ModalFooter>

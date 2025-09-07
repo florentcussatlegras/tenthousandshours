@@ -10,10 +10,19 @@ import { headers } from "next/headers";
 
 const updateStudySessionSchema = z.object({
   description: z.string(),
-  startedAt: z.string().nullable(),
-  finishedAt: z.string().nullable(),
+  startedAt: z.string(),
+  finishedAt: z.string(),
   studySessionId: z.string(),
   studyProcessId: z.string(),
+  urls: z.url({protocol: /^https$/, message: "Merci de saisir une url valide"}),
+}).superRefine(({ startedAt, finishedAt }, ctx) => {
+  if (startedAt != "" && finishedAt !== "" && finishedAt > startedAt) {
+    ctx.addIssue({
+      code: "custom",
+      message: "L'heure de début doit être inférieure à l'heure de fin",
+      path: ["finishedAt"]
+    });
+  }
 });
 
 interface UpdateStudySessionState {

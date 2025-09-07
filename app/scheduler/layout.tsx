@@ -1,6 +1,6 @@
 "use client";
 
-export default function StudyProcessDetailLayout({
+export default function SchedulerLayout({
   children,
 }: {
   children: React.ReactNode;

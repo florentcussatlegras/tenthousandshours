@@ -1,123 +1,3 @@
-// "use client";
-
-// import { createStudySessionAction } from "@/app/actions/create-study-session.action";
-// import {
-//   Card,
-//   CardBody,
-//   CardHeader,
-//   Modal,
-//   ModalContent,
-//   ModalHeader,
-//   ModalBody,
-//   ModalFooter,
-//   Button,
-//   Form,
-//   Input,
-//   useDisclosure,
-//   Checkbox,
-//   Divider,
-//   TimeInput,
-//   Textarea,
-//   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell
-// } from "@heroui/react";
-// import { StudyProcess, StudySession } from "@prisma/client";
-// import { useActionState } from "react";
-
-// export default function ListStudiesSession({
-//   studySessions,
-//   studyProcess,
-// }: {
-//   studySession: StudySession[];
-//   studyProcess: StudyProcess;
-// }) {
-//   const [formState, formAction] = useActionState(createStudySessionAction, {
-//     errors: {},
-//   });
-
-//   console.log(JSON.stringify(studySessions));
-
-//   return (
-//     <Card className="h-full rounded-none relative p-4">
-//       <CardHeader className="flex flex-col gap-4 items-start">
-//         {/* <h2 className="text-md">
-//           Nouvelle session de travail du{" "}
-//           {new Intl.DateTimeFormat("fr-Fr", {
-//             dateStyle: "full",
-//           }).format(new Date())}
-//         </h2> */}
-//         <Form
-//           action={formAction}
-//           className="flex flex-col justify-start w-full"
-//         >
-//           {formState.errors._form ? (
-//             <div className="text-danger text-sm">
-//               {formState.errors._form?.join(", ")}
-//             </div>
-//           ) : null}
-//           <div className="flex flex-row w-full gap-3">
-//             <Input
-//               type="hidden"
-//               name="studyProcessId"
-//               value={studyProcess.id}
-//             />
-//             <TimeInput
-//               label="Débuté à"
-//               className="flex-1"
-//               name="startedAt"
-//               hourCycle={24}
-//             />
-//             <TimeInput
-//               label="Terminé à"
-//               className="flex-1"
-//               name="finishedAt"
-//               hourCycle={24}
-//             />
-//             <Textarea
-//               className="flex-3"
-//               label="Veuillez décrire le contenu de votre session"
-//               name="description"
-//             />
-//           </div>
-//           <Button type="submit" className="bg-sky-500 text-white">Ajouter une nouvelle session</Button>
-//         </Form>
-//         <Divider />
-//       </CardHeader>
-//       <CardBody>
-//         <div className="flex flex-col">
-//           <Table aria-label="Example static collection table" radius="none" shadow="none" className="p-0" classNames={{wrapper: "p-0 m-0 w-full"}}>
-//             <TableHeader>
-//               <TableColumn>Crée le</TableColumn>
-//               <TableColumn>Temps travaillé</TableColumn>
-//               <TableColumn>Début</TableColumn>
-//               <TableColumn>Fin</TableColumn>
-//             </TableHeader>
-//             <TableBody>
-//                 {studySessions.map((studySession) => {
-//                   const createdAtFormat = new Intl.DateTimeFormat("fr-FR", {
-//                     dateStyle: "full",
-//                   }).format(studySession.createdAt);
-
-//                   return (
-//                     <TableRow key={studySession.id}>
-//                       <TableCell>{createdAtFormat.toUpperCase()}</TableCell>
-//                       <TableCell>{studySession.totalSeconds / 3600} heures</TableCell>
-//                       <TableCell>{new Intl.DateTimeFormat("fr-FR", {
-//                         "timeStyle": "short",
-//                       }).format(studySession.startedAt)}</TableCell>
-//                       <TableCell>{new Intl.DateTimeFormat("fr-FR", {
-//                         "timeStyle": "short",
-//                       }).format(studySession.finishedAt)}</TableCell>
-//                     </TableRow>
-//                   );
-//                 })}
-//             </TableBody>
-//           </Table>
-//         </div>
-//       </CardBody>
-//     </Card>
-//   );
-// }
-
 "use client";
 
 import React, { useActionState, useEffect } from "react";
@@ -166,10 +46,11 @@ import { createStudySessionAction } from "@/app/actions/create-study-session.act
 import prisma from "@/app/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { fetchFilterStudySessions } from "@/app/actions/actions";
-import { ChevronDownIcon, EyeIcon, PlusIcon, VerticalDotsIcon } from "./icons";
+import { ChevronDownIcon, DeleteIcon, EyeIcon, PlusIcon, VerticalDotsIcon } from "./icons";
 import { PrismaClient } from "@prisma/client/scripts/default-index";
 import Link from "next/link";
 import ModalStudySessionView from "./modal-study-session-view";
+import { EditIcon } from "./icons";
 
 export const columns = [
   { name: "ID", uid: "id", sortable: true },
@@ -311,23 +192,27 @@ export default function ListStudiesSession({
               </DropdownTrigger>
               <DropdownMenu>
                 <DropdownItem key="view">
-                  <Button
-                    onPress={() => handleOpenModalView(studySession)}
-                    className="p-0 bg-white hover:bg-default-300"
+                  <button
+                    onClick={() => handleOpenModalView(studySession)}
+                    className="p-0 h-[20px] bg-white flex flex-row gap-2 items-center cursor-pointer hover:bg-default active:bg-default"
                   >
                     <EyeIcon />
-                    Voir les détails
-                  </Button>
+                    <span>Voir les détails</span>
+                  </button>
                 </DropdownItem>
                 <DropdownItem
                   key="edit"
                   onClick={() => onEditClick(studySession.id)}
                 >
-                  Edit
+                  <div className="flex flex-row w-full items-center gap-2 h-[20px]">
+                    <EditIcon />
+                    <span>Modifier</span>
+                  </div>
                 </DropdownItem>
                 <DropdownItem key="delete">
-                  <Link href={`/study-session/delete/${studySession.id}`}>
-                    Delete
+                  <Link href={`/study-session/delete/${studySession.id}`} className="flex flex-row w-full items-center gap-2 h-[20px] text-danger-500">
+                    <DeleteIcon />
+                    <span>Supprimer</span>
                   </Link>
                 </DropdownItem>
               </DropdownMenu>
@@ -402,7 +287,7 @@ export default function ListStudiesSession({
           /> */}
           <DateRangePicker
             className="max-w-xs"
-            label="Stay duration"
+            label="Heure de début - heure de fin"
             onChange={onSearchChange}
           />
           <div className="flex gap-3">
@@ -526,7 +411,7 @@ export default function ListStudiesSession({
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
   return (
-    <>
+    <Card radius="none" className="w-2/3 px-6 py-8">
       <div>
         <ModalStudySessionView
           isOpen={isOpen}
@@ -540,9 +425,10 @@ export default function ListStudiesSession({
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
         classNames={{
-          wrapper: "max-h-[382px]",
+          wrapper: "h-[250px] p-0 border border-default-100",
         }}
         radius="none"
+        shadow="none"
         selectedKeys={selectedKeys}
         selectionMode="multiple"
         sortDescriptor={sortDescriptor}
@@ -572,6 +458,6 @@ export default function ListStudiesSession({
           )}
         </TableBody>
       </Table>
-    </>
+    </Card>
   );
 }

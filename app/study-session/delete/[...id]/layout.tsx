@@ -1,9 +1,5 @@
 "use client";
 
-import { Breadcrumb } from "@/components/breadcrumb";
-import MenuAdminDashBoard from "@/components/menu-admin-dashboard";
-import { title } from "@/components/primitives";
-
 export default function StudySessionDeleteLayout({
   children,
 }: {
