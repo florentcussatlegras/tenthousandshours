@@ -10,10 +10,12 @@ import {
   Textarea,
   TimeInput,
 } from "@heroui/react";
-import {Time} from "@internationalized/date";
+import { Time } from "@internationalized/date";
 import { StudyProcess } from "@prisma/client";
 import { PlusIcon } from "lucide-react";
-import { useActionState } from "react";
+import Link from "next/link";
+import { useActionState, useState } from "react";
+import { DeleteIcon, DeleteIconMd } from "./icons";
 
 export const NewStudySessionForm = ({
   studyProcess,
@@ -23,6 +25,31 @@ export const NewStudySessionForm = ({
   const [formState, formAction] = useActionState(createStudySessionAction, {
     errors: {},
   });
+  const [urls, setUrls] = useState([""]);
+
+  function addUrl() {
+    setUrls([...urls, ""]);
+  }
+
+  function handleUrlRemove(index: number) {
+    setUrls(urls.filter((url, i) =>
+      index !== i
+    ));
+  }
+
+  function handleUrlChange(evt) {
+    const index = Number(evt.currentTarget.dataset.index);
+
+    const nextUrls = urls.map((url, i) => {
+      if (i === index) {
+        return evt.currentTarget.value;
+      } else {
+        return url;
+      }
+    });
+
+    setUrls(nextUrls);
+  }
 
   const dateJour = new Date();
 
@@ -31,7 +58,7 @@ export const NewStudySessionForm = ({
   }).format(dateJour);
 
   return (
-    <Card className="h-[425px] rounded-none relative p-4 w-2/5">
+    <Card className="rounded-none relative p-4 w-2/5">
       <CardBody>
         <div className="flex flex-col gap-4">
           <h1>
@@ -47,12 +74,13 @@ export const NewStudySessionForm = ({
                 {formState.errors._form?.join(", ")}
               </div>
             ) : null}
-            
+
             <Input
               type="hidden"
               name="studyProcessId"
               value={studyProcess.id}
             />
+
             <div className="flex flex-col w-full">
               <div className="flex flex-row w-full gap-3 mb-2">
                 {formState.errors.startedAt ? (
@@ -72,7 +100,9 @@ export const NewStudySessionForm = ({
                   className="flex-1"
                   name="startedAt"
                   hourCycle={24}
-                  defaultValue={new Time(dateJour.getHours(), dateJour.getMinutes())}
+                  defaultValue={
+                    new Time(dateJour.getHours(), dateJour.getMinutes())
+                  }
                 />
                 <TimeInput
                   label="Terminé à"
@@ -88,12 +118,38 @@ export const NewStudySessionForm = ({
               label="Veuillez décrire le contenu de votre session"
               name="description"
             />
+
+            <Input type="hidden" name="urls" value={urls.join(",")} />
+
+            {urls.map((url, index) => {
+              return (
+                <div key={index} className="flex flex-row w-full gap-4">
+                  <Input
+                    type="text"
+                    value={url}
+                    data-index={index}
+                    placeholder="Saisissez l'adresse url d'un contenu utilisé lors de cette session"
+                    onChange={handleUrlChange}
+                  />
+                  <Button
+                    onPress={() => handleUrlRemove(index)}
+                    className="bg-white min-w-15"
+                  >
+                    <DeleteIcon width="1.5em" height="1.5em" />
+                  </Button>
+                </div>
+              );
+            })}
+
             <Button
-              type="submit"
-              className="bg-sky-500 text-white"
-              endContent={<PlusIcon />}
+              onPress={addUrl}
+              className="ml-auto bg-secondary-200 text-white min-w-15"
             >
-              Ajouter une nouvelle session
+              <PlusIcon />
+            </Button>
+
+            <Button type="submit" className="bg-sky-500 text-white">
+              Enregistrer la session
             </Button>
           </Form>
         </div>

@@ -23,7 +23,7 @@ export default function DetailsStudyProcess({
         {/* <h2 className="font-bold text-sky-500">{studyProcess.topic.name}</h2> */}
         <span className="text-default-500 text-sm">Apprentissage débuté le {intl.format(studyProcess.createdAt)}</span>
       </CardHeader>
-      <CardBody className="flex flex-col h-[170px]">
+      <CardBody className="flex flex-col">
         <Chip isDisabled color="secondary">{`${studyProcess.totalHours} heures`}</Chip>
         <Progress
           aria-label="Loading..."
