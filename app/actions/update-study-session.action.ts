@@ -50,8 +50,6 @@ export async function updateStudySessionAction(
     Object.fromEntries(formData)
   );
 
-  console.log(formData);
-
   if (!result.success) {
     console.log(z.flattenError(result.error).fieldErrors);
     return {

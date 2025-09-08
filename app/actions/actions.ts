@@ -121,7 +121,7 @@ export async function fetchFilterStudySessions(
   dayStart: number,
   yearEnd: number,
   monthEnd: number,
-  dayEnd: number
+  dayEnd: number,
 ) {
   const dateStartFilter = new Date(
     yearStart,
@@ -135,6 +135,18 @@ export async function fetchFilterStudySessions(
 
   const studySessions =
     await prisma.$queryRaw`SELECT * FROM public."StudySession" WHERE "createdAt" >= ${dateStartFilter} AND "createdAt" <= ${dateEndFilter}`;
+
+  return studySessions;
+}
+
+export async function fetchStudySessions(
+  dateSelect: Date
+) {
+  const dateTimeSlotStart = new Date(dateSelect.getFullYear(), dateSelect.getMonth(), dateSelect.getDate() + 1, -22, 0, 0);
+  const dateTimeSlotFinish = new Date(dateSelect.getFullYear(), dateSelect.getMonth(), dateSelect.getDate() + 1, 1, 59, 0);
+
+  const studySessions =
+    await prisma.$queryRaw`SELECT * FROM public."StudySession" WHERE "createdAt" >= ${dateTimeSlotStart} AND "createdAt" <= ${dateTimeSlotFinish}`;
 
   return studySessions;
 }
@@ -164,7 +176,7 @@ export async function getTopicStudySession(studySession: StudySession) {
 
   const topic = await prisma.topic.findFirst({
     where: {
-      id: studyProcess?.topicId
+      id: studyProcess?.topicId,
     },
   });
 
