@@ -77,11 +77,12 @@ export async function createStudySessionAction(
 
     const objStartedAt = result.data.startedAt?.split(":");
     const objFinishedAt = result.data.finishedAt?.split(":");
+
     const dateJour = new Date();
     const dateStartedAt = new Date(
       dateJour.getFullYear(),
       dateJour.getMonth(),
-      dateJour.getDay(),
+      dateJour.getDate(),
       Number(objStartedAt[0]),
       Number(objStartedAt[1]),
       Number(objStartedAt[2])
@@ -89,7 +90,7 @@ export async function createStudySessionAction(
     const dateFinishedAt = new Date(
       dateJour.getFullYear(),
       dateJour.getMonth(),
-      dateJour.getDay(),
+      dateJour.getDate(),
       Number(objFinishedAt[0]),
       Number(objFinishedAt[1]),
       Number(objFinishedAt[2])
@@ -109,6 +110,9 @@ export async function createStudySessionAction(
         },
       };
     }
+
+    console.log(dateStartedAt);
+    console.log(dateFinishedAt);
 
     const studySession = await prisma.studySession.create({
       data: {
