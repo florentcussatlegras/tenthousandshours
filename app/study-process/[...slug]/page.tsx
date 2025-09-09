@@ -3,7 +3,7 @@ import prisma from "@/app/lib/prisma";
 import { Breadcrumb } from "@/components/breadcrumb";
 import DetailsStudyProcess from "@/components/details-study-process";
 import ListStudiesSession from "@/components/list-studies-session";
-import { NewStudySession, NewStudySessionForm } from "@/components/new-study-session-form";
+import { NewStudySessionForm } from "@/components/new-study-session-form";
 import { StudySessions } from "@/components/study-sessions";
 import { Card } from "@heroui/react";
 import { headers } from "next/headers";

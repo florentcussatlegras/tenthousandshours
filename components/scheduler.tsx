@@ -15,14 +15,16 @@ import { useEffect, useState } from "react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { StudySession } from "@prisma/client";
 import { fetchStudySessions } from "@/app/actions/actions";
-// import {useDateFormatter} from "@react-aria/i18n";
+import { useDateFormatter } from "@react-aria/i18n";
 
 export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
+  let formatter = useDateFormatter();
+
   const [currentDate, setCurrentDate] = useState(defaultDate);
   const [valueDatePicker, setValueDatePicker] = useState(
     parseDate(currentDate.toISOString().substring(0, 10))
   );
-  const [studySessions, setStudySessions] = useState(null);
+  const [studySessions, setStudySessions] = useState([]);
 
   useEffect(() => {
     async function getStudySessions() {
@@ -115,9 +117,9 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
           />
         </div>
       </div>
-      <Table isStriped aria-label="Example static collection table">
+      <Table aria-label="Sessions de travail">
         <TableHeader>
-          <TableColumn>{}</TableColumn>
+          {/* <TableColumn>{}</TableColumn> */}
           <TableColumn className="uppercase flex justify-center items-center">
             {new Intl.DateTimeFormat("fr-FR", { dateStyle: "full" }).format(
               currentDate
@@ -125,16 +127,36 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
           </TableColumn>
         </TableHeader>
         <TableBody>
-          {timeSlots.map((timeSlot, index) => (
-            <TableRow key={index} className="justify-center">
-              <TableCell className="w-[150px]">
-                {new Intl.DateTimeFormat("fr-Fr", {
-                  timeStyle: "short",
-                }).format(timeSlot)}
+          {studySessions.length === 0 ? (
+            <TableRow>
+              <TableCell className="justify-center text-default-400 font-medium uppercase py-12 text-center">
+                Aucune session de travail trouvées ce jour là
               </TableCell>
-              <TableCell className="">CEO</TableCell>
             </TableRow>
-          ))}
+          ) : (
+            studySessions.map((session) => {
+              return (
+                <TableRow key={session.id}>
+                  <TableCell>
+                    <div className="bg-sky-500 text-white rounded-md p-4 flex justify-between text-md">
+                      <div>
+                          {session.topic_name}
+                      </div>
+                      <div>
+                        {new Intl.DateTimeFormat("fr-Fr", {
+                          timeStyle: "short",
+                        }).format(session.startedAt)}{" "}
+                        -{" "}
+                        {new Intl.DateTimeFormat("fr-Fr", {
+                          timeStyle: "short",
+                        }).format(session.finishedAt)}
+                      </div>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              );
+            })
+          )}
         </TableBody>
       </Table>
     </div>
