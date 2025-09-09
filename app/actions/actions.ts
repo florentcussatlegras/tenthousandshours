@@ -145,7 +145,12 @@ export async function fetchStudySessions(
   const dateTimeSlotStart = new Date(dateSelect.getFullYear(), dateSelect.getMonth(), dateSelect.getDate() + 1, -22, 0, 0);
   const dateTimeSlotFinish = new Date(dateSelect.getFullYear(), dateSelect.getMonth(), dateSelect.getDate() + 1, 1, 59, 0);
 
-  const studySessions =
+  console.log(dateTimeSlotStart);
+  console.log(dateTimeSlotFinish);
+
+  let studySessions = [];
+
+  studySessions =
     await prisma.$queryRaw`SELECT 
         "StudySession"."id" AS "session_id", 
         "StudySession"."createdAt" AS "session_createdAt",
