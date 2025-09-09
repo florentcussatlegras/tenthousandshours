@@ -4,8 +4,6 @@ import { fetchStudySessions } from "../actions/actions";
 
 export default async function SchedulerPage() {
   return (
-    <>
-      <Scheduler defaultDate={new Date()}>{/* <DayView /> */}</Scheduler>
-    </>
+      <Scheduler defaultDate={new Date()}></Scheduler>
   );
 }

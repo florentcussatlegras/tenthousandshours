@@ -146,7 +146,27 @@ export async function fetchStudySessions(
   const dateTimeSlotFinish = new Date(dateSelect.getFullYear(), dateSelect.getMonth(), dateSelect.getDate() + 1, 1, 59, 0);
 
   const studySessions =
-    await prisma.$queryRaw`SELECT * FROM public."StudySession" WHERE "createdAt" >= ${dateTimeSlotStart} AND "createdAt" <= ${dateTimeSlotFinish}`;
+    await prisma.$queryRaw`SELECT 
+        "StudySession"."id" AS "session_id", 
+        "StudySession"."createdAt" AS "session_createdAt",
+        "StudySession"."startedAt",
+        "StudySession"."finishedAt",
+        "studyProcessId",
+        "StudyProcess"."id",
+        "StudyProcess"."topicId",
+        "Topic"."id" AS "topic_id",
+        "Topic"."name" AS "topic_name" 
+      FROM public."StudySession"
+      LEFT JOIN public."StudyProcess"
+      ON "studyProcessId" = "StudyProcess"."id"
+      LEFT JOIN public."Topic"
+      ON "StudyProcess"."topicId" = "Topic"."id"
+      WHERE "StudySession"."createdAt" >= ${dateTimeSlotStart} 
+      AND "StudySession"."createdAt" <= ${dateTimeSlotFinish} 
+      ORDER BY "startedAt"
+  `;
+
+  console.log(studySessions);
 
   return studySessions;
 }
