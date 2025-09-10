@@ -3,7 +3,8 @@
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import prisma from "@/app/lib/prisma";
-import { StudySession } from "@prisma/client";
+import { StudySession, User } from "@prisma/client";
+import { UUID } from "crypto";
 
 // const SignUpFormSchema = z.object({
 //     name: z.string().min(5),
@@ -140,25 +141,25 @@ export async function fetchFilterStudySessions(
 }
 
 export async function fetchStudySessions(
+  userId: UUID,
   dateSelect: Date
 ) {
   const dateTimeSlotStart = new Date(dateSelect.getFullYear(), dateSelect.getMonth(), dateSelect.getDate() + 1, -22, 0, 0);
   const dateTimeSlotFinish = new Date(dateSelect.getFullYear(), dateSelect.getMonth(), dateSelect.getDate() + 1, 1, 59, 0);
 
-  console.log(dateTimeSlotStart);
-  console.log(dateTimeSlotFinish);
-
-  let studySessions = [];
-
-  studySessions =
+  const studySessions =
     await prisma.$queryRaw`SELECT 
         "StudySession"."id" AS "session_id", 
         "StudySession"."createdAt" AS "session_createdAt",
         "StudySession"."startedAt",
         "StudySession"."finishedAt",
+        "StudySession"."totalSeconds",
+        "StudySession"."description",
+        "StudySession"."urls",
         "studyProcessId",
         "StudyProcess"."id",
         "StudyProcess"."topicId",
+        "StudyProcess"."totalHours" AS "study_process_total_hours",
         "Topic"."id" AS "topic_id",
         "Topic"."name" AS "topic_name" 
       FROM public."StudySession"
@@ -167,13 +168,44 @@ export async function fetchStudySessions(
       LEFT JOIN public."Topic"
       ON "StudyProcess"."topicId" = "Topic"."id"
       WHERE "StudySession"."createdAt" >= ${dateTimeSlotStart} 
-      AND "StudySession"."createdAt" <= ${dateTimeSlotFinish} 
+      AND "StudySession"."createdAt" <= ${dateTimeSlotFinish}
+      AND "StudyProcess"."userId" = ${userId}
       ORDER BY "startedAt"
   `;
 
-  console.log(studySessions);
-
   return studySessions;
+}
+
+export async function getTopicsOfaUser(userId: UUID) {
+
+  // const studyProcesses =
+  //   await prisma.$queryRaw`SELECT 
+  //       *
+  //     FROM public."Topic"
+  //     LEFT JOIN public."StudyProcess"
+  //     ON "Topic"."id" = "StudyProcess"."topicId"
+  //     LEFT JOIN public."User"
+  //     ON "StudyProcess"."userId" = "User"."id"
+  //     WHERE "User"."id" = ${userId}
+  // `;
+
+  // return studyProcesses;
+
+    const topics = await prisma.topic.findMany({
+      select: {
+        id: true,
+        name: true,
+        studyProcesses: {
+          where: {
+            userId: userId
+          }
+        },
+      },
+    });
+    console.log(topics);
+  
+    return topics;
+
 }
 
 export async function getStudySession(studySessionId: string) {

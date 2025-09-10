@@ -287,7 +287,10 @@ export default function ListStudiesSession({
           /> */}
           <DateRangePicker
             className="max-w-xs"
-            label="Heure de début - heure de fin"
+            classNames={{
+              input: "text-sm",
+              inputWrapper: "h-15"
+            }}
             onChange={onSearchChange}
           />
           <div className="flex gap-3">
@@ -425,7 +428,9 @@ export default function ListStudiesSession({
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
         classNames={{
-          wrapper: "h-[250px] p-0 border border-default-100",
+          wrapper: "p-0",
+          th: "text-sm",
+          td: "text-sm"
         }}
         radius="none"
         shadow="none"
