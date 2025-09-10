@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-export function WeekCalendar({currentDate} : {currentDate: Date}) {
+export function WeekCalendar({ currentDate, currentWeek }: { currentDate: Date, currentWeek: Data[] }) {
+//   const [currentWeek, setCurrentWeek] = useState([]);
+
   const days = [
     "Lundi",
     "Mardi",
@@ -11,52 +13,24 @@ export function WeekCalendar({currentDate} : {currentDate: Date}) {
     "Dimanche",
   ];
 
-  let i = currentDate.getDay();
-  let date = currentDate;
-  let dayBeforeCurrentInversed = [];
-  while (i > 1) {
-    i--;
-    const newDate = new Date(date.getTime() - 86400000);
-    dayBeforeCurrentInversed.push(newDate);
-    date = newDate;
-  }
+  return (
+    <div className="flex flex-col gap-4 pt-1">
+      <div className="uppercase flex justify-center items-center text-sm text-default-500 h-10 font-semibold rounded-xl px-4 absolute top-4 right-2">
+        Semaine du {new Intl.DateTimeFormat('fr-FR', {dateStyle: 'medium'}).format(currentWeek[0])} au {new Intl.DateTimeFormat('fr-FR', {dateStyle: 'medium'}).format(currentWeek[currentWeek.length - 1])}
+      </div>
 
-  const dayBeforeCurrent = dayBeforeCurrentInversed.reverse();
-  dayBeforeCurrent.push(currentDate);
+      <div className="flex flex-col">
+        {JSON.stringify(currentDate.getDay())}
 
-  i = currentDate.getDay();
-  date = currentDate;
-  let dayAfterCurrent = [];
-  while (i < 7) {
-    i++;
-    const newDate = new Date(date.getTime() + 86400000);
-    dayAfterCurrent.push(newDate);
-    date = newDate;
-  }
-
-  const dayWeeks = dayBeforeCurrent.concat(dayAfterCurrent);
-
-  console.log(dayWeeks);
-
-
-  return <div className="flex flex-col">
-
-    {JSON.stringify(currentDate.getDay())}
-
-    <div className="flex flex-row w-full rounded-full py-2">
-
-        {days.map((day) => (
+        <div className="flex flex-row w-full rounded-full py-2">
+          {days.map((day) => (
             <div className="flex flex-col w-1/7">
-                <div className="w-full text-center bg-default-100 p-2">{day}</div>
-                <div className="w-full text-center h-[250px]">FOO</div>
+              <div className="w-full text-center bg-default-100 p-2">{day}</div>
+              <div className="w-full text-center h-[250px]">FOO</div>
             </div>
-        ))}
-
+          ))}
+        </div>
+      </div>
     </div>
-
-    <div>
-
-    </div>
-
-  </div>;
-};
+  );
+}
