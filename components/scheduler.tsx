@@ -40,6 +40,7 @@ import { ListTopicsUser } from "./list-topics-user";
 import prisma from "@/app/lib/prisma";
 import { convertSecondsInHourMin } from "@/app/lib/utils";
 import Link from "next/link";
+import { WeekCalendar } from "./week-calendar";
 
 export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
   let formatter = useDateFormatter();
@@ -330,21 +331,14 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
               </Tab>
               <Tab key="week" title="Semaine">
                 <div className="flex flex-col gap-4 pt-1">
-
                     <div className="uppercase flex justify-center items-center text-sm text-default-500 h-10 font-semibold rounded-xl px-4 absolute top-4 right-2">
                       Semaine du au
                     </div>
-                      
-                    CALENDRIER SEMAINE
-
-
-
-
-
+                    <div>
+                      <WeekCalendar currentDate={currentDate} />
+                    </div>
                   </div>
-          
               </Tab>
-              
             </Tabs>
             
 
