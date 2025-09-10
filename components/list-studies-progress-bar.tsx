@@ -66,7 +66,7 @@ export const ThreeDotsIcon = () => {
   );
 };
 
-export default function StudiesProgressbar({
+export default function ListStudiesProgressbar({
   userStudies,
 }: {
   userStudies: StudyProgression[];

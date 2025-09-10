@@ -30,7 +30,7 @@ export function StudySessions({
   }, []);
 
   return (
-    <div className="flex flex-row w-full gap-4">
+    <div className="flex flex-row w-full gap-4 items-start">
       {currentStudySession === null ? (
         <NewStudySessionForm studyProcess={studyProcess} />
       ) : (

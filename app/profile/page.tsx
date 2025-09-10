@@ -9,9 +9,10 @@ import { ChangePasswordForm } from "@/components/change-password-form";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
 import { EditIcon } from "@/components/icons";
-import StudiesProgressBar from "@/components/studies-progress-bar";
+import StudiesProgressBar from "@/components/list-studies-progress-bar";
 import prisma from "../lib/prisma";
 import Avatar from "@/components/avatar";
+import ListStudiesProgressbar from "@/components/list-studies-progress-bar";
 
 export default async function Page() {
   const headerList = await headers();
@@ -115,7 +116,7 @@ export default async function Page() {
           </Card>
         </div>
         <div className="col-span-3">
-          <StudiesProgressBar userStudies={userStudies?.studyProcesses} />
+          <ListStudiesProgressbar userStudies={userStudies?.studyProcesses} />
         </div>
       </div>
 

@@ -22,3 +22,20 @@ export function normalizeName(name: string) {
         .replace(/[^a-zA-Z\s'-]/g, "")
         .replace(/\b\w/g, (char) => char.toUpperCase());
 }
+
+export function convertSecondsInHourMin(sec: number) {
+    const dateObj = new Date(sec * 1000);
+    const hours = dateObj.getUTCHours();
+    const minutes = dateObj.getUTCMinutes();
+
+    if (hours === 0) {
+        return minutes.toString() + ' min';
+    }
+
+    if (minutes === 0) {
+        return hours.toString() + ' h';
+    }
+
+    return hours.toString() + ' h ' +
+        minutes.toString().padStart(2, '0') + ' min';
+}
