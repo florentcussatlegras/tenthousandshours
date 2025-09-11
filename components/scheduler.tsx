@@ -84,19 +84,24 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [currentDate, setCurrentDate] = useState(defaultDate);
-  const [currentWeek, setCurrentWeek] = useState([]);
+  const [currentWeek, setCurrentWeek] = useState(getCurrentWeek(currentDate));
 
   const [valueDatePicker, setValueDatePicker] = useState(
     parseDate(currentDate.toISOString().substring(0, 10))
   );
   const [studySessions, setStudySessions] = useState([]);
-  const [studySessionToView, setStudySessionToView] = useState(null);
+  // const [studySessionToView, setStudySessionToView] = useState(null);
+  const [studySessionsPerDay, setStudySessionsPerDay] = useState([]);
+
   const [topics, setTopics] = useState([]);
-  const [displayTab, setDisplayTab] = useState("Day");
+  const [displayTab, setDisplayTab] = useState("day");
 
   const { data: session } = useSession();
 
   useEffect(() => {
+    console.log('heeeerrre');
+    console.log(currentWeek);
+
     async function getStudySessions() {
       const newStudySessions = await fetchStudySessions(
         session?.user.id,
@@ -105,21 +110,37 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
       console.log(newStudySessions);
       setStudySessions(newStudySessions);
     }
-    getStudySessions();
+
+    function getStudySessionsPerDay() {
+      let newStudySessionsPerDay = [];
+      console.log('i am here');
+      currentWeek.forEach(async (day) => {
+        console.log(day.getDay());
+        newStudySessionsPerDay[day.getDay()] = await fetchStudySessions(
+          session?.user.id,
+          day
+        );
+      });
+
+      setStudySessionsPerDay(newStudySessionsPerDay);
+    }
 
     async function getTopicsUser() {
       const topics = await getTopicsOfaUser(session?.user.id);
       setTopics(topics);
     }
 
+    getStudySessions();
+    getStudySessionsPerDay();
     getTopicsUser();
+
   }, [currentDate]);
 
-  useEffect(() => {
-    console.log("change current date");
-    console.log(currentDate);
-    setCurrentWeek(getCurrentWeek(currentDate));
-  }, []);
+  // useEffect(() => {
+  //   console.log("change current date");
+  //   console.log(currentDate);
+  //   setCurrentWeek(getCurrentWeek(currentDate));
+  // }, []);
 
   let timeSlots = [];
   const dateDuJour = new Date();
@@ -138,11 +159,6 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
     var d = new Date(b || new Date());
     d.setDate(d.getDate() + a);
     return d;
-  }
-
-  function handleOpenModalView(studySession: StudySession) {
-    setStudySessionToView(studySession);
-    onOpen();
   }
 
   function handleTodaySelect() {
@@ -187,49 +203,10 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
     setCurrentDate(value.toDate());
     setCurrentWeek(getCurrentWeek(value.toDate()));
     console.log(getCurrentWeek(value.toDate()));
-  }
+  }  
 
   return (
     <div className="w-full">
-      {/* <div className="flex w-full justify-between items-center mb-4">
-        <div className="flex justify-between text-default-900 rounded-2xl gap-2">
-          <Button
-            className="cursor-pointer bg-default-100 hover:bg-default-200 px-4 py-2 rounded-2xl transition-color duration-500 text-default-500 font-semibold"
-            onPress={handleTodaySelect}
-          >
-            Aujourd'hui
-          </Button>
-          <Button
-            size="sm"
-            className="cursor-pointer bg-default-100 hover:bg-default-200 rounded-2xl transition-color duration-500 h-[40px]"
-            onPress={handleDayRemove}
-          >
-            <ArrowLeft className="text-default-500" />
-          </Button>
-          <Button
-            size="sm"
-            className="cursor-pointer bg-default-100 hover:bg-default-200 rounded-2xl transition-color duration-500 h-[40px]"
-            onPress={handleDayAdd}
-          >
-            <ArrowRight className="text-default-500" />
-          </Button>
-        </div>
-        <div>
-          <DatePicker
-            value={valueDatePicker}
-            onChange={handleDatePickerChange}
-          />
-        </div>
-      </div> */}
-
-      {/* <div>
-        <ModalStudySessionView
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-          studySession={studySessionToView}
-        />
-      </div> */}
-
       <div className="flex flex-row gap-6">
         <Card className="flex flex-col rounded-none items-center relative p-4 gap-4 w-1/5">
           <div className="flex justify-between text-default-900 rounded-2xl w-full">
@@ -264,6 +241,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
               base: "shadow-none",
             }}
             onChange={handleDateCalendarChange}
+            value={valueDatePicker}
           />
           <Input
             type="search"
@@ -389,7 +367,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
               </div>
             </Tab>
             <Tab key="week" title="Semaine" onClick={() => setDisplayTab("week")}>
-              <WeekCalendar currentDate={currentDate} currentWeek={currentWeek} />
+              <WeekCalendar currentWeek={currentWeek} studySessionsPerDay={studySessionsPerDay} />
             </Tab>
           </Tabs>
         </Card>
