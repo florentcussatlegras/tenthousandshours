@@ -55,6 +55,15 @@ export async function createStudyProcess(
   try {
     var slugify = require('slugify');
 
+    const topic = await prisma.topic.findFirst({
+      select: {
+        name: true
+      },
+      where: {
+        id: result.data.topicId
+      }
+    })
+
     const studyProcessUser = await prisma.studyProcess.findFirst({
       where: {
         userId: session.user.id,
@@ -73,7 +82,7 @@ export async function createStudyProcess(
     studyProcess = await prisma.studyProcess.create({
       data: {
         name: result.data.name,
-        slug: slugify(result.data.name),
+        slug: slugify(String(topic?.name)),
         description: result.data.description,
         forecastedDedicatedHours: result.data.timeDedicated === '' ? null : Number(result.data.timeDedicated),
         forecastedDedicatedHoursPeriod: result.data.timeDedicated === '' ? null : result.data.timeDedicatedPeriod,

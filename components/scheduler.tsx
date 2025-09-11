@@ -41,6 +41,7 @@ import prisma from "@/app/lib/prisma";
 import { convertSecondsInHourMin } from "@/app/lib/utils";
 import Link from "next/link";
 import { WeekCalendar } from "./week-calendar";
+import { DayCalendar } from "./day-calendar";
 
 function getCurrentWeek(currentDate: Date) {
   let i = currentDate.getDay();
@@ -90,32 +91,31 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
     parseDate(currentDate.toISOString().substring(0, 10))
   );
   const [studySessions, setStudySessions] = useState([]);
+  const [studySessionsFilter, setStudySessionsFilter] = useState([]);
   // const [studySessionToView, setStudySessionToView] = useState(null);
   const [studySessionsPerDay, setStudySessionsPerDay] = useState([]);
+  const [studySessionsPerDayFilter, setStudySessionsPerDayFilter] = useState([]);
 
   const [topics, setTopics] = useState([]);
   const [displayTab, setDisplayTab] = useState("day");
 
+  const [searchItem, setSearchItem] = useState("");
+
   const { data: session } = useSession();
 
   useEffect(() => {
-    console.log('heeeerrre');
-    console.log(currentWeek);
-
     async function getStudySessions() {
       const newStudySessions = await fetchStudySessions(
         session?.user.id,
         currentDate
       );
-      console.log(newStudySessions);
       setStudySessions(newStudySessions);
+      setStudySessionsFilter(newStudySessions);
     }
 
     function getStudySessionsPerDay() {
       let newStudySessionsPerDay = [];
-      console.log('i am here');
       currentWeek.forEach(async (day) => {
-        console.log(day.getDay());
         newStudySessionsPerDay[day.getDay()] = await fetchStudySessions(
           session?.user.id,
           day
@@ -123,6 +123,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
       });
 
       setStudySessionsPerDay(newStudySessionsPerDay);
+      setStudySessionsPerDayFilter(newStudySessionsPerDay);
     }
 
     async function getTopicsUser() {
@@ -133,14 +134,11 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
     getStudySessions();
     getStudySessionsPerDay();
     getTopicsUser();
-
   }, [currentDate]);
 
-  // useEffect(() => {
-  //   console.log("change current date");
-  //   console.log(currentDate);
-  //   setCurrentWeek(getCurrentWeek(currentDate));
-  // }, []);
+  useEffect(() => {
+    setCurrentWeek(getCurrentWeek(currentDate));
+  }, []);
 
   let timeSlots = [];
   const dateDuJour = new Date();
@@ -173,7 +171,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
     let newCurrentDate;
     if (displayTab === "day") {
       newCurrentDate = dateAddDays(-1, currentDate);
-    }else {
+    } else {
       newCurrentDate = dateAddDays(-7, currentDate);
     }
     setCurrentDate(newCurrentDate);
@@ -187,7 +185,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
     let newCurrentDate;
     if (displayTab === "day") {
       newCurrentDate = dateAddDays(1, currentDate);
-    }else {
+    } else {
       newCurrentDate = dateAddDays(7, currentDate);
     }
     setCurrentDate(newCurrentDate);
@@ -203,7 +201,37 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
     setCurrentDate(value.toDate());
     setCurrentWeek(getCurrentWeek(value.toDate()));
     console.log(getCurrentWeek(value.toDate()));
-  }  
+  }
+
+  function handleInputSearchChange(evt) {
+    const newSearchTerm = evt.currentTarget.value;
+    // console.log(newSearchTerm);
+    setSearchItem(newSearchTerm);
+
+    if (displayTab === "day") {
+   
+      const newitems = studySessions.filter((item) => {
+          return item.topic_name.toLowerCase().includes(newSearchTerm.toLowerCase());
+      });
+
+      setStudySessionsFilter(newitems);
+
+    } else {
+
+      let result = [];
+
+      studySessionsPerDay.forEach((items, indexDay) => {
+        const newitems = items.filter((item) => {
+           return item.topic_name.toLowerCase().includes(newSearchTerm.toLowerCase());
+        });
+        result[indexDay] = newitems;
+      });
+
+      setStudySessionsPerDayFilter(result);
+
+    }
+
+  }
 
   return (
     <div className="w-full">
@@ -248,6 +276,8 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
             startContent={
               <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none shrink-0" />
             }
+            onChange={handleInputSearchChange}
+            value={searchItem}
           />
           <ListTopicsUser topics={topics} />
         </Card>
@@ -255,119 +285,20 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
         <Card className="rounded-none relative p-4 gap-0 w-4/5 flex flex-col">
           <Tabs aria-label="Options" className="font-semibold">
             <Tab key="day" title="Jour" onClick={() => setDisplayTab("day")}>
-              <div className="flex flex-col gap-4 pt-1">
-                <div className="uppercase flex justify-center items-center text-sm text-default-500 h-10 font-semibold rounded-xl px-4 absolute top-4 right-2">
-                  {new Intl.DateTimeFormat("fr-FR", {
-                    dateStyle: "full",
-                  }).format(currentDate)}
-                </div>
-
-                {studySessions.length === 0 ? (
-                  <div className="justify-center text-default-400 font-medium uppercase py-12 text-center">
-                    Aucune session de travail trouvées ce jour là
-                  </div>
-                ) : (
-                  <div className="flex flex-col gap-3">
-                    <span className="text-sm text-default-500 ml-auto pr-1">
-                      {studySessions.length} sessions de travail
-                    </span>
-
-                    <Accordion variant="splitted" className="px-0">
-                      {studySessions.map((session) => {
-                        const ratioProgress =
-                          (Number(session.study_process_total_hours) / 10000) *
-                          100;
-
-                        return (
-                          <AccordionItem
-                            key={session.session_id}
-                            aria-label={`Accordion ${session.session_id}`}
-                            title={`${session.topic_name}`}
-                            classNames={{
-                              base: "relative px-6 mb-2",
-                              title: "text-xl text-sky-500",
-                              indicator: "w-[350px]",
-                            }}
-                            subtitle={
-                              <Chip isDisabled color="secondary">
-                                {convertSecondsInHourMin(session.totalSeconds)}
-                              </Chip>
-                            }
-                            disableIndicatorAnimation={true}
-                            indicator={
-                              <div className="flex flex-row items-end gap-4">
-                                <Progress
-                                  aria-label="Loading..."
-                                  className="w-full"
-                                  classNames={{
-                                    indicator: "bg-sky-500",
-                                    track:
-                                      "drop-shadow-md border border-default",
-                                    value: "ml-auto text-foreground/60 text-sm",
-                                  }}
-                                  value={ratioProgress}
-                                  showValueLabel={true}
-                                />
-                                <ChevronDown className="-mb-2" />
-                              </div>
-                            }
-                          >
-                            <div className="flex flex-col gap-2 py-4">
-                              <div className="flex flex-row gap-2 text-base mb-2">
-                                <span>Horaires de travail : </span>
-                                <span>
-                                  {new Intl.DateTimeFormat("fr-Fr", {
-                                    timeStyle: "short",
-                                  }).format(session.startedAt)}
-                                </span>
-                                <span>-</span>
-                                <span>
-                                  {new Intl.DateTimeFormat("fr-Fr", {
-                                    timeStyle: "short",
-                                  }).format(session.finishedAt)}
-                                </span>
-                              </div>
-                              <div>
-                                Vous avez travaillé{" "}
-                                {session.study_process_total_hours} heures au
-                                total sur cette matière
-                              </div>
-                              <p className="my-4">
-                                {session?.description === ""
-                                  ? "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Possimus optio delectus harum beatae debitis nihil molestias, animi laboriosam, sint mollitia labore neque sequi soluta ea? Hic dignissimos quam voluptas neque."
-                                  : session?.description}
-                              </p>
-                              {session.urls !== "" ? (
-                                <div className="flex flex-col">
-                                  <h2>
-                                    Vous avez utilisé le contenu suivant lors de
-                                    cette session de travail :
-                                  </h2>
-                                  <ul>
-                                    {session.urls.split(",").map((url) => (
-                                      <li className="text-sky-500">
-                                        <Link href={url}>{url}</Link>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              ) : (
-                                <span>
-                                  Vous n'avez indiqué aucun contenu particulier
-                                  utilisé lors de cette session de travail
-                                </span>
-                              )}
-                            </div>
-                          </AccordionItem>
-                        );
-                      })}
-                    </Accordion>
-                  </div>
-                )}
-              </div>
+              <DayCalendar
+                currentDate={currentDate}
+                studySessions={studySessionsFilter}
+              />
             </Tab>
-            <Tab key="week" title="Semaine" onClick={() => setDisplayTab("week")}>
-              <WeekCalendar currentWeek={currentWeek} studySessionsPerDay={studySessionsPerDay} />
+            <Tab
+              key="week"
+              title="Semaine"
+              onClick={() => setDisplayTab("week")}
+            >
+              <WeekCalendar
+                currentWeek={currentWeek}
+                studySessionsPerDay={studySessionsPerDayFilter}
+              />
             </Tab>
           </Tabs>
         </Card>

@@ -14,7 +14,9 @@ export default async function studyProcessDetailPage({ params }) {
   });
 
   const paramsObj = await params;
-  const { slug } = paramsObj.slug;
+  const slug = paramsObj.slug[0];
+
+  console.log(slug);
 
   const studyProcess = await prisma.studyProcess.findFirst({
     select: {

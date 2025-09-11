@@ -5,12 +5,11 @@ import React from "react";
 
 export function WeekCalendar({
   currentWeek,
-  studySessionsPerDay
+  studySessionsPerDay,
 }: {
   currentWeek: Date[];
-  studySessionsPerDay: StudySession[]
+  studySessionsPerDay: StudySession[];
 }) {
-
   const { data: session } = useSession();
 
   const days = [
@@ -22,7 +21,6 @@ export function WeekCalendar({
     "Vendredi",
     "Samedi",
   ];
-
 
   return (
     <div className="flex flex-col gap-4 pt-1">
@@ -45,9 +43,11 @@ export function WeekCalendar({
                 {days[day.getDay()]}
               </div>
               <div className="w-full text-center flex flex-col gap-3 py-4 px-2">
-                {studySessionsPerDay[day.getDay()] !== undefined 
+                {studySessionsPerDay[day.getDay()] !== undefined
                   ? studySessionsPerDay[day.getDay()].map((session) => (
-                      <div className="bg-sky-500 text-white text-tiny py-1 rounded-sm font-semibold">{session.topic_name}</div>
+                      <div className="bg-sky-500 text-white text-tiny py-1 rounded-sm font-semibold">
+                        {session.topic_name}
+                      </div>
                     ))
                   : null}
               </div>

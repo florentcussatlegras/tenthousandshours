@@ -15,6 +15,7 @@ import Link from "next/link";
 import { DeleteIcon } from "./icons";
 
 interface StudyProgression {
+  id?: UUID,
   slug?: String,
   totalHours?: Number;
   topic?: {
@@ -24,6 +25,7 @@ interface StudyProgression {
 
 import React from "react";
 import { StudyProcess } from "@prisma/client";
+import { UUID } from "crypto";
 
 export const EyeIcon = () => {
   return (
