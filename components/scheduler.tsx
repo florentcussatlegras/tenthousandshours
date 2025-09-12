@@ -20,12 +20,17 @@ import {
   Tab,
   Tabs,
   CardBody,
+  useCheckbox,
+  tv,
+  VisuallyHidden,
+  CheckboxGroup,
 } from "@heroui/react";
 import {
   ArrowBigDown,
   ArrowDown,
   ArrowLeft,
   ArrowRight,
+  CheckIcon,
   ChevronDown,
   SearchIcon,
 } from "lucide-react";
@@ -79,10 +84,67 @@ function getCurrentWeek(currentDate: Date) {
   return dayWeeks;
 }
 
+export const CustomCheckbox = (props) => {
+  const checkbox = tv({
+    slots: {
+      base: "bg-secondary hover:bg-secondary border-none",
+      content: "text-white px-4 font-bold",
+    },
+    variants: {
+      isSelected: {
+        true: {
+          base: "bg-secondary hover:bg-secondary",
+          content: "text-white text-base pl-1 w-full",
+        },
+      },
+      isFocusVisible: {
+        true: {
+          // base: "outline-solid outline-transparent",
+        },
+      },
+    },
+  });
+
+  const {
+    children,
+    isSelected,
+    isFocusVisible,
+    getBaseProps,
+    getLabelProps,
+    getInputProps,
+  } = useCheckbox({
+    ...props,
+  });
+
+  const styles = checkbox({ isSelected, isFocusVisible });
+
+  return (
+    <label {...getBaseProps()}>
+      <VisuallyHidden>
+        <input {...getInputProps()} />
+      </VisuallyHidden>
+      <Chip
+        classNames={{
+          base: styles.base(),
+          content: styles.content(),
+        }}
+        color="secondary"
+        startContent={isSelected ? <CheckIcon className="ml-1" /> : null}
+        variant="faded"
+        {...getLabelProps()}
+      >
+        {children ? children : isSelected ? "Enabled" : "Disabled"}
+      </Chip>
+    </label>
+  );
+};
+
 export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
   let formatter = useDateFormatter();
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [groupSelected, setGroupSelected] = useState([]);
+  const [haveUsedTopicSelection, setHaveUsedTopicSelection] = useState(false);
 
   const [currentDate, setCurrentDate] = useState(defaultDate);
   const [currentWeek, setCurrentWeek] = useState(getCurrentWeek(currentDate));
@@ -94,7 +156,9 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
   const [studySessionsFilter, setStudySessionsFilter] = useState([]);
   // const [studySessionToView, setStudySessionToView] = useState(null);
   const [studySessionsPerDay, setStudySessionsPerDay] = useState([]);
-  const [studySessionsPerDayFilter, setStudySessionsPerDayFilter] = useState([]);
+  const [studySessionsPerDayFilter, setStudySessionsPerDayFilter] = useState(
+    []
+  );
 
   const [topics, setTopics] = useState([]);
   const [displayTab, setDisplayTab] = useState("day");
@@ -109,21 +173,55 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
         session?.user.id,
         currentDate
       );
+
       setStudySessions(newStudySessions);
-      setStudySessionsFilter(newStudySessions);
+
+      if (groupSelected.length !== 0) {
+        const newStudySessionsFilter = newStudySessions.filter((item) => {
+          return groupSelected.includes(item.topic_id);
+        });
+        setStudySessionsFilter(newStudySessionsFilter);
+      } else {
+        setStudySessionsFilter(newStudySessions);
+      }
     }
 
     function getStudySessionsPerDay() {
       let newStudySessionsPerDay = [];
+
+      const getStudySessionPerDay = async (day) => {
+        return await fetchStudySessions(session?.user.id, day);
+      };
+
       currentWeek.forEach(async (day) => {
-        newStudySessionsPerDay[day.getDay()] = await fetchStudySessions(
-          session?.user.id,
-          day
-        );
+        newStudySessionsPerDay[day.getDay()] = await getStudySessionPerDay(day);
       });
 
-      setStudySessionsPerDay(newStudySessionsPerDay);
+      console.log("here");
+      console.log(newStudySessionsPerDay);
+
+      // if (groupSelected.length !== 0) {
+      //   let newStudySessionsPerDayFilter = [];
+
+      //   newStudySessionsPerDay.forEach((items, indexDay) => {
+      //     const newitems = items.filter((item) => {
+      //       return groupSelected.includes(item.topic_id);
+      //     });
+      //     newStudySessionsPerDayFilter[indexDay] = newitems;
+      //   });
+
+      //   console.log('here2');
+      //   console.log(newStudySessionsPerDayFilter);
+
+      //   setStudySessionsPerDayFilter(newStudySessionsPerDayFilter);
+      // } else {
+      //   console.log('here3');
+      //   console.log(newStudySessionsPerDay);
+      //   setStudySessionsPerDayFilter(newStudySessionsPerDay);
+      // }
+
       setStudySessionsPerDayFilter(newStudySessionsPerDay);
+      setStudySessionsPerDay(newStudySessionsPerDay);
     }
 
     async function getTopicsUser() {
@@ -139,6 +237,35 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
   useEffect(() => {
     setCurrentWeek(getCurrentWeek(currentDate));
   }, []);
+
+  useEffect(() => {
+    if (groupSelected.length !== 0) {
+      if (displayTab === "day") {
+        const newitems = studySessions.filter((item) => {
+          return groupSelected.includes(item.topic_id);
+        });
+
+        setStudySessionsFilter(newitems);
+      } else {
+        let result = [];
+
+        studySessionsPerDay.forEach((items, indexDay) => {
+          const newitems = items.filter((item) => {
+            return groupSelected.includes(item.topic_id);
+          });
+          result[indexDay] = newitems;
+        });
+
+        setStudySessionsPerDayFilter(result);
+      }
+    } else if (haveUsedTopicSelection) {
+      if (displayTab === "day") {
+        setStudySessionsFilter(studySessions);
+      } else {
+        setStudySessionsPerDayFilter(studySessionsPerDay);
+      }
+    }
+  }, [groupSelected]);
 
   let timeSlots = [];
   const dateDuJour = new Date();
@@ -209,28 +336,27 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
     setSearchItem(newSearchTerm);
 
     if (displayTab === "day") {
-   
       const newitems = studySessions.filter((item) => {
-          return item.topic_name.toLowerCase().includes(newSearchTerm.toLowerCase());
+        return item.topic_name
+          .toLowerCase()
+          .includes(newSearchTerm.toLowerCase());
       });
 
       setStudySessionsFilter(newitems);
-
     } else {
-
       let result = [];
 
       studySessionsPerDay.forEach((items, indexDay) => {
         const newitems = items.filter((item) => {
-           return item.topic_name.toLowerCase().includes(newSearchTerm.toLowerCase());
+          return item.topic_name
+            .toLowerCase()
+            .includes(newSearchTerm.toLowerCase());
         });
         result[indexDay] = newitems;
       });
 
       setStudySessionsPerDayFilter(result);
-
     }
-
   }
 
   return (
@@ -274,12 +400,30 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
           <Input
             type="search"
             startContent={
-              <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none shrink-0" />
+              <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 pointer-events-none shrink-0" />
             }
             onChange={handleInputSearchChange}
             value={searchItem}
           />
-          <ListTopicsUser topics={topics} />
+
+          <div className="flex flex-col w-full gap-2">
+            <CheckboxGroup
+              className="gap-1"
+              orientation="horizontal"
+              value={groupSelected}
+              onChange={setGroupSelected}
+            >
+              {topics.map((topic) => (
+                <CustomCheckbox
+                  key={topic.id}
+                  value={topic.id}
+                  onClick={() => setHaveUsedTopicSelection(true)}
+                >
+                  {topic.name}
+                </CustomCheckbox>
+              ))}
+            </CheckboxGroup>
+          </div>
         </Card>
 
         <Card className="rounded-none relative p-4 gap-0 w-4/5 flex flex-col">
