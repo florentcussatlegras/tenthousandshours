@@ -41,12 +41,12 @@ export function DayCalendar({
                   aria-label={`Accordion ${session.session_id}`}
                   title={`${session.topic_name}`}
                   classNames={{
-                    base: "relative px-6 mb-2",
-                    title: "text-xl text-sky-500",
+                    base: "relative px-6 mb-2 border-b-1 border-default-200 rounded-none shadow-none",
+                    title: "text-xl text-default-900",
                     indicator: "w-[350px]",
                   }}
                   subtitle={
-                    <Chip isDisabled color="secondary">
+                    <Chip isDisabled className="bg-sky-500 text-white font-semibold">
                       {convertSecondsInHourMin(session.totalSeconds)}
                     </Chip>
                   }

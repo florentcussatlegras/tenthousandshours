@@ -12,11 +12,11 @@ import {
   Button,
 } from "@heroui/react";
 import Link from "next/link";
-import { DeleteIcon } from "./icons";
+import { AddIcon, DeleteIcon, VerticalDotsIcon } from "./icons";
 
 interface StudyProgression {
-  id?: UUID,
-  slug?: String,
+  id?: UUID;
+  slug?: String;
   totalHours?: Number;
   topic?: {
     name?: String;
@@ -26,6 +26,7 @@ interface StudyProgression {
 import React from "react";
 import { StudyProcess } from "@prisma/client";
 import { UUID } from "crypto";
+import { Timer } from "lucide-react";
 
 export const EyeIcon = () => {
   return (
@@ -75,49 +76,57 @@ export default function ListStudiesProgressbar({
 }) {
   return (
     <Card className="h-full rounded-none">
-      <CardHeader className="flex flex-col items-start gap-3 p-4">
+      {/* <CardHeader className="flex flex-col items-start gap-3 p-4">
         <h2 className="text-md font-medium text-black/90">
           Mes apprentissages
         </h2>
         <Divider />
-      </CardHeader>
+      </CardHeader> */}
       <CardBody className="p-6">
-        <div className="flex flex-col gap-4 h-full justify-center">
-          {userStudies.map((study) => {
-            const ratioProgress = (Number(study.totalHours) / 10000) * 100;
-            return (
-              <div className="flex items-end gap-4 relative">
-                <Progress
-                  aria-label="Loading..."
-                  label={study?.topic?.name}
-                  className="w-full"
-                  classNames={{
-                    indicator: "bg-sky-500",
-                    track: "drop-shadow-md border border-default",
-                    value: "ml-auto text-foreground/60 text-sm",
-                  }}
-                  value={ratioProgress}
-                  showValueLabel={true}
-                />
-                <Dropdown>
-                  <DropdownTrigger>
-                    <Button className="bg-white w-[20px] border border-default-100 place-items-end">
-                      <ThreeDotsIcon />
-                    </Button>
-                  </DropdownTrigger>
-                  <DropdownMenu aria-label="Static Actions">
-                    <DropdownItem key="details">
-                      <Link
-                        href={`/study-process/${study?.slug}`}
-                        className="text-lg cursor-pointer active:opacity-50 flex flex-row items-center gap-2"
-                      >
-                        <EyeIcon />
-                        <span className="text-sm">
-                          Afficher les détails
-                        </span>
-                      </Link>
-                    </DropdownItem>
-                    <DropdownItem key="delete">
+        <div className="flex flex-col gap-8 h-full justify-start">
+          <Button
+            startContent={<AddIcon />}
+            className="bg-sky-500 text-white ml-auto"
+          >
+            <Link href="/study-process/new">Ajouter un nouvel apprentissage</Link>
+          </Button>
+          <div className="flex flex-col gap-4">
+            {userStudies.map((study) => {
+              const ratioProgress = (Number(study.totalHours) / 10000) * 100;
+              return (
+                <div className="flex items-end gap-4 relative">
+                  <Progress
+                    aria-label="Loading..."
+                    label={study?.topic?.name}
+                    className="w-full"
+                    classNames={{
+                      indicator: "bg-sky-500",
+                      track: "drop-shadow-md border border-default",
+                      value: "ml-auto text-foreground/60 text-sm",
+                    }}
+                    value={ratioProgress}
+                    showValueLabel={true}
+                  />
+                  <Dropdown>
+                    <DropdownTrigger>
+                      {/* <Button className="bg-white w-[20px] border border-default-100 place-items-end">
+                        <ThreeDotsIcon />
+                      </Button> */}
+                      <Button isIconOnly size="sm" variant="light">
+                        <VerticalDotsIcon className="text-default-300" />
+                      </Button>
+                    </DropdownTrigger>
+                    <DropdownMenu aria-label="Static Actions">
+                      <DropdownItem key="details">
+                        <Link
+                          href={`/study-process/${study?.slug}`}
+                          className="text-lg cursor-pointer active:opacity-50 flex flex-row items-center gap-2"
+                        >
+                          <EyeIcon />
+                          <span className="text-sm">Afficher les détails</span>
+                        </Link>
+                      </DropdownItem>
+                      <DropdownItem key="delete">
                         <Link
                           href=""
                           className="text-lg text-danger cursor-pointer active:opacity-50 flex flex-row items-center gap-2"
@@ -127,12 +136,13 @@ export default function ListStudiesProgressbar({
                             Supprimer l'apprentissage
                           </span>
                         </Link>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-              </div>
-            );
-          })}
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </CardBody>
     </Card>

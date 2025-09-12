@@ -122,7 +122,7 @@ import {
 } from "@heroui/react";
 import { ThemeSwitch } from "./theme-switch";
 import { GithubIcon } from "./icons";
-import { GraduationCap, HelpCircle, LogOut, Mail, Settings, User } from "lucide-react";
+import { Calendar, GraduationCap, HelpCircle, LogOut, Mail, Settings, User } from "lucide-react";
 
 export const AcmeLogo = () => {
   return (
@@ -230,7 +230,22 @@ export default function NavBarPage() {
         </NavbarItem>
         <NavbarItem
           className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary"
-          data-active="true"
+          // data-active="true"
+        >
+          <Link
+            className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
+            href="/scheduler"
+            data-react-aria-pressable="true"
+            role="link"
+            aria-current="page"
+          >
+            <Calendar />
+            Votre calendrier
+          </Link>
+        </NavbarItem>
+        <NavbarItem
+          className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary"
+          // data-active="true"
         >
           <Link
             className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"

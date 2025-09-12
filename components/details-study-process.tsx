@@ -1,7 +1,8 @@
 "use client";
 
-import { Card, CardBody, CardHeader, Chip, Progress } from "@heroui/react";
+import { Button, Card, CardBody, CardHeader, Chip, Progress } from "@heroui/react";
 import { StudyProcess } from "@prisma/client";
+import { Timer } from "lucide-react";
 
 export default function DetailsStudyProcess({
   studyProcess,
@@ -19,9 +20,10 @@ export default function DetailsStudyProcess({
 
   return (
     <Card className="rounded-none relative p-4">
-      <CardHeader className="flex flex-col items-start gap-6">
+      <CardHeader className="flex">
         {/* <h2 className="font-bold text-sky-500">{studyProcess.topic.name}</h2> */}
         <span className="text-default-500 text-sm">Apprentissage débuté le {intl.format(studyProcess.createdAt)}</span>
+        <Button startContent={<Timer />} className="bg-sky-500 text-white ml-auto">Lancer une nouvelle session</Button>
       </CardHeader>
       <CardBody className="flex flex-col">
         <Chip isDisabled color="secondary">{`${studyProcess.totalHours} heures`}</Chip>

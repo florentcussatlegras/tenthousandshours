@@ -38,8 +38,8 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <div className="ml-auto text-sm rounded-full bg-success/20 text-success-700 px-4 py-2">
-          Inscris le {JSON.stringify(session?.user.createdAt)}
+        <div className="ml-auto text-sm rounded-full bg-success/20 text-success-700 px-4 py-2 font-semibold">
+          Vous êtes inscrit le {new Intl.DateTimeFormat('fr-Fr', {dateStyle: 'medium'}).format(session?.user.createdAt)}
         </div>
       </div>
 
