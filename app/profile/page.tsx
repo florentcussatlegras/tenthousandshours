@@ -57,7 +57,7 @@ export default async function Page() {
         select: {
           id: true,
           slug: true,
-          totalHours: true,
+          totalSeconds: true,
           topic: {
             select: {
               name: true

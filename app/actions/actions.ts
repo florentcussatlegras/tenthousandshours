@@ -178,31 +178,34 @@ export async function fetchStudySessions(
 
 export async function getTopicsOfaUser(userId: UUID) {
 
-  // const studyProcesses =
-  //   await prisma.$queryRaw`SELECT 
-  //       *
-  //     FROM public."Topic"
-  //     LEFT JOIN public."StudyProcess"
-  //     ON "Topic"."id" = "StudyProcess"."topicId"
-  //     LEFT JOIN public."User"
-  //     ON "StudyProcess"."userId" = "User"."id"
-  //     WHERE "User"."id" = ${userId}
-  // `;
+  const topics =
+    await prisma.$queryRaw`SELECT
+        "Topic"."id" AS "topic_id",
+        "Topic"."name" AS "topic_name"
+      FROM public."Topic"
+      LEFT JOIN public."StudyProcess"
+      ON "Topic"."id" = "StudyProcess"."topicId"
+      WHERE "StudyProcess"."userId" = ${userId}
+  `;
 
-  // return studyProcesses;
+  console.log(topics);
 
-    const topics = await prisma.topic.findMany({
-      select: {
-        id: true,
-        name: true,
-        studyProcesses: {
-          where: {
-            userId: userId
-          }
-        },
-      },
-    });
-    console.log(topics);
+  // return topics;
+
+  // console.log(userId);
+
+    // const topics = await prisma.topic.findMany({
+    //   select: {
+    //     id: true,
+    //     name: true,
+    //     studyProcesses: {
+    //       where: {
+    //         userId: userId
+    //       }
+    //     },
+    //   },
+    // });
+    // console.log(topics);
   
     return topics;
 

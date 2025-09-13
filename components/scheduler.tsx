@@ -218,6 +218,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
     }
 
     async function getTopicsUser() {
+      console.log(session.user.id);
       const topics = await getTopicsOfaUser(session?.user.id);
       setTopics(topics);
     }
@@ -232,7 +233,9 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
   }, []);
 
   useEffect(() => {
+    console.log('here');
     if (groupSelected.length !== 0) {
+      console.log(groupSelected);
       const newitems = studySessions.filter((item) => {
         return groupSelected.includes(item.topic_id);
       });
@@ -401,11 +404,11 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
             >
               {topics.map((topic) => (
                 <CustomCheckbox
-                  key={topic.id}
-                  value={topic.id}
+                  key={topic.topic_id}
+                  value={topic.topic_id}
                   onClick={() => setHaveUsedTopicSelection(true)}
                 >
-                  {topic.name}
+                  {topic.topic_name}
                 </CustomCheckbox>
               ))}
             </CheckboxGroup>

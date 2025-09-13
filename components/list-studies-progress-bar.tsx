@@ -17,7 +17,7 @@ import { AddIcon, DeleteIcon, VerticalDotsIcon } from "./icons";
 interface StudyProgression {
   id?: UUID;
   slug?: String;
-  totalHours?: Number;
+  totalSeconds?: Number;
   topic?: {
     name?: String;
   };
@@ -88,60 +88,71 @@ export default function ListStudiesProgressbar({
             startContent={<AddIcon />}
             className="bg-sky-500 text-white ml-auto"
           >
-            <Link href="/study-process/new">Ajouter un nouvel apprentissage</Link>
+            <Link href="/study-process/new">
+              Ajouter un nouvel apprentissage
+            </Link>
           </Button>
-          <div className="flex flex-col gap-4">
-            {userStudies.map((study) => {
-              const ratioProgress = (Number(study.totalHours) / 10000) * 100;
-              return (
-                <div className="flex items-end gap-4 relative">
-                  <Progress
-                    aria-label="Loading..."
-                    label={study?.topic?.name}
-                    className="w-full"
-                    classNames={{
-                      indicator: "bg-sky-500",
-                      track: "drop-shadow-md border border-default",
-                      value: "ml-auto text-foreground/60 text-sm",
-                    }}
-                    value={ratioProgress}
-                    showValueLabel={true}
-                  />
-                  <Dropdown>
-                    <DropdownTrigger>
-                      {/* <Button className="bg-white w-[20px] border border-default-100 place-items-end">
-                        <ThreeDotsIcon />
-                      </Button> */}
-                      <Button isIconOnly size="sm" variant="light">
-                        <VerticalDotsIcon className="text-default-300" />
-                      </Button>
-                    </DropdownTrigger>
-                    <DropdownMenu aria-label="Static Actions">
-                      <DropdownItem key="details">
-                        <Link
-                          href={`/study-process/${study?.slug}`}
-                          className="text-lg cursor-pointer active:opacity-50 flex flex-row items-center gap-2"
-                        >
-                          <EyeIcon />
-                          <span className="text-sm">Afficher les détails</span>
-                        </Link>
-                      </DropdownItem>
-                      <DropdownItem key="delete">
-                        <Link
-                          href=""
-                          className="text-lg text-danger cursor-pointer active:opacity-50 flex flex-row items-center gap-2"
-                        >
-                          <DeleteIcon />
-                          <span className="text-sm">
-                            Supprimer l'apprentissage
-                          </span>
-                        </Link>
-                      </DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
-                </div>
-              );
-            })}
+          <div className="flex flex-col gap-4 items-stretch h-full justify-center">
+            {userStudies.length !== 0 ? (
+              userStudies.map((study) => {
+                const ratioProgress =
+                  (Number(study.totalSeconds) / 36000000) * 100;
+                return (
+                  <div className="flex items-end gap-4 relative">
+                    <Progress
+                      aria-label="Loading..."
+                      label={study?.topic?.name}
+                      className="w-full"
+                      classNames={{
+                        indicator: "bg-sky-500",
+                        track: "drop-shadow-md border border-default",
+                        value: "ml-auto text-foreground/60 text-sm",
+                      }}
+                      value={ratioProgress}
+                      showValueLabel={true}
+                    />
+                    <Dropdown>
+                      <DropdownTrigger>
+                        {/* <Button className="bg-white w-[20px] border border-default-100 place-items-end">
+                          <ThreeDotsIcon />
+                        </Button> */}
+                        <Button isIconOnly size="sm" variant="light">
+                          <VerticalDotsIcon className="text-default-300" />
+                        </Button>
+                      </DropdownTrigger>
+                      <DropdownMenu aria-label="Static Actions">
+                        <DropdownItem key="details">
+                          <Link
+                            href={`/study-process/${study?.slug}`}
+                            className="text-lg cursor-pointer active:opacity-50 flex flex-row items-center gap-2"
+                          >
+                            <EyeIcon />
+                            <span className="text-sm">
+                              Afficher les détails
+                            </span>
+                          </Link>
+                        </DropdownItem>
+                        <DropdownItem key="delete">
+                          <Link
+                            href=""
+                            className="text-lg text-danger cursor-pointer active:opacity-50 flex flex-row items-center gap-2"
+                          >
+                            <DeleteIcon />
+                            <span className="text-sm">
+                              Supprimer l'apprentissage
+                            </span>
+                          </Link>
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
+                );
+              })
+            ) : (
+              <span className="text-default-400 uppercase w-full text-center">
+                Vous n'avez aucun apprentissage en cours
+              </span>
+            )}
           </div>
         </div>
       </CardBody>
