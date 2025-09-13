@@ -163,7 +163,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
   const [topics, setTopics] = useState([]);
   const [displayTab, setDisplayTab] = useState("day");
 
-  const [searchItem, setSearchItem] = useState("");
+  // const [searchItem, setSearchItem] = useState("");
 
   const { data: session } = useSession();
 
@@ -186,41 +186,34 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
       }
     }
 
-    function getStudySessionsPerDay() {
+    async function getStudySessionsPerDay() {
       let newStudySessionsPerDay = [];
 
       const getStudySessionPerDay = async (day) => {
         return await fetchStudySessions(session?.user.id, day);
       };
 
-      currentWeek.forEach(async (day) => {
+      for (let index = 0; index < currentWeek.length; index++) {
+        let day = currentWeek[index];
         newStudySessionsPerDay[day.getDay()] = await getStudySessionPerDay(day);
-      });
+      }
 
-      console.log("here");
-      console.log(newStudySessionsPerDay);
+      if (groupSelected.length !== 0) {
+        let newStudySessionsPerDayFilter = [];
 
-      // if (groupSelected.length !== 0) {
-      //   let newStudySessionsPerDayFilter = [];
+        newStudySessionsPerDay.forEach((items, indexDay) => {
+          const newitems = items.filter((item) => {
+            return groupSelected.includes(item.topic_id);
+          });
+          newStudySessionsPerDayFilter[indexDay] = newitems;
+        });
 
-      //   newStudySessionsPerDay.forEach((items, indexDay) => {
-      //     const newitems = items.filter((item) => {
-      //       return groupSelected.includes(item.topic_id);
-      //     });
-      //     newStudySessionsPerDayFilter[indexDay] = newitems;
-      //   });
+        setStudySessionsPerDayFilter(newStudySessionsPerDayFilter);
+      } else {
+        setStudySessionsPerDayFilter(newStudySessionsPerDay);
+      }
 
-      //   console.log('here2');
-      //   console.log(newStudySessionsPerDayFilter);
-
-      //   setStudySessionsPerDayFilter(newStudySessionsPerDayFilter);
-      // } else {
-      //   console.log('here3');
-      //   console.log(newStudySessionsPerDay);
-      //   setStudySessionsPerDayFilter(newStudySessionsPerDay);
-      // }
-
-      setStudySessionsPerDayFilter(newStudySessionsPerDay);
+      // setStudySessionsPerDayFilter(newStudySessionsPerDay);
       setStudySessionsPerDay(newStudySessionsPerDay);
     }
 
@@ -240,30 +233,23 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
 
   useEffect(() => {
     if (groupSelected.length !== 0) {
-      if (displayTab === "day") {
-        const newitems = studySessions.filter((item) => {
+      const newitems = studySessions.filter((item) => {
+        return groupSelected.includes(item.topic_id);
+      });
+      setStudySessionsFilter(newitems);
+
+      let result = [];
+
+      studySessionsPerDay.forEach((items, indexDay) => {
+        const newitems = items.filter((item) => {
           return groupSelected.includes(item.topic_id);
         });
-
-        setStudySessionsFilter(newitems);
-      } else {
-        let result = [];
-
-        studySessionsPerDay.forEach((items, indexDay) => {
-          const newitems = items.filter((item) => {
-            return groupSelected.includes(item.topic_id);
-          });
-          result[indexDay] = newitems;
-        });
-
-        setStudySessionsPerDayFilter(result);
-      }
+        result[indexDay] = newitems;
+      });
+      setStudySessionsPerDayFilter(result);
     } else if (haveUsedTopicSelection) {
-      if (displayTab === "day") {
-        setStudySessionsFilter(studySessions);
-      } else {
-        setStudySessionsPerDayFilter(studySessionsPerDay);
-      }
+      setStudySessionsFilter(studySessions);
+      setStudySessionsPerDayFilter(studySessionsPerDay);
     }
   }, [groupSelected]);
 
@@ -330,34 +316,34 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
     console.log(getCurrentWeek(value.toDate()));
   }
 
-  function handleInputSearchChange(evt) {
-    const newSearchTerm = evt.currentTarget.value;
-    // console.log(newSearchTerm);
-    setSearchItem(newSearchTerm);
+  // function handleInputSearchChange(evt) {
+  //   const newSearchTerm = evt.currentTarget.value;
+  //   // console.log(newSearchTerm);
+  //   setSearchItem(newSearchTerm);
 
-    if (displayTab === "day") {
-      const newitems = studySessions.filter((item) => {
-        return item.topic_name
-          .toLowerCase()
-          .includes(newSearchTerm.toLowerCase());
-      });
+  //   if (displayTab === "day") {
+  //     const newitems = studySessions.filter((item) => {
+  //       return item.topic_name
+  //         .toLowerCase()
+  //         .includes(newSearchTerm.toLowerCase());
+  //     });
 
-      setStudySessionsFilter(newitems);
-    } else {
-      let result = [];
+  //     setStudySessionsFilter(newitems);
+  //   } else {
+  //     let result = [];
 
-      studySessionsPerDay.forEach((items, indexDay) => {
-        const newitems = items.filter((item) => {
-          return item.topic_name
-            .toLowerCase()
-            .includes(newSearchTerm.toLowerCase());
-        });
-        result[indexDay] = newitems;
-      });
+  //     studySessionsPerDay.forEach((items, indexDay) => {
+  //       const newitems = items.filter((item) => {
+  //         return item.topic_name
+  //           .toLowerCase()
+  //           .includes(newSearchTerm.toLowerCase());
+  //       });
+  //       result[indexDay] = newitems;
+  //     });
 
-      setStudySessionsPerDayFilter(result);
-    }
-  }
+  //     setStudySessionsPerDayFilter(result);
+  //   }
+  // }
 
   return (
     <div className="w-full">
@@ -397,14 +383,14 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
             onChange={handleDateCalendarChange}
             value={valueDatePicker}
           />
-          <Input
+          {/* <Input
             type="search"
             startContent={
               <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 pointer-events-none shrink-0" />
             }
             onChange={handleInputSearchChange}
             value={searchItem}
-          />
+          /> */}
 
           <div className="flex flex-col w-full gap-2">
             <CheckboxGroup
