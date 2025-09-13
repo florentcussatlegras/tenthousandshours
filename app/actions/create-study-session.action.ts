@@ -73,6 +73,8 @@ export async function createStudySessionAction(
     };
   }
 
+  const totalSecondsStudyProcess = studyProcess.totalSeconds;
+
   try {
 
     const objStartedAt = result.data.startedAt?.split(":");
@@ -113,17 +115,26 @@ export async function createStudySessionAction(
 
     console.log(dateStartedAt);
     console.log(dateFinishedAt);
+    const totalSecondsSession = (dateFinishedAt.getTime() - dateStartedAt.getTime()) / 1000;
 
     const studySession = await prisma.studySession.create({
       data: {
         description: result.data.description,
         startedAt: dateStartedAt,
         finishedAt: dateFinishedAt,
-        totalSeconds:
-          (dateFinishedAt.getTime() - dateStartedAt.getTime()) / 1000,
+        totalSeconds: totalSecondsSession,
         studyProcessId: result.data.studyProcessId,
         urls: result.data.urls,
       },
+    });
+
+    await prisma.studyProcess.update({
+      data: {
+        totalSeconds: totalSecondsStudyProcess + totalSecondsSession
+      },
+      where: {
+        id: result.data.studyProcessId
+      }
     });
 
   } catch (err: unknown) {

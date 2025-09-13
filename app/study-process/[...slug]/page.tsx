@@ -24,7 +24,7 @@ export default async function studyProcessDetailPage({ params }) {
       name: true,
       createdAt: true,
       description: true,
-      totalHours: true,
+      totalSeconds: true,
       topic: {
         select: {
           name: true,

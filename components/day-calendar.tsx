@@ -30,7 +30,7 @@ export function DayCalendar({
             {studySessions.length} sessions de travail
           </span>
 
-          <Accordion variant="splitted" className="px-0">
+          <Accordion variant="splitted">
             {studySessions.map((session) => {
               const ratioProgress =
                 (Number(session.study_process_total_hours) / 10000) * 100;
@@ -41,12 +41,12 @@ export function DayCalendar({
                   aria-label={`Accordion ${session.session_id}`}
                   title={`${session.topic_name}`}
                   classNames={{
-                    base: "relative px-6 mb-2 border-b-1 border-default-200 rounded-none shadow-none",
+                    base: "relative px-0 mb-2 border-b-1 border-default-200 rounded-none shadow-none",
                     title: "text-xl text-default-900",
                     indicator: "w-[350px]",
                   }}
                   subtitle={
-                    <Chip isDisabled className="bg-sky-500 text-white font-semibold">
+                    <Chip isDisabled className="bg-sky-500 text-white font-semibold mt-2">
                       {convertSecondsInHourMin(session.totalSeconds)}
                     </Chip>
                   }

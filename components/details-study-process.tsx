@@ -9,7 +9,7 @@ export default function DetailsStudyProcess({
 }: {
   studyProcess: StudyProcess;
 }) {
-  const ratioProgress = (Number(studyProcess.totalHours) / 10000) * 100;
+  const ratioProgress = (Number(studyProcess.totalSeconds) / 36000000) * 100;
 
   var intl = new Intl.DateTimeFormat("fr-Fr", {
     "weekday": "long",
@@ -26,7 +26,7 @@ export default function DetailsStudyProcess({
         <Button startContent={<Timer />} className="bg-sky-500 text-white ml-auto">Lancer une nouvelle session</Button>
       </CardHeader>
       <CardBody className="flex flex-col">
-        <Chip isDisabled color="secondary">{`${studyProcess.totalHours} heures`}</Chip>
+        <Chip isDisabled color="secondary">{`${studyProcess.totalSeconds/3600} heures`}</Chip>
         <Progress
           aria-label="Loading..."
           className="w-full"
