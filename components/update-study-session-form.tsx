@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   CardBody,
+  DatePicker,
   Form,
   Input,
   Textarea,
@@ -13,6 +14,8 @@ import { PlusIcon } from "lucide-react";
 import { useActionState, useState } from "react";
 import { DeleteIcon, EditIcon } from "./icons";
 import { Time } from "@internationalized/date";
+import { useDateFormatter } from "@react-aria/i18n";
+import { parseDate, getLocalTimeZone } from "@internationalized/date";
 
 export function UpdateStudySessionForm({
   onReset,
@@ -27,15 +30,18 @@ export function UpdateStudySessionForm({
   });
 
   const [urls, setUrls] = useState(studySession.urls.split(","));
+  const [dateCreation, setDateCreation] = useState(
+    parseDate(studySession.createdAt.toISOString().substring(0, 10))
+  );
+
+  let formatter = useDateFormatter({ dateStyle: "full" });
 
   function addUrl() {
     setUrls([...urls, ""]);
   }
 
   function handleUrlRemove(index: number) {
-    setUrls(urls.filter((url, i) =>
-      index !== i
-    ));
+    setUrls(urls.filter((url, i) => index !== i));
   }
 
   function handleUrlChange(evt) {
@@ -72,20 +78,33 @@ export function UpdateStudySessionForm({
 
   const dateCreationStr = new Intl.DateTimeFormat("fr-Fr", {
     dateStyle: "full",
-  }).format(studySession.createdAt);
+  }).format(dateCreation.toDate(getLocalTimeZone()));
 
   return (
     <Card className="rounded-none relative p-4 w-2/5">
       <CardBody>
         <div className="flex flex-col gap-4">
-          <h1>
-            {dateCreationStr.slice(0, 1).toUpperCase() +
-              dateCreationStr.slice(1)}
-          </h1>
           <Form
             action={formAction}
             className="flex flex-col justify-start w-full gap-6"
           >
+            <div className="flex flex-row items-center justify-around w-full">
+              <h1>
+                {dateCreationStr.slice(0, 1).toUpperCase() +
+                  dateCreationStr.slice(1)}
+              </h1>
+              <div className="ml-auto">
+                <DatePicker
+                  name="date"
+                  className="max-w-[150px]"
+                  classNames={{
+                    inputWrapper: "h-15",
+                  }}
+                  value={dateCreation}
+                  onChange={setDateCreation}
+                />
+              </div>
+            </div>
             {formState.errors._form ? (
               <div className="text-danger text-sm">
                 {formState.errors._form?.join(", ")}
@@ -143,7 +162,7 @@ export function UpdateStudySessionForm({
               onChange={(e) => setDescriptionValue(e.currentTarget.value)}
             />
 
-            <Input type="text" name="urls" value={urls.join(",")} />
+            <Input type="hidden" name="urls" value={urls.join(",")} />
 
             {urls.map((url, index) => {
               return (
@@ -157,7 +176,7 @@ export function UpdateStudySessionForm({
                     onChange={handleUrlChange}
                   />
                   <Button
-                    onPress={() => removeUrl(index)}
+                    onPress={() => handleUrlRemove(index)}
                     className="bg-white min-w-15"
                   >
                     <DeleteIcon width="1.5em" height="1.5em" />
