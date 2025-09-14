@@ -45,8 +45,14 @@ import { StudyProcess, StudySession } from "@prisma/client";
 import { createStudySessionAction } from "@/app/actions/create-study-session.action";
 import prisma from "@/app/lib/prisma";
 import { Prisma } from "@prisma/client";
-import { fetchFilterStudySessions } from "@/app/actions/actions";
-import { ChevronDownIcon, DeleteIcon, EyeIcon, PlusIcon, VerticalDotsIcon } from "./icons";
+import { fetchStudySessionsPerRangeDays } from "@/app/actions/actions";
+import {
+  ChevronDownIcon,
+  DeleteIcon,
+  EyeIcon,
+  PlusIcon,
+  VerticalDotsIcon,
+} from "./icons";
 import { PrismaClient } from "@prisma/client/scripts/default-index";
 import Link from "next/link";
 import ModalStudySessionView from "./modal-study-session-view";
@@ -85,6 +91,7 @@ const INITIAL_VISIBLE_COLUMNS = [
 
 export default function ListStudiesSession({
   onEditClick,
+  studyProcessId,
   studySessions,
 }: {
   studySessions: StudySession[];
@@ -92,7 +99,7 @@ export default function ListStudiesSession({
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [studySessionToView, setStudySessionToView] = React.useState(null);
 
-  const [filterValue, setFilterValue] = React.useState("");
+  const [filterValue, setFilterValue] = React.useState(null);
   const [filteredItems, setFilteredItems] = React.useState(studySessions);
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -210,7 +217,10 @@ export default function ListStudiesSession({
                   </div>
                 </DropdownItem>
                 <DropdownItem key="delete">
-                  <Link href={`/study-session/delete/${studySession.id}`} className="flex flex-row w-full items-center gap-2 h-[20px] text-danger-500">
+                  <Link
+                    href={`/study-session/delete/${studySession.id}`}
+                    className="flex flex-row w-full items-center gap-2 h-[20px] text-danger-500"
+                  >
                     <DeleteIcon />
                     <span>Supprimer</span>
                   </Link>
@@ -244,23 +254,34 @@ export default function ListStudiesSession({
   const onSearchChange = React.useCallback(async (value) => {
     if (value) {
       setFilterValue(value);
-      const result = await fetchFilterStudySessions(
+      const result = await fetchStudySessionsPerRangeDays(
+        studyProcessId,
         value.start.year,
         value.start.month,
         value.start.day,
         value.end.year,
         value.end.month,
-        value.end.day
+        value.end.day,
       );
       setFilteredItems(result);
       setPage(1);
     } else {
-      setFilterValue("");
+      setFilterValue(null);
     }
   }, []);
 
-  const onClear = React.useCallback(() => {
-    setFilterValue("");
+  const onClear = React.useCallback(async () => {
+    setFilterValue(null);
+    const result = await fetchStudySessionsPerRangeDays(
+      studyProcessId,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
+    setFilteredItems(result);
     setPage(1);
   }, []);
 
@@ -268,31 +289,17 @@ export default function ListStudiesSession({
     return (
       <div className="flex flex-col gap-4">
         <div className="flex justify-between gap-3 items-end">
-          {/* <Input
-            isClearable
-            className="w-full sm:max-w-[44%]"
-            placeholder="Search by name..."
-            startContent={<SearchIcon />}
-            value={filterValue}
-            onClear={() => onClear()}
-            onValueChange={onSearchChange}
-          /> */}
-          {/* <DateInput
-            className="max-w-sm"
-            label={"Birth date"}
-            // value={filterValue}
-            // onClear={() => onClear()}
-            onValueChange={onSearchChange}
-            placeholderValue={new CalendarDate(1995, 11, 6)}
-          /> */}
-          <DateRangePicker
-            className="max-w-xs"
-            classNames={{
-              input: "text-sm",
-              inputWrapper: "h-15"
-            }}
-            onChange={onSearchChange}
-          />
+          <div className="flex flex-row items-center gap-4">
+            <DateRangePicker
+              className="max-w-xs"
+              classNames={{
+                input: "text-sm",
+              }}
+              value={filterValue}
+              onChange={onSearchChange}
+            />
+            <Button onPress={onClear}>Effacer</Button>
+          </div>
           <div className="flex gap-3">
             {/* <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
@@ -346,7 +353,7 @@ export default function ListStudiesSession({
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Total {studySessions.length} sessions
+            {studySessions.length} sessions
           </span>
           <label className="flex items-center text-default-400 text-small">
             Lignes par page:
@@ -430,7 +437,7 @@ export default function ListStudiesSession({
         classNames={{
           wrapper: "p-0",
           th: "text-sm",
-          td: "text-sm"
+          td: "text-sm",
         }}
         radius="none"
         shadow="none"

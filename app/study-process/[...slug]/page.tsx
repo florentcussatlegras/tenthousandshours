@@ -16,8 +16,6 @@ export default async function studyProcessDetailPage({ params }) {
   const paramsObj = await params;
   const slug = paramsObj.slug[0];
 
-  console.log(slug);
-
   const studyProcess = await prisma.studyProcess.findFirst({
     select: {
       id: true,
@@ -61,7 +59,7 @@ export default async function studyProcessDetailPage({ params }) {
             <div className="w-full">
                 <DetailsStudyProcess studyProcess={studyProcess} />
             </div>
-            <StudySessions studyProcess={studyProcess} studySessions={studyProcess?.studySessions} />
+            <StudySessions studySessions={studyProcess?.studySessions} studyProcess={studyProcess} />
         </div>
     </div>
   );
