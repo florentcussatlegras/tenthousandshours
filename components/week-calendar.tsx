@@ -1,4 +1,3 @@
-import { fetchStudySessions } from "@/app/actions/actions";
 import { useSession } from "@/app/lib/auth-client";
 import { StudySession } from "@prisma/client";
 import React from "react";

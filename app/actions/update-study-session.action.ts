@@ -139,8 +139,8 @@ export async function updateStudySessionAction(
 
     const studyProcessInThisHours = await prisma.$queryRaw(Prisma.sql`
               SELECT * FROM public."StudySession" 
-              WHERE 
-                "id" != ${result.data.studySessionId}
+              WHERE "StudySession"."id" != ${result.data.studySessionId}
+                AND "StudySession"."studyProcessId" = ${result.data.studyProcessId}
                 AND (("startedAt" <= ${dateStartedAt} AND "finishedAt" >= ${dateStartedAt}) 
                 OR ("startedAt" <= ${dateFinishedAt} AND "finishedAt" >= ${dateFinishedAt}))
     `);

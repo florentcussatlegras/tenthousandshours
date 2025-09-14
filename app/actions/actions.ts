@@ -5,6 +5,7 @@ import { z } from "zod";
 import prisma from "@/app/lib/prisma";
 import { StudySession, User } from "@prisma/client";
 import { UUID } from "crypto";
+import { CalendarDate } from "@heroui/react";
 
 // const SignUpFormSchema = z.object({
 //     name: z.string().min(5),
@@ -116,36 +117,59 @@ export async function getListTopics() {
   return topics;
 }
 
-export async function fetchFilterStudySessions(
-  yearStart: number,
-  monthStart: number,
-  dayStart: number,
-  yearEnd: number,
-  monthEnd: number,
-  dayEnd: number,
+export async function fetchStudySessionsPerRangeDays(
+  studyProcessId: UUID,
+  yearStart: number | null,
+  monthStart: number | null,
+  dayStart: number | null,
+  yearEnd: number | null,
+  monthEnd: number | null,
+  dayEnd: number | null,
 ) {
-  const dateStartFilter = new Date(
-    yearStart,
-    monthStart - 1,
-    dayStart + 1,
-    -22,
-    0,
-    0
-  );
-  const dateEndFilter = new Date(yearEnd, monthEnd - 1, dayEnd + 1, 1, 59, 0);
 
-  const studySessions =
-    await prisma.$queryRaw`SELECT * FROM public."StudySession" WHERE "createdAt" >= ${dateStartFilter} AND "createdAt" <= ${dateEndFilter}`;
+  let studySessions = [];
+
+  if (yearStart !== null) {
+
+    const dateStartFilter = new Date(
+      yearStart,
+      monthStart - 1,
+      dayStart + 1,
+      -22,
+      0,
+      0
+    );
+    const dateEndFilter = new Date(yearEnd, monthEnd - 1, dayEnd + 1, 1, 59, 0);
+
+    studySessions =
+      await prisma.$queryRaw`
+        SELECT * FROM public."StudySession" 
+        WHERE "studyProcessId" = ${studyProcessId}
+        AND "createdAt" >= ${dateStartFilter} 
+        AND "createdAt" <= ${dateEndFilter}
+      `;
+
+  } else {
+
+    studySessions =
+      await prisma.$queryRaw`
+        SELECT * FROM public."StudySession" 
+        WHERE "studyProcessId" = ${studyProcessId}
+      `;
+
+  }
 
   return studySessions;
 }
 
-export async function fetchStudySessions(
+export async function fetchStudySessionsPerDay(
   userId: UUID,
   dateSelect: Date
 ) {
   const dateTimeSlotStart = new Date(dateSelect.getFullYear(), dateSelect.getMonth(), dateSelect.getDate() + 1, -22, 0, 0);
   const dateTimeSlotFinish = new Date(dateSelect.getFullYear(), dateSelect.getMonth(), dateSelect.getDate() + 1, 1, 59, 0);
+
+  console.log(dateTimeSlotStart,dateTimeSlotFinish);
 
   const studySessions =
     await prisma.$queryRaw`SELECT 
@@ -159,7 +183,7 @@ export async function fetchStudySessions(
         "studyProcessId",
         "StudyProcess"."id",
         "StudyProcess"."topicId",
-        "StudyProcess"."totalHours" AS "study_process_total_hours",
+        "StudyProcess"."totalSeconds" AS "study_process_total_seconds",
         "Topic"."id" AS "topic_id",
         "Topic"."name" AS "topic_name" 
       FROM public."StudySession"

@@ -128,8 +128,9 @@ export async function createStudySessionAction(
 
     const studyProcessInThisHours = await prisma.$queryRaw(Prisma.sql`
         SELECT * FROM public."StudySession" 
-        WHERE ("startedAt" <= ${dateStartedAt} AND "finishedAt" >= ${dateStartedAt}) 
-          OR ("startedAt" <= ${dateFinishedAt} AND "finishedAt" >= ${dateFinishedAt})
+        WHERE "StudySession"."studyProcessId" = ${result.data.studyProcessId}
+        AND (("startedAt" <= ${dateStartedAt} AND "finishedAt" >= ${dateStartedAt}) 
+          OR ("startedAt" <= ${dateFinishedAt} AND "finishedAt" >= ${dateFinishedAt}))
     `);
 
     if (Array.from(studyProcessInThisHours).length !== 0) {

@@ -1,6 +1,5 @@
 import Scheduler from "@/components/scheduler";
 import * as React from "react";
-import { fetchStudySessions } from "../actions/actions";
 import { Breadcrumb } from "@/components/breadcrumb";
 
 export default async function SchedulerPage() {

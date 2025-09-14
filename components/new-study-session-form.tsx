@@ -77,9 +77,6 @@ export const NewStudySessionForm = ({
                 <DatePicker
                   name="date"
                   className="max-w-[150px]"
-                  classNames={{
-                    inputWrapper: "h-15",
-                  }}
                   value={dateCreation}
                   onChange={setDateCreation}
                 />

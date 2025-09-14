@@ -37,7 +37,7 @@ import {
 import { useEffect, useState } from "react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { StudySession } from "@prisma/client";
-import { fetchStudySessions, getTopicsOfaUser } from "@/app/actions/actions";
+import { fetchStudySessionsPerDay, getTopicsOfaUser } from "@/app/actions/actions";
 import { useDateFormatter } from "@react-aria/i18n";
 import ModalStudySessionView from "./modal-study-session-view";
 import { useSession } from "@/app/lib/auth-client";
@@ -169,7 +169,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
 
   useEffect(() => {
     async function getStudySessions() {
-      const newStudySessions = await fetchStudySessions(
+      const newStudySessions = await fetchStudySessionsPerDay(
         session?.user.id,
         currentDate
       );
@@ -190,7 +190,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
       let newStudySessionsPerDay = [];
 
       const getStudySessionPerDay = async (day) => {
-        return await fetchStudySessions(session?.user.id, day);
+        return await fetchStudySessionsPerDay(session?.user.id, day);
       };
 
       for (let index = 0; index < currentWeek.length; index++) {
