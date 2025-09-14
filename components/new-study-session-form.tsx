@@ -5,17 +5,19 @@ import {
   Button,
   Card,
   CardBody,
+  DatePicker,
   Form,
   Input,
   Textarea,
   TimeInput,
 } from "@heroui/react";
 import { Time } from "@internationalized/date";
+import { useDateFormatter } from "@react-aria/i18n";
+import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { StudyProcess } from "@prisma/client";
 import { PlusIcon } from "lucide-react";
-import Link from "next/link";
 import { useActionState, useState } from "react";
-import { DeleteIcon, DeleteIconMd } from "./icons";
+import { DeleteIcon } from "./icons";
 
 export const NewStudySessionForm = ({
   studyProcess,
@@ -26,15 +28,18 @@ export const NewStudySessionForm = ({
     errors: {},
   });
   const [urls, setUrls] = useState([""]);
+  const [dateCreation, setDateCreation] = useState(
+    parseDate(new Date().toISOString().substring(0, 10))
+  );
+
+  let formatter = useDateFormatter({ dateStyle: "full" });
 
   function addUrl() {
     setUrls([...urls, ""]);
   }
 
   function handleUrlRemove(index: number) {
-    setUrls(urls.filter((url, i) =>
-      index !== i
-    ));
+    setUrls(urls.filter((url, i) => index !== i));
   }
 
   function handleUrlChange(evt) {
@@ -51,24 +56,36 @@ export const NewStudySessionForm = ({
     setUrls(nextUrls);
   }
 
-  const dateJour = new Date();
-
   const dateCreationStr = new Intl.DateTimeFormat("fr-Fr", {
     dateStyle: "full",
-  }).format(dateJour);
+  }).format(dateCreation.toDate(getLocalTimeZone()));
 
   return (
     <Card className="rounded-none relative p-4 w-2/5">
       <CardBody>
         <div className="flex flex-col gap-4">
-          <h1>
-            {dateCreationStr.slice(0, 1).toUpperCase() +
-              dateCreationStr.slice(1)}
-          </h1>
           <Form
             action={formAction}
             className="flex flex-col justify-start w-full gap-6"
           >
+            <div className="flex flex-row items-center justify-around w-full">
+              <h1>
+                {dateCreationStr.slice(0, 1).toUpperCase() +
+                  dateCreationStr.slice(1)}
+              </h1>
+              <div className="ml-auto">
+                <DatePicker
+                  name="date"
+                  className="max-w-[150px]"
+                  classNames={{
+                    inputWrapper: "h-15",
+                  }}
+                  value={dateCreation}
+                  onChange={setDateCreation}
+                />
+              </div>
+            </div>
+
             {formState.errors._form ? (
               <div className="text-danger text-sm">
                 {formState.errors._form?.join(", ")}
@@ -101,7 +118,7 @@ export const NewStudySessionForm = ({
                   name="startedAt"
                   hourCycle={24}
                   defaultValue={
-                    new Time(dateJour.getHours(), dateJour.getMinutes())
+                    new Time(new Date().getHours(), new Date().getMinutes())
                   }
                 />
                 <TimeInput

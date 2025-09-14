@@ -26,7 +26,7 @@ export default function DetailsStudyProcess({
         <Button startContent={<Timer />} className="bg-sky-500 text-white ml-auto">Lancer une nouvelle session</Button>
       </CardHeader>
       <CardBody className="flex flex-col">
-        <Chip isDisabled color="secondary">{`${studyProcess.totalSeconds/3600} heures`}</Chip>
+        <Chip isDisabled color="secondary">{`${Math.round(studyProcess.totalSeconds/3600)} heures`}</Chip>
         <Progress
           aria-label="Loading..."
           className="w-full"

@@ -8,27 +8,45 @@ import { StudyProcess, Prisma, User } from "@prisma/client";
 import { auth } from "../lib/auth";
 import { headers } from "next/headers";
 
-const createStudySessionSchema = z.object({
-  description: z.string(),
-  startedAt: z.string().min(1, "Veuillez saisir une heure de début"),
-  finishedAt: z.string().min(1, "Veuillez saisir une heure de fin"),
-  studyProcessId: z.string(),
-  urls: z.string(),
-}).superRefine(({ startedAt, finishedAt }, ctx) => {
-  if (startedAt !== "" && finishedAt !== "" && finishedAt < startedAt) {
-    ctx.addIssue({
-      code: "custom",
-      message: "L'heure de début doit être inférieure à l'heure de fin",
-      path: ["finishedAt"]
+const createStudySessionSchema = z
+  .object({
+    description: z.string(),
+    date: z.string(),
+    startedAt: z.string().min(1, "Veuillez saisir une heure de début"),
+    finishedAt: z.string().min(1, "Veuillez saisir une heure de fin"),
+    studyProcessId: z.string(),
+    urls: z.string(),
+  })
+  .superRefine(({ urls, startedAt, finishedAt }, ctx) => {
+    if (startedAt !== "" && finishedAt !== "" && finishedAt < startedAt) {
+      ctx.addIssue({
+        code: "custom",
+        message: "L'heure de début doit être inférieure à l'heure de fin",
+        path: ["finishedAt"],
+      });
+    }
+    if (urls.length > 0) {
+    const arrayUrls = urls.split(',');
+    console.log(arrayUrls);
+    var httpRegex = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
+    arrayUrls.forEach(url => {
+      if (httpRegex.test(url) === false) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Merci de saisir une url valide",
+          path: ["finishedAt"]
+        });
+      } 
     });
   }
-});
+  });
 
 createStudySessionSchema.refine((obj) => obj.startedAt < obj.finishedAt);
 
 interface CreateStudySessionState {
   errors: {
     description?: string[];
+    date?: string[];
     startedAt?: string[];
     finishedAt?: string[];
     urls?: string[];
@@ -76,27 +94,37 @@ export async function createStudySessionAction(
   const totalSecondsStudyProcess = studyProcess.totalSeconds;
 
   try {
-
     const objStartedAt = result.data.startedAt?.split(":");
     const objFinishedAt = result.data.finishedAt?.split(":");
+    const objCreatedAt = result.data.date.split('-');
 
-    const dateJour = new Date();
+    const dateCreatedAt = new Date(
+      Number(objCreatedAt[0]),
+      Number(objCreatedAt[1]) - 1,
+      Number(objCreatedAt[2]) + 1,
+      -22,
+      0,
+      0
+    );
+
     const dateStartedAt = new Date(
-      dateJour.getFullYear(),
-      dateJour.getMonth(),
-      dateJour.getDate(),
-      Number(objStartedAt[0]),
+      Number(objCreatedAt[0]),
+      Number(objCreatedAt[1]) - 1,
+      Number(objCreatedAt[2]),
+      Number(objStartedAt[0]) + 2,
       Number(objStartedAt[1]),
       Number(objStartedAt[2])
     );
     const dateFinishedAt = new Date(
-      dateJour.getFullYear(),
-      dateJour.getMonth(),
-      dateJour.getDate(),
-      Number(objFinishedAt[0]),
+      Number(objCreatedAt[0]),
+      Number(objCreatedAt[1]) - 1,
+      Number(objCreatedAt[2]),
+      Number(objFinishedAt[0]) + 2,
       Number(objFinishedAt[1]),
       Number(objFinishedAt[2])
     );
+
+    console.log(dateCreatedAt, dateStartedAt, dateFinishedAt);
 
     const studyProcessInThisHours = await prisma.$queryRaw(Prisma.sql`
         SELECT * FROM public."StudySession" 
@@ -113,13 +141,13 @@ export async function createStudySessionAction(
       };
     }
 
-    console.log(dateStartedAt);
-    console.log(dateFinishedAt);
-    const totalSecondsSession = (dateFinishedAt.getTime() - dateStartedAt.getTime()) / 1000;
+    const totalSecondsSession =
+      (dateFinishedAt.getTime() - dateStartedAt.getTime()) / 1000;
 
     const studySession = await prisma.studySession.create({
       data: {
         description: result.data.description,
+        createdAt: dateCreatedAt,
         startedAt: dateStartedAt,
         finishedAt: dateFinishedAt,
         totalSeconds: totalSecondsSession,
@@ -130,15 +158,13 @@ export async function createStudySessionAction(
 
     await prisma.studyProcess.update({
       data: {
-        totalSeconds: totalSecondsStudyProcess + totalSecondsSession
+        totalSeconds: totalSecondsStudyProcess + totalSecondsSession,
       },
       where: {
-        id: result.data.studyProcessId
-      }
+        id: result.data.studyProcessId,
+      },
     });
-
   } catch (err: unknown) {
-
     if (err instanceof Error) {
       return {
         errors: {
