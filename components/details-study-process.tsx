@@ -12,10 +12,22 @@ import {
   Form,
   Input,
   Progress,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
 } from "@heroui/react";
 import { StudyProcess } from "@prisma/client";
 import { Timer } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
+import useTimer from "./useTimer";
+
+const SECOND = 1_000;
+const MINUTE = SECOND * 60;
+const HOUR = MINUTE * 60;
+const DAY = HOUR * 24;
 
 export default function DetailsStudyProcess({
   studyProcess,
@@ -23,6 +35,7 @@ export default function DetailsStudyProcess({
   studyProcess: StudyProcess;
 }) {
   const { data: session } = useSession();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [formState, formAction] = useActionState(launchStudySessionAction, {
     errors: {},
@@ -30,17 +43,63 @@ export default function DetailsStudyProcess({
 
   const [currentStudySession, setCurrentStudySession] = useState([]);
 
+  const [timespanCurrentStudySession, setTimespanCurrentStudySession] =
+    useState(0);
+
+  const [daysElapsedCurrentStudySession, setDaysElapsedCurrentStudySession] =
+    useState(0);
+  const [hoursElapsedCurrentStudySession, setHoursElapsedCurrentStudySession] =
+    useState(0);
+  const [
+    minutesElapsedCurrentStudySession,
+    setMinutesElapsedCurrentStudySession,
+  ] = useState(0);
+  const [
+    secondsElapsedCurrentStudySession,
+    setSecondsElapsedCurrentStudySession,
+  ] = useState(0);
+
   useEffect(() => {
     async function getCurrentStudySession() {
-      const currentStudySession = await fetchCurrentStudySession(
+      const newCurrentStudySession = await fetchCurrentStudySession(
         String(session?.user.id)
       );
-      console.log(currentStudySession);
-      setCurrentStudySession(currentStudySession);
+      setCurrentStudySession(newCurrentStudySession);
     }
 
     getCurrentStudySession();
   }, []);
+
+  useEffect(() => {
+    if (currentStudySession.length > 0) {
+      setTimespanCurrentStudySession(
+        Date.now() - Date.parse(currentStudySession[0].startedAt)
+      );
+
+      const intervalId = setInterval(() => {
+        setTimespanCurrentStudySession((_timespan) => _timespan + 1000);
+      }, 1000);
+
+      return () => {
+        clearInterval(intervalId);
+      };
+    }
+  }, [currentStudySession]);
+
+  useEffect(() => {
+    setDaysElapsedCurrentStudySession(
+      Math.floor(timespanCurrentStudySession / DAY)
+    );
+    setHoursElapsedCurrentStudySession(
+      Math.floor((timespanCurrentStudySession / HOUR) % 24)
+    );
+    setMinutesElapsedCurrentStudySession(
+      Math.floor((timespanCurrentStudySession / MINUTE) % 60)
+    );
+    setSecondsElapsedCurrentStudySession(
+      Math.floor((timespanCurrentStudySession / SECOND) % 60)
+    );
+  }, [timespanCurrentStudySession]);
 
   const ratioProgress = (Number(studyProcess.totalSeconds) / 36000000) * 100;
 
@@ -59,10 +118,44 @@ export default function DetailsStudyProcess({
           Apprentissage débuté le {intl.format(studyProcess.createdAt)}
         </span>
         {currentStudySession.length > 0 ? (
-          <Button type="submit" className="bg-sky-500 text-white ml-auto uppercase">
+          <div className="ml-auto">
+            <Button
+              onPress={onOpen}
+              type="submit"
+              className="bg-sky-500 text-white uppercase"
+            >
               <Timer />
-              <span>Vous avez une session de travail en cours ... {currentStudySession[0].id}</span>
+              <span>
+                Vous avez une session de travail en cours ...{" "}
+                {currentStudySession[0].id}
+              </span>
             </Button>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+              <ModalContent>
+                {(onClose) => (
+                  <>
+                    <ModalHeader className="flex flex-col gap-1">
+                      Modal Title
+                    </ModalHeader>
+                    <ModalBody>
+                      {daysElapsedCurrentStudySession}j - {" "}
+                      {hoursElapsedCurrentStudySession}h - {" "}
+                      {minutesElapsedCurrentStudySession}min - {" "}
+                      {secondsElapsedCurrentStudySession}sec
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button color="danger" variant="light" onPress={onClose}>
+                        Close
+                      </Button>
+                      <Button color="primary" onPress={onClose}>
+                        Action
+                      </Button>
+                    </ModalFooter>
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
+          </div>
         ) : (
           <Form action={formAction} className="ml-auto">
             <Input
