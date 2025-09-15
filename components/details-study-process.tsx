@@ -1,6 +1,8 @@
 "use client";
 
+import { fetchCurrentStudySession } from "@/app/actions/actions";
 import { launchStudySessionAction } from "@/app/actions/launch-study-session.action";
+import { useSession } from "@/app/lib/auth-client";
 import {
   Button,
   Card,
@@ -13,17 +15,32 @@ import {
 } from "@heroui/react";
 import { StudyProcess } from "@prisma/client";
 import { Timer } from "lucide-react";
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 export default function DetailsStudyProcess({
   studyProcess,
 }: {
   studyProcess: StudyProcess;
 }) {
+  const { data: session } = useSession();
 
   const [formState, formAction] = useActionState(launchStudySessionAction, {
-      errors: {},
-    });
+    errors: {},
+  });
+
+  const [currentStudySession, setCurrentStudySession] = useState([]);
+
+  useEffect(() => {
+    async function getCurrentStudySession() {
+      const currentStudySession = await fetchCurrentStudySession(
+        String(session?.user.id)
+      );
+      console.log(currentStudySession);
+      setCurrentStudySession(currentStudySession);
+    }
+
+    getCurrentStudySession();
+  }, []);
 
   const ratioProgress = (Number(studyProcess.totalSeconds) / 36000000) * 100;
 
@@ -41,17 +58,31 @@ export default function DetailsStudyProcess({
         <span className="text-default-500 text-sm">
           Apprentissage débuté le {intl.format(studyProcess.createdAt)}
         </span>
-        <Form action={formAction} className="ml-auto">
-          <Input type="hidden" name="studyProcessId" defaultValue={studyProcess.id} />
-          <Input type="hidden" name="startedAt" defaultValue={new Intl.DateTimeFormat('fr-Fr', {timeStyle: "short"}).format(new Date())} />
-          <Button
-            type="submit"
-            className="bg-sky-500 text-white"
-            >
-            <Timer />
-            <span>Lancer une nouvelle session</span>
-          </Button>
-        </Form>
+        {currentStudySession.length > 0 ? (
+          <Button type="submit" className="bg-sky-500 text-white ml-auto uppercase">
+              <Timer />
+              <span>Vous avez une session de travail en cours ... {currentStudySession[0].id}</span>
+            </Button>
+        ) : (
+          <Form action={formAction} className="ml-auto">
+            <Input
+              type="hidden"
+              name="studyProcessId"
+              defaultValue={studyProcess.id}
+            />
+            <Input
+              type="hidden"
+              name="startedAt"
+              defaultValue={new Intl.DateTimeFormat("fr-Fr", {
+                timeStyle: "short",
+              }).format(new Date())}
+            />
+            <Button type="submit" className="bg-sky-500 text-white">
+              <Timer />
+              <span>Lancer une nouvelle session</span>
+            </Button>
+          </Form>
+        )}
       </CardHeader>
       <CardBody className="flex flex-col">
         <Chip

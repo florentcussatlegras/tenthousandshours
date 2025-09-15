@@ -49,8 +49,6 @@ export async function launchStudySessionAction(
     },
   });
 
-  console.log(studyProcess);
-
   if (studyProcess === null) {
     return {
       errors: {
@@ -59,9 +57,80 @@ export async function launchStudySessionAction(
     };
   }
 
-  return {
-    errors: {},
-  };
+  try {
+      const objStartedAt = result.data.startedAt?.split(":");
+      const objCreatedAt = new Date();
+  
+      const dateCreatedAt = new Date(
+        objCreatedAt.getFullYear(),
+        objCreatedAt.getMonth(),
+        objCreatedAt.getDate() + 1,
+        -22,
+        0,
+        0
+      );
+  
+      const dateStartedAt = new Date(
+        objCreatedAt.getFullYear(),
+        objCreatedAt.getMonth(),
+        objCreatedAt.getDate(),
+        Number(objStartedAt[0]),
+        Number(objStartedAt[1]) + 1,
+        0
+      );
+      const dateFinishedAt = null;
+  
+      const studyProcessInThisHours = await prisma.$queryRaw`
+          SELECT * FROM public."StudySession" 
+          WHERE "StudySession"."studyProcessId" = ${result.data.studyProcessId}
+          AND ("startedAt" <= ${dateStartedAt} AND "finishedAt" >= ${dateStartedAt})
+      `;
+  
+      if (Array.from(studyProcessInThisHours).length !== 0) {
+        return {
+          errors: {
+            _form: ["Cette session dans cette tranche horaire existe dèja."],
+          },
+        };
+      }
+  
+      const studySession = await prisma.studySession.create({
+        data: {
+          description: "",
+          createdAt: dateCreatedAt,
+          startedAt: dateStartedAt,
+          finishedAt: null,
+          totalSeconds: 0,
+          studyProcessId: String(result.data.studyProcessId),
+          urls: ""
+        },
+      });
+  
+      // await prisma.studyProcess.update({
+      //   data: {
+      //     totalSeconds: totalSecondsStudyProcess + totalSecondsSession,
+      //   },
+      //   where: {
+      //     id: result.data.studyProcessId,
+      //   },
+      // });
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        return {
+          errors: {
+            _form: [err.message],
+          },
+        };
+      } else {
+        return {
+          errors: {
+            _form: [
+              "Une erreur est survenue lors de la création du processus de création",
+            ],
+          },
+        };
+      }
+    }
 
   //   try {
   //     await prisma.studySession.delete({
