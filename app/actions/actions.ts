@@ -204,6 +204,7 @@ export async function fetchStudySessionsPerDay(
 export async function fetchCurrentStudySession(userId: String) {
   const studySession = await prisma.$queryRaw`SELECT
         "StudySession"."id" AS "id",
+        "StudySession"."startedAt",
         "StudySession"."studyProcessId" AS "studyprocess_id"
       FROM public."StudySession"
       LEFT JOIN public."StudyProcess"
