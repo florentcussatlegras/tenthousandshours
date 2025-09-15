@@ -27,7 +27,6 @@ const createStudySessionSchema = z
     }
     if (urls.length > 0) {
     const arrayUrls = urls.split(',');
-    console.log(arrayUrls);
     var httpRegex = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
     arrayUrls.forEach(url => {
       if (httpRegex.test(url) === false) {
