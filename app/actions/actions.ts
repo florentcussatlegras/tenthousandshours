@@ -200,6 +200,23 @@ export async function fetchStudySessionsPerDay(
   return studySessions;
 }
 
+
+export async function fetchCurrentStudySession(userId: String) {
+  const studySession = await prisma.$queryRaw`SELECT
+        "StudySession"."id" AS "id",
+        "StudySession"."studyProcessId" AS "studyprocess_id"
+      FROM public."StudySession"
+      LEFT JOIN public."StudyProcess"
+      ON "StudySession"."studyProcessId" = "StudyProcess"."id"
+      WHERE "StudyProcess"."userId" = ${userId}
+      AND "StudySession"."totalSeconds" = 0
+  `;
+
+  console.log(studySession);
+
+  return studySession;
+}
+
 export async function getTopicsOfaUser(userId: UUID) {
 
   const topics =
