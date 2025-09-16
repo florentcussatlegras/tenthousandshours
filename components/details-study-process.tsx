@@ -131,21 +131,36 @@ export default function DetailsStudyProcess({
                 {currentStudySession.id}
               </span>
             </Button>
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="xl">
               <ModalContent>
                 {(onClose) => (
                   <>
-                    <ModalHeader className="flex flex-col gap-1">
-                      {currentStudySession.studyprocess_name}
+                    <ModalHeader className="flex flex-col gap-1 w-full mt-4">
+                      <div>Vous avez une session en cours en <span className="text-sky-500">{currentStudySession.topic_name}</span></div>
+                      <span className="text-sm">{currentStudySession.studyprocess_name}</span>
                     </ModalHeader>
-                    <ModalBody>
-
-                      {daysElapsedCurrentStudySession}j - {" "}
-                      {hoursElapsedCurrentStudySession}h - {" "}
-                      {minutesElapsedCurrentStudySession}min - {" "}
-                      {secondsElapsedCurrentStudySession}sec
+                    <ModalBody className="flex flex-col gap-2 w-full my-4">
+                      {/* {JSON.stringify(currentStudySession)} */}
+                      <div>Session débutée le {new Intl.DateTimeFormat('fr-Fr', {
+                        dateStyle: "long"
+                      }).format(currentStudySession.startedAt)} à {new Intl.DateTimeFormat('fr-Fr', {
+                        timeStyle: "medium"
+                      }).format(currentStudySession.startedAt)}
+                      </div>
+                      <span className="text-3xl">
+                        {daysElapsedCurrentStudySession}j - {" "}
+                        {hoursElapsedCurrentStudySession}h - {" "}
+                        {minutesElapsedCurrentStudySession}min - {" "}
+                        {secondsElapsedCurrentStudySession}sec
+                      </span>
                     </ModalBody>
                     <ModalFooter>
+                      <Button className="bg-sky-500 text-white">
+                        Terminer la session
+                      </Button>
+                      <Button variant="faded">
+                          Annuler la session
+                      </Button>
                       <Button color="danger" variant="light" onPress={onClose}>
                         Fermer
                       </Button>
