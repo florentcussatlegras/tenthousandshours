@@ -228,10 +228,13 @@ export async function fetchCurrentStudySession(userId: String) {
         "StudySession"."id" AS "id",
         "StudySession"."startedAt",
         "StudySession"."studyProcessId" AS "studyprocess_id",
-        "StudyProcess"."name" AS "studyprocess_name"
+        "StudyProcess"."name" AS "studyprocess_name",
+        "Topic"."name" AS "topic_name"
       FROM public."StudySession"
       LEFT JOIN public."StudyProcess"
       ON "StudySession"."studyProcessId" = "StudyProcess"."id"
+      LEFT JOIN public."Topic"
+      ON "StudyProcess"."topicId" = "Topic"."id"
       WHERE "StudyProcess"."userId" = ${userId}
       AND "StudySession"."totalSeconds" = 0
   `;
