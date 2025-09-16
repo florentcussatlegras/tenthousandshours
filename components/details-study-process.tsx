@@ -41,7 +41,7 @@ export default function DetailsStudyProcess({
     errors: {},
   });
 
-  const [currentStudySession, setCurrentStudySession] = useState([]);
+  const [currentStudySession, setCurrentStudySession] = useState(null);
 
   const [timespanCurrentStudySession, setTimespanCurrentStudySession] =
     useState(0);
@@ -71,9 +71,10 @@ export default function DetailsStudyProcess({
   }, []);
 
   useEffect(() => {
-    if (currentStudySession.length > 0) {
+    if (currentStudySession !== null) {
+      console.log(currentStudySession);
       setTimespanCurrentStudySession(
-        Date.now() - Date.parse(currentStudySession[0].startedAt)
+        Date.now() - Date.parse(currentStudySession.startedAt)
       );
 
       const intervalId = setInterval(() => {
@@ -117,7 +118,7 @@ export default function DetailsStudyProcess({
         <span className="text-default-500 text-sm">
           Apprentissage débuté le {intl.format(studyProcess.createdAt)}
         </span>
-        {currentStudySession.length > 0 ? (
+        {currentStudySession !== null ? (
           <div className="ml-auto">
             <Button
               onPress={onOpen}
@@ -127,7 +128,7 @@ export default function DetailsStudyProcess({
               <Timer />
               <span>
                 Vous avez une session de travail en cours ...{" "}
-                {currentStudySession[0].id}
+                {currentStudySession.id}
               </span>
             </Button>
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -135,9 +136,10 @@ export default function DetailsStudyProcess({
                 {(onClose) => (
                   <>
                     <ModalHeader className="flex flex-col gap-1">
-                      Modal Title
+                      {currentStudySession.studyprocess_name}
                     </ModalHeader>
                     <ModalBody>
+
                       {daysElapsedCurrentStudySession}j - {" "}
                       {hoursElapsedCurrentStudySession}h - {" "}
                       {minutesElapsedCurrentStudySession}min - {" "}
@@ -145,10 +147,7 @@ export default function DetailsStudyProcess({
                     </ModalBody>
                     <ModalFooter>
                       <Button color="danger" variant="light" onPress={onClose}>
-                        Close
-                      </Button>
-                      <Button color="primary" onPress={onClose}>
-                        Action
+                        Fermer
                       </Button>
                     </ModalFooter>
                   </>

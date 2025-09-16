@@ -1,3 +1,4 @@
+import { fetchStudySessionsFinished } from "@/app/actions/actions";
 import { auth } from "@/app/lib/auth";
 import prisma from "@/app/lib/prisma";
 import { Breadcrumb } from "@/components/breadcrumb";
@@ -28,23 +29,28 @@ export default async function studyProcessDetailPage({ params }) {
           name: true,
         },
       },
-      studySessions: {
-        select: {
-          description: true,
-          id: true,
-          createdAt: true,
-          totalSeconds: true,
-          startedAt: true,
-          finishedAt: true,
-          studyProcessId: true,
-        },
-      },
+      // studySessions: {
+      //   select: {
+      //     description: true,
+      //     id: true,
+      //     createdAt: true,
+      //     totalSeconds: true,
+      //     startedAt: true,
+      //     finishedAt: true,
+      //     studyProcessId: true,
+      //   },
+      //   where: {
+      //     finishedAt: null
+      //   }
+      // },
     },
     where: {
       slug,
       userId: session?.user.id,
     },
   });
+
+  const studySessions = await fetchStudySessionsFinished(studyProcess.id);
 
   return (
     <div className="w-full space-y-6">
@@ -59,7 +65,7 @@ export default async function studyProcessDetailPage({ params }) {
             <div className="w-full">
                 <DetailsStudyProcess studyProcess={studyProcess} />
             </div>
-            <StudySessions studySessions={studyProcess?.studySessions} studyProcess={studyProcess} />
+            <StudySessions studySessions={studySessions} studyProcess={studyProcess} />
         </div>
     </div>
   );

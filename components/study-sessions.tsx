@@ -39,7 +39,7 @@ export function StudySessions({
       <ListStudiesSession
         onEditClick={handleEditForm}
         studyProcessId={studyProcess.id}
-        studySessions={studyProcess?.studySessions}
+        studySessions={studySessions}
       />
     </div>
   );

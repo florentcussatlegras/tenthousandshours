@@ -117,6 +117,25 @@ export async function getListTopics() {
   return topics;
 }
 
+export async function fetchStudySessionsFinished(studyProcessId) {
+
+  const studySessions = await prisma.$queryRaw`SELECT 
+        "StudySession"."id", 
+        "StudySession"."createdAt",
+        "StudySession"."startedAt",
+        "StudySession"."finishedAt",
+        "StudySession"."totalSeconds",
+        "StudySession"."description",
+        "StudySession"."urls",
+        "studyProcessId"
+      FROM public."StudySession"
+      WHERE "totalSeconds" > 0
+      AND "studyProcessId" = ${studyProcessId}
+    `;
+
+  return studySessions;
+}
+
 export async function fetchStudySessionsPerRangeDays(
   studyProcessId: UUID,
   yearStart: number | null,
@@ -124,13 +143,11 @@ export async function fetchStudySessionsPerRangeDays(
   dayStart: number | null,
   yearEnd: number | null,
   monthEnd: number | null,
-  dayEnd: number | null,
+  dayEnd: number | null
 ) {
-
   let studySessions = [];
 
   if (yearStart !== null) {
-
     const dateStartFilter = new Date(
       yearStart,
       monthStart - 1,
@@ -141,38 +158,43 @@ export async function fetchStudySessionsPerRangeDays(
     );
     const dateEndFilter = new Date(yearEnd, monthEnd - 1, dayEnd + 1, 1, 59, 0);
 
-    studySessions =
-      await prisma.$queryRaw`
+    studySessions = await prisma.$queryRaw`
         SELECT * FROM public."StudySession" 
         WHERE "studyProcessId" = ${studyProcessId}
         AND "createdAt" >= ${dateStartFilter} 
         AND "createdAt" <= ${dateEndFilter}
+        AND "totalSeconds" > 0
       `;
-
   } else {
-
-    studySessions =
-      await prisma.$queryRaw`
+    studySessions = await prisma.$queryRaw`
         SELECT * FROM public."StudySession" 
         WHERE "studyProcessId" = ${studyProcessId}
+        AND "totalSeconds" > 0 
       `;
-
   }
 
   return studySessions;
 }
 
-export async function fetchStudySessionsPerDay(
-  userId: UUID,
-  dateSelect: Date
-) {
-  const dateTimeSlotStart = new Date(dateSelect.getFullYear(), dateSelect.getMonth(), dateSelect.getDate() + 1, -22, 0, 0);
-  const dateTimeSlotFinish = new Date(dateSelect.getFullYear(), dateSelect.getMonth(), dateSelect.getDate() + 1, 1, 59, 0);
+export async function fetchStudySessionsPerDay(userId: UUID, dateSelect: Date) {
+  const dateTimeSlotStart = new Date(
+    dateSelect.getFullYear(),
+    dateSelect.getMonth(),
+    dateSelect.getDate() + 1,
+    -22,
+    0,
+    0
+  );
+  const dateTimeSlotFinish = new Date(
+    dateSelect.getFullYear(),
+    dateSelect.getMonth(),
+    dateSelect.getDate() + 1,
+    1,
+    59,
+    0
+  );
 
-  console.log(dateTimeSlotStart,dateTimeSlotFinish);
-
-  const studySessions =
-    await prisma.$queryRaw`SELECT 
+  const studySessions = await prisma.$queryRaw`SELECT 
         "StudySession"."id" AS "session_id", 
         "StudySession"."createdAt" AS "session_createdAt",
         "StudySession"."startedAt",
@@ -193,6 +215,7 @@ export async function fetchStudySessionsPerDay(
       ON "StudyProcess"."topicId" = "Topic"."id"
       WHERE "StudySession"."createdAt" >= ${dateTimeSlotStart} 
       AND "StudySession"."createdAt" <= ${dateTimeSlotFinish}
+      AND "StudySession"."totalSeconds" > 0
       AND "StudyProcess"."userId" = ${userId}
       ORDER BY "startedAt"
   `;
@@ -200,12 +223,12 @@ export async function fetchStudySessionsPerDay(
   return studySessions;
 }
 
-
 export async function fetchCurrentStudySession(userId: String) {
   const studySession = await prisma.$queryRaw`SELECT
         "StudySession"."id" AS "id",
         "StudySession"."startedAt",
-        "StudySession"."studyProcessId" AS "studyprocess_id"
+        "StudySession"."studyProcessId" AS "studyprocess_id",
+        "StudyProcess"."name" AS "studyprocess_name"
       FROM public."StudySession"
       LEFT JOIN public."StudyProcess"
       ON "StudySession"."studyProcessId" = "StudyProcess"."id"
@@ -213,15 +236,15 @@ export async function fetchCurrentStudySession(userId: String) {
       AND "StudySession"."totalSeconds" = 0
   `;
 
-  console.log(studySession);
+  if (studySession.length > 0) {
+    return studySession[0];
+  }
 
-  return studySession;
+  return null;
 }
 
 export async function getTopicsOfaUser(userId: UUID) {
-
-  const topics =
-    await prisma.$queryRaw`SELECT
+  const topics = await prisma.$queryRaw`SELECT
         "Topic"."id" AS "topic_id",
         "Topic"."name" AS "topic_name"
       FROM public."Topic"
@@ -230,27 +253,24 @@ export async function getTopicsOfaUser(userId: UUID) {
       WHERE "StudyProcess"."userId" = ${userId}
   `;
 
-  console.log(topics);
-
   // return topics;
 
   // console.log(userId);
 
-    // const topics = await prisma.topic.findMany({
-    //   select: {
-    //     id: true,
-    //     name: true,
-    //     studyProcesses: {
-    //       where: {
-    //         userId: userId
-    //       }
-    //     },
-    //   },
-    // });
-    // console.log(topics);
-  
-    return topics;
+  // const topics = await prisma.topic.findMany({
+  //   select: {
+  //     id: true,
+  //     name: true,
+  //     studyProcesses: {
+  //       where: {
+  //         userId: userId
+  //       }
+  //     },
+  //   },
+  // });
+  // console.log(topics);
 
+  return topics;
 }
 
 export async function getStudySession(studySessionId: string) {
