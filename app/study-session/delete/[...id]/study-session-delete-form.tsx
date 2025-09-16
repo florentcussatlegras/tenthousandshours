@@ -15,7 +15,7 @@ export default function StudySessionDeleteForm({
   return (
     <Form action={deleteStudySession} className="gap-4">
       <div className="flex items-center">
-        <span>Etes-vous sûr de vouloir supprimer cette session?</span>
+        <span>Etes-vous sûr de vouloir supprimer cette session? {id}</span>
       </div>
       <Input type="hidden" value={id} name="id" />
       <Input type="hidden" value={studyProcessId} name="studyProcessId" />
