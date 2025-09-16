@@ -23,6 +23,7 @@ import { StudyProcess } from "@prisma/client";
 import { Timer } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 import useTimer from "./useTimer";
+import Link from "next/link";
 
 const SECOND = 1_000;
 const MINUTE = SECOND * 60;
@@ -128,7 +129,6 @@ export default function DetailsStudyProcess({
               <Timer />
               <span>
                 Vous avez une session de travail en cours ...{" "}
-                {currentStudySession.id}
               </span>
             </Button>
             <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="xl">
@@ -156,10 +156,14 @@ export default function DetailsStudyProcess({
                     </ModalBody>
                     <ModalFooter>
                       <Button className="bg-sky-500 text-white">
-                        Terminer la session
+                        <Link href={`/study-session/current/${currentStudySession.id}/validate`}>
+                          Terminer la session
+                        </Link>
                       </Button>
-                      <Button variant="faded">
+                      <Button variant="flat">
+                        <Link href={`/study-session/current/cancel/${currentStudySession.id}`}>
                           Annuler la session
+                        </Link>
                       </Button>
                       <Button color="danger" variant="light" onPress={onClose}>
                         Fermer

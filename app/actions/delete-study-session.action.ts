@@ -18,6 +18,7 @@ export async function deleteStudySession(formData: FormData) {
       },
     });
   } catch (err: unknown) {
+    console.log(err);
     if (err instanceof Error) {
       return {
         errors: {
