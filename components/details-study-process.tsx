@@ -22,8 +22,8 @@ import {
 import { StudyProcess } from "@prisma/client";
 import { Timer } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
-import useTimer from "./useTimer";
 import Link from "next/link";
+import { validateCurrentStudySessionAction } from "@/app/actions/validate-current-study-session.action";
 
 const SECOND = 1_000;
 const MINUTE = SECOND * 60;
@@ -38,7 +38,11 @@ export default function DetailsStudyProcess({
   const { data: session } = useSession();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const [formState, formAction] = useActionState(launchStudySessionAction, {
+  const [formLaunchCurrentSessionState, formLaunchCurrentSessionAction] = useActionState(launchStudySessionAction, {
+    errors: {},
+  });
+
+  const [formValidateCurrentSessionState, formValidateCurrentSessionAction] = useActionState(validateCurrentStudySessionAction, {
     errors: {},
   });
 
@@ -74,8 +78,13 @@ export default function DetailsStudyProcess({
   useEffect(() => {
     if (currentStudySession !== null) {
       console.log(currentStudySession);
+      let diffTime = 0
+      if (Date.now() - Date.parse(currentStudySession.startedAt) > 0) {
+        console.log('ici');
+        diffTime = Date.now() - Date.parse(currentStudySession.startedAt);
+      }
       setTimespanCurrentStudySession(
-        Date.now() - Date.parse(currentStudySession.startedAt)
+        diffTime
       );
 
       const intervalId = setInterval(() => {
@@ -155,19 +164,21 @@ export default function DetailsStudyProcess({
                       </span>
                     </ModalBody>
                     <ModalFooter>
-                      <Button className="bg-sky-500 text-white">
-                        <Link href={`/study-session/current/${currentStudySession.id}/validate`}>
-                          Terminer la session
-                        </Link>
-                      </Button>
-                      <Button variant="flat">
-                        <Link href={`/study-session/current/cancel/${currentStudySession.id}`}>
-                          Annuler la session
-                        </Link>
-                      </Button>
-                      <Button color="danger" variant="light" onPress={onClose}>
-                        Fermer
-                      </Button>
+                      <Form action={formValidateCurrentSessionAction}>
+                        <Input type="text" name="currentStudySessionStudyProcessId" value={currentStudySession.studyprocess_id} />
+                        <Input type="text" name="currentStudySessionId" value={currentStudySession.id} />
+                        <Button type="submit" className="bg-sky-500 text-white">
+                            Terminer la session
+                        </Button>
+                        <Button type="button" variant="flat">
+                          <Link href={`/study-session/current/cancel/${currentStudySession.id}`}>
+                            Annuler la session
+                          </Link>
+                        </Button>
+                        <Button color="danger" variant="light" onPress={onClose}>
+                          Fermer
+                        </Button>
+                      </Form>
                     </ModalFooter>
                   </>
                 )}
@@ -175,7 +186,7 @@ export default function DetailsStudyProcess({
             </Modal>
           </div>
         ) : (
-          <Form action={formAction} className="ml-auto">
+          <Form action={formLaunchCurrentSessionAction} className="ml-auto">
             <Input
               type="hidden"
               name="studyProcessId"

@@ -21,7 +21,7 @@ const launchStudySessionSchema = z.object({
 });
 
 export async function launchStudySessionAction(
-  formState: LaunchSessionState,
+  formLaunchCurrentSessionState: LaunchSessionState,
   formData: FormData
 ): Promise<LaunchSessionState> {
   const headerList = await headers();
@@ -75,9 +75,10 @@ export async function launchStudySessionAction(
         objCreatedAt.getMonth(),
         objCreatedAt.getDate(),
         Number(objStartedAt[0]),
-        Number(objStartedAt[1]) + 1,
+        Number(objStartedAt[1]),
         0
       );
+      console.log(dateStartedAt);
       const dateFinishedAt = null;
   
       const studyProcessInThisHours = await prisma.$queryRaw`
