@@ -9,6 +9,7 @@ import { z } from "zod";
 
 interface LaunchSessionState {
   errors: {
+    topicId?: String[];
     studyProcessId?: String[];
     startedAt?: String[];
     _form?: String[];
@@ -16,6 +17,7 @@ interface LaunchSessionState {
 }
 
 const launchStudySessionSchema = z.object({
+  topicId: z.string(),
   studyProcessId: z.string(),
   startedAt: z.string().min(1, "Veuillez saisir une heure de début"),
 });
@@ -43,11 +45,21 @@ export async function launchStudySessionAction(
     };
   }
 
-  let studyProcess = await prisma.studyProcess.findFirst({
-    where: {
-      id: result.data.studyProcessId,
-    },
-  });
+  let studyProcess = null;
+
+  if (result.data.studyProcessId !== "") {
+    studyProcess = await prisma.studyProcess.findFirst({
+      where: {
+        id: result.data.studyProcessId,
+      },
+    });
+  } else {
+    studyProcess = await prisma.studyProcess.findFirst({
+      where: {
+        topicId: result.data.topicId,
+      },
+    });
+  }
 
   if (studyProcess === null) {
     return {
@@ -102,7 +114,7 @@ export async function launchStudySessionAction(
           startedAt: dateStartedAt,
           finishedAt: null,
           totalSeconds: 0,
-          studyProcessId: String(result.data.studyProcessId),
+          studyProcessId: String(studyProcess.id),
           urls: ""
         },
       });
@@ -116,6 +128,7 @@ export async function launchStudySessionAction(
       //   },
       // });
     } catch (err: unknown) {
+      console.log(err);
       if (err instanceof Error) {
         return {
           errors: {
@@ -157,6 +170,7 @@ export async function launchStudySessionAction(
   //     }
   // }
 
+  revalidateTag("CurrentStudySession");
   revalidateTag("studySession");
   redirect(`/study-process/${studyProcess?.slug}`);
 }

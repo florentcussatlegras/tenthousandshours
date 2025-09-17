@@ -86,7 +86,7 @@ export default function ListStudiesProgressbar({
         <div className="flex flex-col gap-8 h-full justify-start">
           <Button
             startContent={<AddIcon />}
-            className="bg-sky-500 text-white ml-auto"
+            className="bg-sky-500 text-white ml-auto py-4"
           >
             <Link href="/study-process/new">
               Ajouter un nouvel apprentissage

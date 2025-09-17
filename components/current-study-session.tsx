@@ -1,27 +1,27 @@
 "use client";
 
-import { fetchCurrentStudySession } from "@/app/actions/actions";
+import {
+  fetchCurrentStudySession,
+  getTopicsOfaUser,
+} from "@/app/actions/actions";
 import { launchStudySessionAction } from "@/app/actions/launch-study-session.action";
 import { validateCurrentStudySessionAction } from "@/app/actions/validate-current-study-session.action";
 import { useSession } from "@/app/lib/auth-client";
 import { useActionState, useEffect, useState } from "react";
 import {
   Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Chip,
   Form,
   Input,
-  Progress,
   Modal,
   ModalContent,
   ModalHeader,
   ModalBody,
   ModalFooter,
   useDisclosure,
+  Autocomplete,
+  AutocompleteItem,
 } from "@heroui/react";
-import { Timer } from "lucide-react";
+import { SearchIcon, Timer } from "lucide-react";
 import Link from "next/link";
 import { StudyProcess } from "@prisma/client";
 
@@ -35,7 +35,8 @@ export function CurrentStudySession({
 }: {
   studyprocess?: StudyProcess;
 }) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const modal1 = useDisclosure();
+  const modal2 = useDisclosure();
 
   const [formLaunchCurrentSessionState, formLaunchCurrentSessionAction] =
     useActionState(launchStudySessionAction, {
@@ -65,7 +66,16 @@ export function CurrentStudySession({
     setSecondsElapsedCurrentStudySession,
   ] = useState(0);
 
+  const [topics, setTopics] = useState([]);
+  const [currentTopicId, setCurrentTopicId] = useState();
+
   useEffect(() => {
+    async function getTopics() {
+      const allTopics = await getTopicsOfaUser();
+
+      setTopics(allTopics);
+    }
+
     async function getCurrentStudySession() {
       const newCurrentStudySession = await fetchCurrentStudySession();
 
@@ -73,6 +83,7 @@ export function CurrentStudySession({
     }
 
     getCurrentStudySession();
+    getTopics();
   }, []);
 
   useEffect(() => {
@@ -108,19 +119,29 @@ export function CurrentStudySession({
     );
   }, [timespanCurrentStudySession]);
 
+  function handleTopicChange(value) {
+    setCurrentTopicId(
+      topics.filter((topic) => topic.topic_name === value)[0].topic_id
+    );
+  }
+
   if (currentStudySession === null) {
     if (studyProcess === undefined) {
       return (
         <div>
           <Button
-            onPress={onOpen}
+            onPress={modal1.onOpen}
             type="submit"
-            className="bg-sky-500 text-white uppercase"
+            className="bg-sky-500 text-white"
           >
             <Timer />
             <span>Lancer une nouvelle session</span>
           </Button>
-          <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="xl">
+          <Modal
+            isOpen={modal1.isOpen}
+            onOpenChange={modal1.onOpenChange}
+            size="xl"
+          >
             <ModalContent>
               {(onClose) => (
                 <>
@@ -132,15 +153,107 @@ export function CurrentStudySession({
                       action={formLaunchCurrentSessionAction}
                       className="flex gap-8"
                     >
-                      "CHAMPS SELECT STUDY PROCESS"
-                      <div className="flex flex-row">
+                      <Input
+                        type="text"
+                        name="topicId"
+                        value={currentTopicId}
+                      />
+                      <Input type="text" name="studyProcessId" />
+                      <Input
+                        type="text"
+                        name="startedAt"
+                        defaultValue={new Intl.DateTimeFormat("fr-Fr", {
+                          timeStyle: "short",
+                        }).format(new Date())}
+                      />
+                      <Autocomplete
+                        aria-label="Selectionner une matière"
+                        //   inputValue={currentTopicName}
+                        classNames={{
+                          base: "max-w-full mb-8",
+                          listboxWrapper: "max-h-[320px]",
+                          selectorButton: "text-default-500",
+                        }}
+                        defaultItems={topics}
+                        inputProps={{
+                          classNames: {
+                            input: "ml-4 text-base text-default-600",
+                            inputWrapper:
+                              "h-[60px] border-1 border-default-100 shadow-lg dark:bg-content1",
+                          },
+                        }}
+                        listboxProps={{
+                          hideSelectedIcon: true,
+                          itemClasses: {
+                            base: [
+                              "rounded-medium",
+                              "text-default-500",
+                              "transition-opacity",
+                              "data-[hover=true]:text-foreground",
+                              "dark:data-[hover=true]:bg-default-50",
+                              "data-[pressed=true]:opacity-70",
+                              "data-[hover=true]:bg-default-200",
+                              "data-[selectable=true]:focus:bg-default-100",
+                              "data-[focus-visible=true]:ring-default-500",
+                            ],
+                          },
+                        }}
+                        placeholder="Exple: saxophone, javascript, maçonnerie..."
+                        popoverProps={{
+                          offset: 10,
+                          classNames: {
+                            base: "rounded-large",
+                            content:
+                              "p-1 border-small border-default-100 bg-background",
+                          },
+                        }}
+                        radius="full"
+                        startContent={
+                          <SearchIcon
+                            className="text-default-400"
+                            size={20}
+                            strokeWidth={2.5}
+                          />
+                        }
+                        variant="bordered"
+                        onInputChange={handleTopicChange}
+                      >
+                        {(item) => (
+                          <AutocompleteItem
+                            key={item.topic_id}
+                            textValue={item.topic_name}
+                          >
+                            <div className="flex justify-between items-center">
+                              <div className="flex gap-2 items-center">
+                                {/* <Avatar alt={item.name} className="shrink-0" size="sm" src={item.avatar} /> */}
+                                <div className="flex flex-col">
+                                  <span className="text-base">
+                                    {item.topic_name}
+                                  </span>
+                                  {/* <span className="text-tiny text-default-400">{item.team}</span> */}
+                                </div>
+                              </div>
+                              {/* <Button
+                                        className="border-small mr-0.5 font-medium shadow-small"
+                                        radius="full"
+                                        size="sm"
+                                        variant="bordered"
+                                        >
+                                        Add
+                                        </Button> */}
+                            </div>
+                          </AutocompleteItem>
+                        )}
+                      </Autocomplete>
+
+                      <div className="flex flex-row gap-2">
                         <Button type="submit" className="bg-sky-500 text-white">
                           Lancer la session
                         </Button>
                         <Button
                           color="danger"
                           variant="light"
-                          onPress={onClose}
+                          onPress={modal1.onClose}
                         >
                           Fermer
                         </Button>
@@ -156,6 +269,7 @@ export function CurrentStudySession({
     } else {
       return (
         <Form action={formLaunchCurrentSessionAction} className="ml-auto">
+          <Input type="hidden" name="topicId" />
           <Input
             type="hidden"
             name="studyProcessId"
@@ -170,7 +284,9 @@ export function CurrentStudySession({
           />
           <Button type="submit" className="bg-sky-500 text-white">
             <Timer />
-            <span>Lancer une nouvelle session</span>
+            <span>
+              Lancer une nouvelle session de {studyProcess.topic.name}
+            </span>
           </Button>
         </Form>
       );
@@ -180,14 +296,18 @@ export function CurrentStudySession({
   return (
     <div>
       <Button
-        onPress={onOpen}
+        onPress={modal2.onOpen}
         type="submit"
         className="bg-sky-500 text-white uppercase"
       >
         <Timer />
         <span>Vous avez une session de travail en cours ... </span>
       </Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="xl">
+      <Modal
+        isOpen={modal2.isOpen}
+        onOpenChange={modal2.onOpenChange}
+        size="xl"
+      >
         <ModalContent>
           {(onClose) => (
             <>
@@ -221,7 +341,7 @@ export function CurrentStudySession({
                   {secondsElapsedCurrentStudySession}sec
                 </span>
               </ModalBody>
-              <ModalFooter>
+              <ModalFooter className="justify-start">
                 <Form
                   action={formValidateCurrentSessionAction}
                   className="flex flex-row"
@@ -246,7 +366,11 @@ export function CurrentStudySession({
                       Annuler la session
                     </Link>
                   </Button>
-                  <Button color="danger" variant="light" onPress={onClose}>
+                  <Button
+                    color="danger"
+                    variant="light"
+                    onPress={modal2.onClose}
+                  >
                     Fermer
                   </Button>
                 </Form>

@@ -126,7 +126,7 @@ export default function DetailsStudyProcess({
           Apprentissage débuté le {intl.format(studyProcess.createdAt)}
         </span>
         <div className="ml-auto">
-            <CurrentStudySession />
+            <CurrentStudySession studyProcess={studyProcess} />
         </div>
       </CardHeader>
       <CardBody className="flex flex-col">
