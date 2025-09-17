@@ -1,0 +1,260 @@
+"use client";
+
+import { fetchCurrentStudySession } from "@/app/actions/actions";
+import { launchStudySessionAction } from "@/app/actions/launch-study-session.action";
+import { validateCurrentStudySessionAction } from "@/app/actions/validate-current-study-session.action";
+import { useSession } from "@/app/lib/auth-client";
+import { useActionState, useEffect, useState } from "react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Chip,
+  Form,
+  Input,
+  Progress,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from "@heroui/react";
+import { Timer } from "lucide-react";
+import Link from "next/link";
+import { StudyProcess } from "@prisma/client";
+
+const SECOND = 1_000;
+const MINUTE = SECOND * 60;
+const HOUR = MINUTE * 60;
+const DAY = HOUR * 24;
+
+export function CurrentStudySession({
+  studyProcess,
+}: {
+  studyprocess?: StudyProcess;
+}) {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const [formLaunchCurrentSessionState, formLaunchCurrentSessionAction] =
+    useActionState(launchStudySessionAction, {
+      errors: {},
+    });
+
+  const [formValidateCurrentSessionState, formValidateCurrentSessionAction] =
+    useActionState(validateCurrentStudySessionAction, {
+      errors: {},
+    });
+
+  const [currentStudySession, setCurrentStudySession] = useState(null);
+
+  const [timespanCurrentStudySession, setTimespanCurrentStudySession] =
+    useState(0);
+
+  const [daysElapsedCurrentStudySession, setDaysElapsedCurrentStudySession] =
+    useState(0);
+  const [hoursElapsedCurrentStudySession, setHoursElapsedCurrentStudySession] =
+    useState(0);
+  const [
+    minutesElapsedCurrentStudySession,
+    setMinutesElapsedCurrentStudySession,
+  ] = useState(0);
+  const [
+    secondsElapsedCurrentStudySession,
+    setSecondsElapsedCurrentStudySession,
+  ] = useState(0);
+
+  useEffect(() => {
+    async function getCurrentStudySession() {
+      const newCurrentStudySession = await fetchCurrentStudySession();
+
+      setCurrentStudySession(newCurrentStudySession);
+    }
+
+    getCurrentStudySession();
+  }, []);
+
+  useEffect(() => {
+    if (currentStudySession !== null) {
+      let diffTime = 0;
+      if (Date.now() - Date.parse(currentStudySession.startedAt) > 0) {
+        diffTime = Date.now() - Date.parse(currentStudySession.startedAt);
+      }
+      setTimespanCurrentStudySession(diffTime);
+
+      const intervalId = setInterval(() => {
+        setTimespanCurrentStudySession((_timespan) => _timespan + 1000);
+      }, 1000);
+
+      return () => {
+        clearInterval(intervalId);
+      };
+    }
+  }, [currentStudySession]);
+
+  useEffect(() => {
+    setDaysElapsedCurrentStudySession(
+      Math.floor(timespanCurrentStudySession / DAY)
+    );
+    setHoursElapsedCurrentStudySession(
+      Math.floor((timespanCurrentStudySession / HOUR) % 24)
+    );
+    setMinutesElapsedCurrentStudySession(
+      Math.floor((timespanCurrentStudySession / MINUTE) % 60)
+    );
+    setSecondsElapsedCurrentStudySession(
+      Math.floor((timespanCurrentStudySession / SECOND) % 60)
+    );
+  }, [timespanCurrentStudySession]);
+
+  if (currentStudySession === null) {
+    if (studyProcess === undefined) {
+      return (
+        <div>
+          <Button
+            onPress={onOpen}
+            type="submit"
+            className="bg-sky-500 text-white uppercase"
+          >
+            <Timer />
+            <span>Lancer une nouvelle session</span>
+          </Button>
+          <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="xl">
+            <ModalContent>
+              {(onClose) => (
+                <>
+                  <ModalHeader className="flex flex-col gap-1 w-full mt-4">
+                    <h1>Lancer une nouvelle session de travail</h1>
+                  </ModalHeader>
+                  <ModalBody className="flex flex-col gap-2 w-full my-4">
+                    <Form
+                      action={formLaunchCurrentSessionAction}
+                      className="flex gap-8"
+                    >
+                      "CHAMPS SELECT STUDY PROCESS"
+                      <div className="flex flex-row">
+                        <Button type="submit" className="bg-sky-500 text-white">
+                          Lancer la session
+                        </Button>
+                        <Button
+                          color="danger"
+                          variant="light"
+                          onPress={onClose}
+                        >
+                          Fermer
+                        </Button>
+                      </div>
+                    </Form>
+                  </ModalBody>
+                </>
+              )}
+            </ModalContent>
+          </Modal>
+        </div>
+      );
+    } else {
+      return (
+        <Form action={formLaunchCurrentSessionAction} className="ml-auto">
+          <Input
+            type="hidden"
+            name="studyProcessId"
+            defaultValue={studyProcess.id}
+          />
+          <Input
+            type="hidden"
+            name="startedAt"
+            defaultValue={new Intl.DateTimeFormat("fr-Fr", {
+              timeStyle: "short",
+            }).format(new Date())}
+          />
+          <Button type="submit" className="bg-sky-500 text-white">
+            <Timer />
+            <span>Lancer une nouvelle session</span>
+          </Button>
+        </Form>
+      );
+    }
+  }
+
+  return (
+    <div>
+      <Button
+        onPress={onOpen}
+        type="submit"
+        className="bg-sky-500 text-white uppercase"
+      >
+        <Timer />
+        <span>Vous avez une session de travail en cours ... </span>
+      </Button>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="xl">
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 w-full mt-4">
+                <div>
+                  Vous avez une session en cours en{" "}
+                  <span className="text-sky-500">
+                    {currentStudySession.topic_name}
+                  </span>
+                </div>
+                <span className="text-sm">
+                  {currentStudySession.studyprocess_name}
+                </span>
+              </ModalHeader>
+              <ModalBody className="flex flex-col gap-2 w-full my-4">
+                {/* {JSON.stringify(currentStudySession)} */}
+                <div>
+                  Session débutée le{" "}
+                  {new Intl.DateTimeFormat("fr-Fr", {
+                    dateStyle: "long",
+                  }).format(currentStudySession.startedAt)}{" "}
+                  à{" "}
+                  {new Intl.DateTimeFormat("fr-Fr", {
+                    timeStyle: "medium",
+                  }).format(currentStudySession.startedAt)}
+                </div>
+                <span className="text-3xl">
+                  {daysElapsedCurrentStudySession}j -{" "}
+                  {hoursElapsedCurrentStudySession}h -{" "}
+                  {minutesElapsedCurrentStudySession}min -{" "}
+                  {secondsElapsedCurrentStudySession}sec
+                </span>
+              </ModalBody>
+              <ModalFooter>
+                <Form
+                  action={formValidateCurrentSessionAction}
+                  className="flex flex-row"
+                >
+                  <Input
+                    type="hidden"
+                    name="currentStudySessionStudyProcessId"
+                    value={currentStudySession.studyprocess_id}
+                  />
+                  <Input
+                    type="hidden"
+                    name="currentStudySessionId"
+                    value={currentStudySession.id}
+                  />
+                  <Button type="submit" className="bg-sky-500 text-white">
+                    Terminer la session
+                  </Button>
+                  <Button type="button" variant="flat">
+                    <Link
+                      href={`/study-session/current/cancel/${currentStudySession.id}`}
+                    >
+                      Annuler la session
+                    </Link>
+                  </Button>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Fermer
+                  </Button>
+                </Form>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </div>
+  );
+}

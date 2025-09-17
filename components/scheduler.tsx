@@ -233,7 +233,6 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
   }, []);
 
   useEffect(() => {
-    console.log('here');
     if (groupSelected.length !== 0) {
       console.log(groupSelected);
       const newitems = studySessions.filter((item) => {

@@ -10,6 +10,8 @@ import { fontSans } from "@/config/fonts";
 import NavbarPage from "@/components/navbar";
 
 import { Geist } from 'next/font/google'
+import { CurrentStudySession } from "@/components/current-study-session";
+import CurrentStudySessionDeleteLayout from "./study-session/current/cancel/[...id]/layout";
  
 const geist = Geist({
   subsets: ['latin'],
@@ -52,6 +54,7 @@ export default function RootLayout({
           <div className="relative flex flex-col h-screen">
             <NavbarPage />
             <main className="mx-auto pt-8 px-6 flex-grow w-full">
+              <CurrentStudySession />
               {children}
             </main>
             <footer className="w-full flex items-center justify-center py-3">
