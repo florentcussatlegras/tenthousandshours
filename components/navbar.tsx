@@ -123,6 +123,9 @@ import {
 import { ThemeSwitch } from "./theme-switch";
 import { GithubIcon } from "./icons";
 import { Calendar, GraduationCap, HelpCircle, LogOut, Mail, Settings, User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { fetchCurrentStudySession } from "@/app/actions/actions";
+import { CurrentStudySession } from "./current-study-session";
 
 export const AcmeLogo = () => {
   return (
@@ -195,6 +198,8 @@ export const UserIcon = ({}) => {
 
 export default function NavBarPage() {
   const { data: session } = useSession();
+
+  console.log(session?.user.id);
 
   return (
     <Navbar

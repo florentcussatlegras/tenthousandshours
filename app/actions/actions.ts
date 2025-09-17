@@ -64,6 +64,17 @@ import { CalendarDate } from "@heroui/react";
 
 // }
 
+import { auth } from "../lib/auth";
+import { headers } from "next/headers";
+
+export async function getUser() {
+  const session = await auth.api.getSession({
+    headers: await headers(), // you need to pass the headers object.
+  });
+
+  return session?.user.id;
+}
+
 export async function getCategoryTopic(slug) {
   const categoryTopic = await prisma.categoryTopic.findFirst({
     where: {
@@ -118,7 +129,6 @@ export async function getListTopics() {
 }
 
 export async function fetchStudySessionsFinished(studyProcessId) {
-
   const studySessions = await prisma.$queryRaw`SELECT 
         "StudySession"."id", 
         "StudySession"."createdAt",
@@ -223,7 +233,10 @@ export async function fetchStudySessionsPerDay(userId: UUID, dateSelect: Date) {
   return studySessions;
 }
 
-export async function fetchCurrentStudySession(userId: String) {
+export async function fetchCurrentStudySession() {
+
+  const userId = await getUser();
+
   const studySession = await prisma.$queryRaw`SELECT
         "StudySession"."id" AS "id",
         "StudySession"."startedAt",

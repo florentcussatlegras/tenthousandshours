@@ -24,6 +24,7 @@ import { Timer } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 import Link from "next/link";
 import { validateCurrentStudySessionAction } from "@/app/actions/validate-current-study-session.action";
+import { CurrentStudySession } from "./current-study-session";
 
 const SECOND = 1_000;
 const MINUTE = SECOND * 60;
@@ -35,82 +36,78 @@ export default function DetailsStudyProcess({
 }: {
   studyProcess: StudyProcess;
 }) {
-  const { data: session } = useSession();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  // const { data: session } = useSession();
+  // const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const [formLaunchCurrentSessionState, formLaunchCurrentSessionAction] = useActionState(launchStudySessionAction, {
-    errors: {},
-  });
+  // const [formLaunchCurrentSessionState, formLaunchCurrentSessionAction] = useActionState(launchStudySessionAction, {
+  //   errors: {},
+  // });
 
-  const [formValidateCurrentSessionState, formValidateCurrentSessionAction] = useActionState(validateCurrentStudySessionAction, {
-    errors: {},
-  });
+  // const [formValidateCurrentSessionState, formValidateCurrentSessionAction] = useActionState(validateCurrentStudySessionAction, {
+  //   errors: {},
+  // });
 
-  const [currentStudySession, setCurrentStudySession] = useState(null);
+  // const [currentStudySession, setCurrentStudySession] = useState(null);
 
-  const [timespanCurrentStudySession, setTimespanCurrentStudySession] =
-    useState(0);
+  // const [timespanCurrentStudySession, setTimespanCurrentStudySession] =
+  //   useState(0);
 
-  const [daysElapsedCurrentStudySession, setDaysElapsedCurrentStudySession] =
-    useState(0);
-  const [hoursElapsedCurrentStudySession, setHoursElapsedCurrentStudySession] =
-    useState(0);
-  const [
-    minutesElapsedCurrentStudySession,
-    setMinutesElapsedCurrentStudySession,
-  ] = useState(0);
-  const [
-    secondsElapsedCurrentStudySession,
-    setSecondsElapsedCurrentStudySession,
-  ] = useState(0);
+  // const [daysElapsedCurrentStudySession, setDaysElapsedCurrentStudySession] =
+  //   useState(0);
+  // const [hoursElapsedCurrentStudySession, setHoursElapsedCurrentStudySession] =
+  //   useState(0);
+  // const [
+  //   minutesElapsedCurrentStudySession,
+  //   setMinutesElapsedCurrentStudySession,
+  // ] = useState(0);
+  // const [
+  //   secondsElapsedCurrentStudySession,
+  //   setSecondsElapsedCurrentStudySession,
+  // ] = useState(0);
 
-  useEffect(() => {
-    async function getCurrentStudySession() {
-      const newCurrentStudySession = await fetchCurrentStudySession(
-        String(session?.user.id)
-      );
-      setCurrentStudySession(newCurrentStudySession);
-    }
+  // useEffect(() => {
+  //   async function getCurrentStudySession() {
+  //     const newCurrentStudySession = await fetchCurrentStudySession();
+  //     setCurrentStudySession(newCurrentStudySession);
+  //   }
 
-    getCurrentStudySession();
-  }, []);
+  //   getCurrentStudySession();
+  // }, []);
 
-  useEffect(() => {
-    if (currentStudySession !== null) {
-      console.log(currentStudySession);
-      let diffTime = 0
-      if (Date.now() - Date.parse(currentStudySession.startedAt) > 0) {
-        console.log('ici');
-        diffTime = Date.now() - Date.parse(currentStudySession.startedAt);
-      }
-      setTimespanCurrentStudySession(
-        diffTime
-      );
+  // useEffect(() => {
+  //   if (currentStudySession !== null) {
+  //     let diffTime = 0
+  //     if (Date.now() - Date.parse(currentStudySession.startedAt) > 0) {
+  //       diffTime = Date.now() - Date.parse(currentStudySession.startedAt);
+  //     }
+  //     setTimespanCurrentStudySession(
+  //       diffTime
+  //     );
 
-      const intervalId = setInterval(() => {
-        setTimespanCurrentStudySession((_timespan) => _timespan + 1000);
-      }, 1000);
+  //     const intervalId = setInterval(() => {
+  //       setTimespanCurrentStudySession((_timespan) => _timespan + 1000);
+  //     }, 1000);
 
-      return () => {
-        clearInterval(intervalId);
-      };
-    }
-  }, [currentStudySession]);
+  //     return () => {
+  //       clearInterval(intervalId);
+  //     };
+  //   }
+  // }, [currentStudySession]);
 
-  useEffect(() => {
-    setDaysElapsedCurrentStudySession(
-      Math.floor(timespanCurrentStudySession / DAY)
-    );
-    setHoursElapsedCurrentStudySession(
-      Math.floor((timespanCurrentStudySession / HOUR) % 24)
-    );
-    setMinutesElapsedCurrentStudySession(
-      Math.floor((timespanCurrentStudySession / MINUTE) % 60)
-    );
-    setSecondsElapsedCurrentStudySession(
-      Math.floor((timespanCurrentStudySession / SECOND) % 60)
-    );
-  }, [timespanCurrentStudySession]);
+  // useEffect(() => {
+  //   setDaysElapsedCurrentStudySession(
+  //     Math.floor(timespanCurrentStudySession / DAY)
+  //   );
+  //   setHoursElapsedCurrentStudySession(
+  //     Math.floor((timespanCurrentStudySession / HOUR) % 24)
+  //   );
+  //   setMinutesElapsedCurrentStudySession(
+  //     Math.floor((timespanCurrentStudySession / MINUTE) % 60)
+  //   );
+  //   setSecondsElapsedCurrentStudySession(
+  //     Math.floor((timespanCurrentStudySession / SECOND) % 60)
+  //   );
+  // }, [timespanCurrentStudySession]);
 
   const ratioProgress = (Number(studyProcess.totalSeconds) / 36000000) * 100;
 
@@ -128,83 +125,9 @@ export default function DetailsStudyProcess({
         <span className="text-default-500 text-sm">
           Apprentissage débuté le {intl.format(studyProcess.createdAt)}
         </span>
-        {currentStudySession !== null ? (
-          <div className="ml-auto">
-            <Button
-              onPress={onOpen}
-              type="submit"
-              className="bg-sky-500 text-white uppercase"
-            >
-              <Timer />
-              <span>
-                Vous avez une session de travail en cours ...{" "}
-              </span>
-            </Button>
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="xl">
-              <ModalContent>
-                {(onClose) => (
-                  <>
-                    <ModalHeader className="flex flex-col gap-1 w-full mt-4">
-                      <div>Vous avez une session en cours en <span className="text-sky-500">{currentStudySession.topic_name}</span></div>
-                      <span className="text-sm">{currentStudySession.studyprocess_name}</span>
-                    </ModalHeader>
-                    <ModalBody className="flex flex-col gap-2 w-full my-4">
-                      {/* {JSON.stringify(currentStudySession)} */}
-                      <div>Session débutée le {new Intl.DateTimeFormat('fr-Fr', {
-                        dateStyle: "long"
-                      }).format(currentStudySession.startedAt)} à {new Intl.DateTimeFormat('fr-Fr', {
-                        timeStyle: "medium"
-                      }).format(currentStudySession.startedAt)}
-                      </div>
-                      <span className="text-3xl">
-                        {daysElapsedCurrentStudySession}j - {" "}
-                        {hoursElapsedCurrentStudySession}h - {" "}
-                        {minutesElapsedCurrentStudySession}min - {" "}
-                        {secondsElapsedCurrentStudySession}sec
-                      </span>
-                    </ModalBody>
-                    <ModalFooter>
-                      <Form action={formValidateCurrentSessionAction}>
-                        <Input type="text" name="currentStudySessionStudyProcessId" value={currentStudySession.studyprocess_id} />
-                        <Input type="text" name="currentStudySessionId" value={currentStudySession.id} />
-                        <Button type="submit" className="bg-sky-500 text-white">
-                            Terminer la session
-                        </Button>
-                        <Button type="button" variant="flat">
-                          <Link href={`/study-session/current/cancel/${currentStudySession.id}`}>
-                            Annuler la session
-                          </Link>
-                        </Button>
-                        <Button color="danger" variant="light" onPress={onClose}>
-                          Fermer
-                        </Button>
-                      </Form>
-                    </ModalFooter>
-                  </>
-                )}
-              </ModalContent>
-            </Modal>
-          </div>
-        ) : (
-          <Form action={formLaunchCurrentSessionAction} className="ml-auto">
-            <Input
-              type="hidden"
-              name="studyProcessId"
-              defaultValue={studyProcess.id}
-            />
-            <Input
-              type="hidden"
-              name="startedAt"
-              defaultValue={new Intl.DateTimeFormat("fr-Fr", {
-                timeStyle: "short",
-              }).format(new Date())}
-            />
-            <Button type="submit" className="bg-sky-500 text-white">
-              <Timer />
-              <span>Lancer une nouvelle session</span>
-            </Button>
-          </Form>
-        )}
+        <div className="ml-auto">
+            <CurrentStudySession />
+        </div>
       </CardHeader>
       <CardBody className="flex flex-col">
         <Chip
