@@ -36,6 +36,7 @@ export async function deleteStudySession(formData: FormData) {
     }
   }
 
+  revalidateTag("CurrentStudySession");
   revalidateTag("studySession");
   redirect(`/study-process/${studyProcess?.slug}`);
 }

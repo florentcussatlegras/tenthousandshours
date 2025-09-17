@@ -259,7 +259,10 @@ export async function fetchCurrentStudySession() {
   return null;
 }
 
-export async function getTopicsOfaUser(userId: UUID) {
+export async function getTopicsOfaUser() {
+
+  const userId = await getUser(); 
+
   const topics = await prisma.$queryRaw`SELECT
         "Topic"."id" AS "topic_id",
         "Topic"."name" AS "topic_name"
