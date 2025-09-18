@@ -75,6 +75,7 @@ export const NewStudySessionForm = ({
               </h1>
               <div className="ml-auto">
                 <DatePicker
+                  aria-labelledby="date picker new study session"
                   name="date"
                   className="max-w-[150px]"
                   value={dateCreation}
