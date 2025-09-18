@@ -291,6 +291,7 @@ export default function ListStudiesSession({
         <div className="flex justify-between gap-3 items-end">
           <div className="flex flex-row items-center gap-4">
             <DateRangePicker
+              aria-labelledby="date range picker for study session list"
               className="max-w-xs"
               classNames={{
                 input: "text-sm",

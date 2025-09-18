@@ -218,7 +218,6 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
     }
 
     async function getTopicsUser() {
-      console.log(session.user.id);
       const topics = await getTopicsOfaUser(session?.user.id);
       setTopics(topics);
     }

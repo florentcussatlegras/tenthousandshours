@@ -64,7 +64,7 @@ export async function launchStudySessionAction(
   if (studyProcess === null) {
     return {
       errors: {
-        _form: ["Cette session n'est liée à aucun apprentissage en cours."],
+        _form: ["Veuillez préciser la matière concernée."],
       },
     };
   }

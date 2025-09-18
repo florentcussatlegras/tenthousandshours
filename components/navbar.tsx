@@ -199,8 +199,6 @@ export const UserIcon = ({}) => {
 export default function NavBarPage() {
   const { data: session } = useSession();
 
-  console.log(session?.user.id);
-
   return (
     <Navbar
       className="bg-white dark:bg-black/90 p-0 m-0"

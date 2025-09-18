@@ -68,6 +68,11 @@ export function CurrentStudySession({
 
   const [topics, setTopics] = useState([]);
   const [currentTopicId, setCurrentTopicId] = useState();
+  const [hoursStartedAt, setHoursStartedAt] = useState(
+    new Intl.DateTimeFormat("fr-Fr", {
+      timeStyle: "short",
+    }).format(new Date())
+  );
 
   useEffect(() => {
     async function getTopics() {
@@ -84,6 +89,14 @@ export function CurrentStudySession({
 
     getCurrentStudySession();
     getTopics();
+
+    const intervalId = setInterval(() => {
+      setHoursStartedAt(
+        new Intl.DateTimeFormat("fr-Fr", {
+          timeStyle: "short",
+        }).format(new Date())
+      );
+    }, 1000);
   }, []);
 
   useEffect(() => {
@@ -153,18 +166,22 @@ export function CurrentStudySession({
                       action={formLaunchCurrentSessionAction}
                       className="flex gap-8"
                     >
+                      {formLaunchCurrentSessionState.errors._form ? (
+                        <div className="text-danger text-sm">
+                          {formLaunchCurrentSessionState.errors._form?.join(", ")}
+                        </div>
+                      ) : null}
+
                       <Input
-                        type="text"
+                        type="hidden"
                         name="topicId"
                         value={currentTopicId}
                       />
-                      <Input type="text" name="studyProcessId" />
+                      <Input type="hidden" name="studyProcessId" />
                       <Input
-                        type="text"
+                        type="hidden"
                         name="startedAt"
-                        defaultValue={new Intl.DateTimeFormat("fr-Fr", {
-                          timeStyle: "short",
-                        }).format(new Date())}
+                        value={hoursStartedAt}
                       />
                       <Autocomplete
                         aria-label="Selectionner une matière"
@@ -275,13 +292,7 @@ export function CurrentStudySession({
             name="studyProcessId"
             defaultValue={studyProcess.id}
           />
-          <Input
-            type="hidden"
-            name="startedAt"
-            defaultValue={new Intl.DateTimeFormat("fr-Fr", {
-              timeStyle: "short",
-            }).format(new Date())}
-          />
+          <Input type="text" name="startedAt" value={hoursStartedAt} />
           <Button type="submit" className="bg-sky-500 text-white">
             <Timer />
             <span>

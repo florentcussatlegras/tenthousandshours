@@ -18,7 +18,7 @@ export const ChangePasswordForm = () => {
     const formData = new FormData(evt.target as HTMLFormElement);
 
     const { error } = await changePasswordAction(formData);
-    console.log(error);
+
     if (error) {
       addToast({
         title: "Erreur changement mot de passe",

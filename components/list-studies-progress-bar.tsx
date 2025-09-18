@@ -37,9 +37,9 @@ export const EyeIcon = () => {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       className="lucide lucide-eye-icon lucide-eye text-default-600"
     >
       <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
@@ -98,7 +98,7 @@ export default function ListStudiesProgressbar({
                 const ratioProgress =
                   (Number(study.totalSeconds) / 36000000) * 100;
                 return (
-                  <div className="flex items-end gap-4 relative">
+                  <div className="flex items-end gap-4 relative" key={study.id}>
                     <Progress
                       aria-label="Loading..."
                       label={study?.topic?.name}
