@@ -33,7 +33,7 @@ const updateStudySessionSchema = z.object({
         ctx.addIssue({
           code: "custom",
           message: "Merci de saisir une url valide",
-          path: ["finishedAt"]
+          path: ["urls"]
         });
       } 
     });
@@ -47,6 +47,7 @@ interface UpdateStudySessionState {
     startedAt?: string[];
     finishedAt?: string[];
     _form?: string[];
+    urls?: string[];
   };
 }
 

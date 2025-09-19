@@ -11,12 +11,38 @@ import { headers } from "next/headers";
 const validateCurrentStudySessionSchema = z.object({
   currentStudySessionStudyProcessId: z.string(),
   currentStudySessionId: z.string(),
-});
+  description: z.string(),
+  urls: z.string(),
+})
+.superRefine(({ urls, startedAt, finishedAt }, ctx) => {
+    if (startedAt !== "" && finishedAt !== "" && finishedAt < startedAt) {
+      ctx.addIssue({
+        code: "custom",
+        message: "L'heure de début doit être inférieure à l'heure de fin",
+        path: ["finishedAt"],
+      });
+    }
+    if (urls.length > 0) {
+    const arrayUrls = urls.split(',');
+    var httpRegex = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
+    arrayUrls.forEach(url => {
+      if (httpRegex.test(url) === false) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Merci de saisir une url valide",
+          path: ["urls"]
+        });
+      } 
+    });
+  }
+  });;
 
 interface ValidateCurrentStudySessionState {
   errors: {
     currentStudySessionStudyProcessId?: string[];
     currentStudySessionId?: string[];
+    description?: string[],
+    urls?: string[]; 
     _form?: string[];
   };
 }
@@ -95,6 +121,8 @@ export async function validateCurrentStudySessionAction(
       data: {
         finishedAt: new Date(),
         totalSeconds: totalSecondsSession,
+        description: result.data.description,
+        urls: result.data.urls,
       },
       where: {
         id: result.data.currentStudySessionId

@@ -33,7 +33,7 @@ const createStudySessionSchema = z
         ctx.addIssue({
           code: "custom",
           message: "Merci de saisir une url valide",
-          path: ["finishedAt"]
+          path: ["urls"]
         });
       } 
     });
