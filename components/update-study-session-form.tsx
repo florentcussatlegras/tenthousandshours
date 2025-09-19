@@ -161,6 +161,12 @@ export function UpdateStudySessionForm({
 
             <Input type="hidden" name="urls" value={urls.join(",")} />
 
+            {formState.errors.urls ? (
+              <div className="text-danger text-sm">
+                {formState.errors.urls?.join(", ")}
+              </div>
+            ) : null}
+
             {urls.map((url, index) => {
               return (
                 <div key={index} className="flex flex-row w-full gap-4">
