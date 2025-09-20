@@ -46,10 +46,11 @@ export function CurrentStudySession({
       errors: {},
     });
 
-  const [formValidateCurrentSessionState, formValidateCurrentSessionAction] =
-    useActionState(validateCurrentStudySessionAction, {
-      errors: {},
-    });
+  // const [formValidateCurrentSessionState, formValidateCurrentSessionAction] =
+  //   useActionState(validateCurrentStudySessionAction, {
+  //     errors: {},
+  //     confirmValidation: false
+  //   });
 
   const [currentStudySession, setCurrentStudySession] = useState(null);
 
