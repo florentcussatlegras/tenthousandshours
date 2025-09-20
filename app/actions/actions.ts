@@ -233,6 +233,16 @@ export async function fetchStudySessionsPerDay(userId: UUID, dateSelect: Date) {
   return studySessions;
 }
 
+export async function fetchStudyProcess(id: String) {
+  const studyProcess = await prisma.studyProcess.findFirst({
+    where: {
+      id,
+    },
+  }); 
+
+  return studyProcess;
+}
+
 export async function fetchCurrentStudySession() {
 
   const userId = await getUser();

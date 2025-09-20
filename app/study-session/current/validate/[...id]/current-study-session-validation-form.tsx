@@ -1,13 +1,15 @@
 "use client";
 
 import { StudySession } from "@prisma/client";
-import React from "react";
+import React, { useEffect } from "react";
 import { validateCurrentStudySessionAction } from "@/app/actions/validate-current-study-session.action";
-import { Button, Form, Input, Textarea } from "@heroui/react";
+import { addToast, Button, Form, Input, Textarea } from "@heroui/react";
 import { PlusIcon } from "lucide-react";
 import { useActionState, useState } from "react";
 import Link from "next/link";
 import { DeleteIcon } from "@/components/icons";
+import { redirect } from "next/navigation";
+import { fetchStudyProcess } from "@/app/actions/actions";
 
 export function CurrentStudySessionValidationForm({
   currentStudySession,
@@ -17,9 +19,30 @@ export function CurrentStudySessionValidationForm({
   const [formValidateCurrentSessionState, formValidateCurrentSessionAction] =
     useActionState(validateCurrentStudySessionAction, {
       errors: {},
+      confirmValidation: false,
     });
 
   const [urls, setUrls] = useState([""]);
+
+  useEffect(() => {
+    async function toastAndRedirect() {
+      const newStudyProcess = await fetchStudyProcess(
+        currentStudySession.studyProcessId
+      );
+
+      if (formValidateCurrentSessionState.confirmValidation) {
+        addToast({
+          title: "Confirmation",
+          description: "La session a bien été ajoutée",
+          color: "success",
+        });
+
+        redirect(`/study-process/${newStudyProcess?.slug}`);
+      }
+    }
+
+    toastAndRedirect();
+  }, [formValidateCurrentSessionState]);
 
   function addUrl() {
     setUrls([...urls, ""]);
@@ -54,6 +77,33 @@ export function CurrentStudySessionValidationForm({
             {formValidateCurrentSessionState.errors._form?.join(", ")}
           </div>
         ) : null}
+        <div className="text-3xl">
+          {new Intl.DateTimeFormat("fr-Fr", {
+            dateStyle: "long",
+          }).format(currentStudySession.createdAt)}
+        </div>
+        <div className="flex flex-row gap-2 text-2xl">
+          <div>
+            Heure de début:{" "}
+            {new Intl.DateTimeFormat("fr-Fr", {
+              timeStyle: "short",
+            }).format(currentStudySession.startedAt)}
+          </div>
+          <div>-</div>
+          <div>
+            Heure de fin:{" "}
+            {new Intl.DateTimeFormat("fr-Fr", {
+              timeStyle: "short",
+            }).format(new Date())}
+          </div>
+        </div>
+        <Input
+          type="text"
+          name="finishedAt"
+          value={new Intl.DateTimeFormat("fr-Fr", {
+            timeStyle: "medium",
+          }).format(new Date())}
+        />
         <Input
           type="text"
           name="currentStudySessionStudyProcessId"
@@ -69,15 +119,12 @@ export function CurrentStudySessionValidationForm({
           label="Vous pouvez ajouter une description"
           name="description"
         />
-
         <Input type="text" name="urls" value={urls.join(",")} />
-
         {formValidateCurrentSessionState.errors.urls ? (
           <div className="text-danger text-sm">
             {formValidateCurrentSessionState.errors.urls?.join(", ")}
           </div>
         ) : null}
-
         {urls.map((url, index) => {
           return (
             <div key={index} className="flex flex-row w-full gap-4">
@@ -97,7 +144,6 @@ export function CurrentStudySessionValidationForm({
             </div>
           );
         })}
-
         <Button
           onPress={addUrl}
           className="ml-auto bg-secondary-200 text-white min-w-15"

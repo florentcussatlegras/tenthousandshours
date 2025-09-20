@@ -2,12 +2,13 @@ import { fetchStudySessionsFinished } from "@/app/actions/actions";
 import { auth } from "@/app/lib/auth";
 import prisma from "@/app/lib/prisma";
 import { Breadcrumb } from "@/components/breadcrumb";
+import { ConfirmCurrentSessionValidation } from "@/components/confirm-current-session-validation";
 import DetailsStudyProcess from "@/components/details-study-process";
 import ListStudiesSession from "@/components/list-studies-session";
 import { NewStudySessionForm } from "@/components/new-study-session-form";
 import { StudySessions } from "@/components/study-sessions";
-import { Card } from "@heroui/react";
-import { headers } from "next/headers";
+import { addToast, Card } from "@heroui/react";
+import { headers, cookies } from "next/headers";
 
 export default async function studyProcessDetailPage({ params }) {
   const session = await auth.api.getSession({
@@ -16,6 +17,9 @@ export default async function studyProcessDetailPage({ params }) {
 
   const paramsObj = await params;
   const slug = paramsObj.slug[0];
+
+  const cookieStore = await cookies();
+  const confirmValidation = cookieStore.get('confirmValidation');
 
   const studyProcess = await prisma.studyProcess.findFirst({
     select: {
@@ -60,13 +64,20 @@ export default async function studyProcessDetailPage({ params }) {
           { label: `${studyProcess?.topic.name}` },
         ]}
       />
-      <h1 className="text-3xl font-bold">Mes sessions de travail <span className="text-sky-500">{studyProcess.topic.name}</span></h1>
-        <div className="flex flex-col gap-4">
-            <div className="w-full">
-                <DetailsStudyProcess studyProcess={studyProcess} />
-            </div>
-            <StudySessions studySessions={studySessions} studyProcess={studyProcess} />
+      {confirmValidation && <ConfirmCurrentSessionValidation />}
+      <h1 className="text-3xl font-bold">
+        Mes sessions de travail{" "}
+        <span className="text-sky-500">{studyProcess.topic.name}</span>
+      </h1>
+      <div className="flex flex-col gap-4">
+        <div className="w-full">
+          <DetailsStudyProcess studyProcess={studyProcess} />
         </div>
+        <StudySessions
+          studySessions={studySessions}
+          studyProcess={studyProcess}
+        />
+      </div>
     </div>
   );
 }
