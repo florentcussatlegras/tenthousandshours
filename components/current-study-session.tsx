@@ -21,7 +21,7 @@ import {
   Autocomplete,
   AutocompleteItem,
 } from "@heroui/react";
-import { SearchIcon, Timer } from "lucide-react";
+import { Clock, Pause, Play, SearchIcon, Timer } from "lucide-react";
 import Link from "next/link";
 import { StudyProcess } from "@prisma/client";
 import { usePathname } from "next/navigation";
@@ -149,9 +149,9 @@ export function CurrentStudySession({
             <Button
               onPress={modal1.onOpen}
               type="submit"
-              className="bg-sky-500 text-white"
+              className="text-white rounded-full bg-secondary-300"
             >
-              <Timer />
+              <Play />
               {/* <span>Lancer une nouvelle session </span> */}
             </Button>
             <Modal
@@ -302,8 +302,12 @@ export function CurrentStudySession({
               defaultValue={studyProcess.id}
             />
             <Input type="hidden" name="startedAt" value={hoursStartedAt} />
-            <Button type="submit" className="text-default-700" variant="flat">
-              <Timer />
+            <Button
+              type="submit"
+              className="text-white bg-secondary-300"
+              variant="flat"
+            >
+              <Play />
               <span>
                 Lancer une nouvelle session de {studyProcess.topic.name}
               </span>
@@ -321,38 +325,48 @@ export function CurrentStudySession({
           variant="bordered"
           color="success"
         >
-          <Timer />
+          <Pause />
           {/* <span>Vous avez une session de travail en cours ... </span> */}
           <div className="flex items-center">
-            <div className="w-[25px]">{daysElapsedCurrentStudySession}j</div>
-            {/* {" "}-{" "} */}
-            <div className="w-[25px]">{hoursElapsedCurrentStudySession}h</div>
-            {/* {" "}-{" "} */}
-            <div className="w-[50px]">{minutesElapsedCurrentStudySession}min</div>
-            {/* {" "}-{" "} */}
-            <div className="w-[50px]">{secondsElapsedCurrentStudySession}sec</div>
+            {daysElapsedCurrentStudySession > 0 && (
+              <div className="w-[25px]">{daysElapsedCurrentStudySession}j</div>
+            )}
+
+            {hoursElapsedCurrentStudySession > 0 && (
+              <div className="w-[25px]">{hoursElapsedCurrentStudySession}h</div>
+            )}
+
+            {minutesElapsedCurrentStudySession > 0 && (
+              <div className="w-[40px]">
+                {minutesElapsedCurrentStudySession}min
+              </div>
+            )}
+
+            <div className="w-[50px]">
+              {secondsElapsedCurrentStudySession}sec
+            </div>
           </div>
         </Button>
         <Modal
           isOpen={modal2.isOpen}
           onOpenChange={modal2.onOpenChange}
-          size="xl"
+          size="3xl"
         >
           <ModalContent className="p-4">
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-col gap-1 w-full mt-4">
+                <ModalHeader className="flex flex-col gap-1 w-full mt-4 text-3xl">
                   <div>
                     Vous avez une session en cours en{" "}
                     <span className="text-sky-500">
                       {currentStudySession.topic_name}
                     </span>
                   </div>
-                  <span className="text-sm">
+                  <span className="text-xl">
                     {currentStudySession.studyprocess_name}
                   </span>
                 </ModalHeader>
-                <ModalBody className="flex flex-col gap-2 w-full my-4">
+                <ModalBody className="flex flex-col gap-4 w-full my-8 text-2xl">
                   {/* {JSON.stringify(currentStudySession)} */}
                   <div>
                     Session débutée le{" "}
@@ -364,19 +378,49 @@ export function CurrentStudySession({
                       timeStyle: "medium",
                     }).format(currentStudySession.startedAt)}
                   </div>
-                  <span className="text-3xl">
-                    {daysElapsedCurrentStudySession}j -{" "}
+                  <div className="text-3xl flex items-center gap-4">
+                    {/* {daysElapsedCurrentStudySession}j -{" "}
                     {hoursElapsedCurrentStudySession}h -{" "}
                     {minutesElapsedCurrentStudySession}min -{" "}
-                    {secondsElapsedCurrentStudySession}sec
-                  </span>
+                    {secondsElapsedCurrentStudySession}sec */}
+
+                    <Clock size={30} />
+
+                    {daysElapsedCurrentStudySession > 0 && (
+                      <div>
+                        {daysElapsedCurrentStudySession}j
+                      </div>
+                    )}
+
+                    {hoursElapsedCurrentStudySession > 0 && (
+                      <div>
+                        {hoursElapsedCurrentStudySession}h
+                      </div>
+                    )}
+
+                    {minutesElapsedCurrentStudySession > 0 && (
+                      <div className="w-[80px]">
+                        {minutesElapsedCurrentStudySession}min
+                      </div>
+                    )}
+
+                    <div className="w-[120px]">
+                      {secondsElapsedCurrentStudySession}sec
+                    </div>
+
+                    <Button className="bg-secondary-200 text-white">
+                      <Pause />
+                      Mettre en pause
+                    </Button>
+
+                  </div>
                 </ModalBody>
                 <ModalFooter className="justify-start">
                   {/* <Form
                     action={formValidateCurrentSessionAction}
                     className="flex flex-row"
                   > */}
-                  <div className="flex flex-row gap-2">
+                  <div className="flex flex-row gap-4">
                     {/* <Input
                         type="hidden"
                         name="currentStudySessionStudyProcessId"
@@ -391,7 +435,7 @@ export function CurrentStudySession({
                       <Link
                         href={`/study-session/current/validate/${currentStudySession.id}`}
                       >
-                        Terminer la session 2
+                        Terminer la session
                       </Link>
                     </Button>
                     <Button type="button" variant="flat">

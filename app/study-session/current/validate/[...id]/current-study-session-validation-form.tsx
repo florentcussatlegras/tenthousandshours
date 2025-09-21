@@ -98,19 +98,19 @@ export function CurrentStudySessionValidationForm({
           </div>
         </div>
         <Input
-          type="text"
+          type="hidden"
           name="finishedAt"
           value={new Intl.DateTimeFormat("fr-Fr", {
             timeStyle: "medium",
           }).format(new Date())}
         />
         <Input
-          type="text"
+          type="hidden"
           name="currentStudySessionStudyProcessId"
           value={currentStudySession.studyProcessId}
         />
         <Input
-          type="text"
+          type="hidden"
           name="currentStudySessionId"
           value={currentStudySession.id}
         />
@@ -119,7 +119,7 @@ export function CurrentStudySessionValidationForm({
           label="Vous pouvez ajouter une description"
           name="description"
         />
-        <Input type="text" name="urls" value={urls.join(",")} />
+        <Input type="hidden" name="urls" value={urls.join(",")} />
         {formValidateCurrentSessionState.errors.urls ? (
           <div className="text-danger text-sm">
             {formValidateCurrentSessionState.errors.urls?.join(", ")}
