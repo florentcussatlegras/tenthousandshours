@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import prisma from "@/app/lib/prisma";
 
@@ -36,7 +36,8 @@ export async function deleteStudySession(formData: FormData) {
     }
   }
 
-  revalidateTag("CurrentStudySession");
-  revalidateTag("studySession");
+
+  
+  revalidatePath("/");
   redirect(`/study-process/${studyProcess?.slug}`);
 }

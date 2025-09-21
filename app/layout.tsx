@@ -55,7 +55,7 @@ export default function RootLayout({
             <NavbarPage />
             <main className="mx-auto pt-8 px-6 flex-grow w-full">
               <div className="container mx-auto max-w-[1536px]">
-                <CurrentStudySession />
+                {/* <CurrentStudySession /> */}
               </div>
               {children}
             </main>

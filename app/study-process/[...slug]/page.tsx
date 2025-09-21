@@ -18,8 +18,8 @@ export default async function studyProcessDetailPage({ params }) {
   const paramsObj = await params;
   const slug = paramsObj.slug[0];
 
-  const cookieStore = await cookies();
-  const confirmValidation = cookieStore.get('confirmValidation');
+  // const cookieStore = await cookies();
+  // const confirmValidation = cookieStore.get('confirmValidation');
 
   const studyProcess = await prisma.studyProcess.findFirst({
     select: {
@@ -64,7 +64,7 @@ export default async function studyProcessDetailPage({ params }) {
           { label: `${studyProcess?.topic.name}` },
         ]}
       />
-      {confirmValidation && <ConfirmCurrentSessionValidation />}
+      {/* {confirmValidation && <ConfirmCurrentSessionValidation />} */}
       <h1 className="text-3xl font-bold">
         Mes sessions de travail{" "}
         <span className="text-sky-500">{studyProcess.topic.name}</span>

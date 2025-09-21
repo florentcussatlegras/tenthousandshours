@@ -145,14 +145,14 @@ export function CurrentStudySession({
     if (currentStudySession === null) {
       if (studyProcess === undefined) {
         return (
-          <div>
+          <div className="mr-4">
             <Button
               onPress={modal1.onOpen}
               type="submit"
               className="bg-sky-500 text-white"
             >
               <Timer />
-              <span>Lancer une nouvelle session </span>
+              {/* <span>Lancer une nouvelle session </span> */}
             </Button>
             <Modal
               isOpen={modal1.isOpen}
@@ -302,7 +302,7 @@ export function CurrentStudySession({
               defaultValue={studyProcess.id}
             />
             <Input type="hidden" name="startedAt" value={hoursStartedAt} />
-            <Button type="submit" className="bg-sky-500 text-white">
+            <Button type="submit" className="text-default-700" variant="flat">
               <Timer />
               <span>
                 Lancer une nouvelle session de {studyProcess.topic.name}
@@ -320,10 +320,18 @@ export function CurrentStudySession({
           type="submit"
           variant="bordered"
           color="success"
-          className="uppercase"
         >
           <Timer />
-          <span>Vous avez une session de travail en cours ... </span>
+          {/* <span>Vous avez une session de travail en cours ... </span> */}
+          <div className="flex items-center">
+            <div className="w-[25px]">{daysElapsedCurrentStudySession}j</div>
+            {/* {" "}-{" "} */}
+            <div className="w-[25px]">{hoursElapsedCurrentStudySession}h</div>
+            {/* {" "}-{" "} */}
+            <div className="w-[50px]">{minutesElapsedCurrentStudySession}min</div>
+            {/* {" "}-{" "} */}
+            <div className="w-[50px]">{secondsElapsedCurrentStudySession}sec</div>
+          </div>
         </Button>
         <Modal
           isOpen={modal2.isOpen}
@@ -380,25 +388,25 @@ export function CurrentStudySession({
                         value={currentStudySession.id}
                         /> */}
                     <Button type="button" className="bg-sky-500 text-white">
-                        <Link
+                      <Link
                         href={`/study-session/current/validate/${currentStudySession.id}`}
-                        >
+                      >
                         Terminer la session 2
-                        </Link>
+                      </Link>
                     </Button>
                     <Button type="button" variant="flat">
-                        <Link
+                      <Link
                         href={`/study-session/current/cancel/${currentStudySession.id}`}
-                        >
+                      >
                         Annuler la session
-                        </Link>
+                      </Link>
                     </Button>
                     <Button
-                        color="danger"
-                        variant="light"
-                        onPress={modal2.onClose}
+                      color="danger"
+                      variant="light"
+                      onPress={modal2.onClose}
                     >
-                        Fermer
+                      Fermer
                     </Button>
                     {/* </Form> */}
                   </div>
