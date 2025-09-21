@@ -35,9 +35,7 @@ export async function deleteStudySession(formData: FormData) {
       };
     }
   }
-
-
   
-  revalidatePath("/");
+  revalidatePath(`/study-process/${studyProcess?.slug}`);
   redirect(`/study-process/${studyProcess?.slug}`);
 }
