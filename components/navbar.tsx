@@ -122,7 +122,15 @@ import {
 } from "@heroui/react";
 import { ThemeSwitch } from "./theme-switch";
 import { GithubIcon } from "./icons";
-import { Calendar, GraduationCap, HelpCircle, LogOut, Mail, Settings, User } from "lucide-react";
+import {
+  Calendar,
+  GraduationCap,
+  HelpCircle,
+  LogOut,
+  Mail,
+  Settings,
+  User,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { fetchCurrentStudySession } from "@/app/actions/actions";
 import { CurrentStudySession } from "./current-study-session";
@@ -276,6 +284,7 @@ export default function NavBarPage() {
 
       {session !== null ? (
         <NavbarContent justify="end">
+          <CurrentStudySession />
           <GithubIcon />
           <ThemeSwitch />
           <Link href="/settings">
@@ -327,8 +336,14 @@ export default function NavBarPage() {
               )}
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
-              <DropdownItem key="profile" className="gap-2 bg-default-200 flex flex-row">
-                <Link href="/profile" className="font-semibold text-sky-500 text-md items-center gap-1">
+              <DropdownItem
+                key="profile"
+                className="gap-2 bg-default-200 flex flex-row"
+              >
+                <Link
+                  href="/profile"
+                  className="font-semibold text-sky-500 text-md items-center gap-1"
+                >
                   <User />
                   {session.user.email}
                 </Link>

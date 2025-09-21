@@ -25,6 +25,7 @@ import { useActionState, useEffect, useState } from "react";
 import Link from "next/link";
 import { validateCurrentStudySessionAction } from "@/app/actions/validate-current-study-session.action";
 import { CurrentStudySession } from "./current-study-session";
+import { convertSecondsInHourMin } from "@/app/lib/utils";
 
 const SECOND = 1_000;
 const MINUTE = SECOND * 60;
@@ -110,6 +111,26 @@ export default function DetailsStudyProcess({
   // }, [timespanCurrentStudySession]);
 
   const ratioProgress = (Number(studyProcess.totalSeconds) / 36000000) * 100;
+  // let timeDisplayed = Math.round(studyProcess.totalSeconds / 60);
+  // let strTimeDisplayed = "";
+  // if (timeDisplayed >= 60) {
+  //   if (Math.round(timeDisplayed / 60) <= 1) {
+  //     strTimeDisplayed = Math.round(timeDisplayed / 60) + " heure";
+  //   } else {
+  //     strTimeDisplayed = Math.round(timeDisplayed / 60) + " heures";
+  //   }
+  // } else {
+  //   if (Math.round(timeDisplayed) <= 1) {
+  //     strTimeDisplayed = Math.round(timeDisplayed) + " minute";
+  //   } else {
+  //     strTimeDisplayed = Math.round(timeDisplayed) + " minutes";
+  //   }
+  // }
+
+  // const hours = Math.floor(studyProcess.totalSeconds / 3600);
+  // const minutes = Math.floor((studyProcess.totalSeconds - hours * 3600) / 60);
+  // const seconds = studyProcess.totalSeconds - hours * 3600 - minutes * 60;
+  const timeString = convertSecondsInHourMin(studyProcess.totalSeconds);
 
   var intl = new Intl.DateTimeFormat("fr-Fr", {
     weekday: "long",
@@ -126,14 +147,13 @@ export default function DetailsStudyProcess({
           Apprentissage débuté le {intl.format(studyProcess.createdAt)}
         </span>
         <div className="ml-auto">
-            <CurrentStudySession studyProcess={studyProcess} />
+          <CurrentStudySession studyProcess={studyProcess} />
         </div>
       </CardHeader>
       <CardBody className="flex flex-col">
-        <Chip
-          isDisabled
-          color="secondary"
-        >{`${Math.round(studyProcess.totalSeconds / 3600)} heures`}</Chip>
+        <Chip isDisabled color="secondary">
+          {timeString}
+        </Chip>
         <Progress
           aria-label="Loading..."
           className="w-full"
