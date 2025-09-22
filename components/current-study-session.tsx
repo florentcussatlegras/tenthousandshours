@@ -54,6 +54,7 @@ export function CurrentStudySession({
 
   const [intervalId, setIntervalId] = useState();
   const [isTiming, setIsTiming] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const [currentStudySession, setCurrentStudySession] = useState(null);
 
@@ -80,13 +81,20 @@ export function CurrentStudySession({
 
     if (localStorage.getItem("current_study_session_timer")) {
       setTime(JSON.parse(localStorage.getItem("current_study_session_timer")));
+      setCurrentTopicId(localStorage.getItem("current_study_session_topic_id"));
+      setHoursStartedAt(localStorage.getItem("current_study_session_started_at"))
       setIsTiming(true);
-      let id = setInterval(updateTimer, 1000);
-      setIntervalId(id);
-
-      return () => {
-        clearInterval(id);
-      };
+      if(localStorage.getItem("current_study_session_is_playing") === "true") {
+          let id = setInterval(updateTimer, 1000);
+          setIntervalId(id);
+          setIsPlaying(true);
+    
+          return () => {
+            clearInterval(id);
+          };
+      }else{
+        setIsPlaying(false);
+      }
     }
   }, []);
 
@@ -137,6 +145,7 @@ export function CurrentStudySession({
         String(new Date().getTime())
       );
       localStorage.setItem("current_study_session_timer", JSON.stringify(time));
+      localStorage.setItem("current_study_session_is_playing", String(isPlaying));
     }
     modal1.onClose();
   }
@@ -147,9 +156,11 @@ export function CurrentStudySession({
     if (!intervalId) {
       let id = setInterval(updateTimer, 1000);
       setIntervalId(id);
+      setIsPlaying(true);
     } else {
       clearInterval(intervalId);
       setIntervalId("");
+      setIsPlaying(false);
     }
   };
 
