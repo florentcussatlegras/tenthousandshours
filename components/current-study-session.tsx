@@ -78,13 +78,16 @@ export function CurrentStudySession({
     // getCurrentStudySession();
     getTopics();
 
-    if (localStorage.hasItem("current_study_session_timer")) {
-      setTime(JSON.parse(localStorage.hasItem("current_study_session_timer")));
-    }
+    if (localStorage.getItem("current_study_session_timer")) {
+      setTime(JSON.parse(localStorage.getItem("current_study_session_timer")));
+      setIsTiming(true);
+      let id = setInterval(updateTimer, 1000);
+      setIntervalId(id);
 
-    // setInterval(() => {
-    //   setHoursStartedAt(new Date().getTime());
-    // }, 1000);
+      return () => {
+        clearInterval(id);
+      };
+    }
   }, []);
 
   //   useEffect(() => {
@@ -112,7 +115,10 @@ export function CurrentStudySession({
         newTime.min = 0;
         newTime.hr += 1;
       }
-
+      localStorage.setItem(
+        "current_study_session_timer",
+        JSON.stringify(newTime)
+      );
       return newTime;
     });
   };
