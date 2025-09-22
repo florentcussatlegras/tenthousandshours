@@ -42,10 +42,17 @@ export function CurrentStudySession({
 
   const pathname = usePathname();
 
-  const [formLaunchCurrentSessionState, formLaunchCurrentSessionAction] =
-    useActionState(launchStudySessionAction, {
-      errors: {},
-    });
+  // const [formLaunchCurrentSessionState, formLaunchCurrentSessionAction] =
+  //   useActionState(launchStudySessionAction, {
+  //     errors: {},
+  //   });
+
+  // const [formValidateCurrentSessionState, formValidateCurrentSessionAction] =
+  //   useActionState(validateCurrentStudySessionAction, {
+  //     errors: {},
+  //     confirmValidation: false,
+  //   });
+
   const [time, setTime] = useState({
     sec: 0,
     min: 0,
@@ -60,6 +67,7 @@ export function CurrentStudySession({
 
   const [topics, setTopics] = useState([]);
   const [currentTopicId, setCurrentTopicId] = useState();
+  const [currentTopicName, setCurrentTopicName] = useState();
 
   const [hoursStartedAt, setHoursStartedAt] = useState(0);
 
@@ -82,17 +90,19 @@ export function CurrentStudySession({
     if (localStorage.getItem("current_study_session_timer")) {
       setTime(JSON.parse(localStorage.getItem("current_study_session_timer")));
       setCurrentTopicId(localStorage.getItem("current_study_session_topic_id"));
-      setHoursStartedAt(localStorage.getItem("current_study_session_started_at"))
+      setHoursStartedAt(
+        localStorage.getItem("current_study_session_started_at")
+      );
       setIsTiming(true);
-      if(localStorage.getItem("current_study_session_is_playing") === "true") {
-          let id = setInterval(updateTimer, 1000);
-          setIntervalId(id);
-          setIsPlaying(true);
-    
-          return () => {
-            clearInterval(id);
-          };
-      }else{
+      if (localStorage.getItem("current_study_session_is_playing") === "true") {
+        let id = setInterval(updateTimer, 1000);
+        setIntervalId(id);
+        setIsPlaying(true);
+
+        return () => {
+          clearInterval(id);
+        };
+      } else {
         setIsPlaying(false);
       }
     }
@@ -145,7 +155,10 @@ export function CurrentStudySession({
         String(new Date().getTime())
       );
       localStorage.setItem("current_study_session_timer", JSON.stringify(time));
-      localStorage.setItem("current_study_session_is_playing", String(isPlaying));
+      localStorage.setItem(
+        "current_study_session_is_playing",
+        String(isPlaying)
+      );
     }
     modal1.onClose();
   }
@@ -177,6 +190,7 @@ export function CurrentStudySession({
     setCurrentTopicId(
       topics.filter((topic) => topic.topic_name === value)[0].topic_id
     );
+    setCurrentTopicName(value);
   }
 
   return (
@@ -205,19 +219,19 @@ export function CurrentStudySession({
                   </ModalHeader>
                   <ModalBody className="flex flex-col gap-2 w-full my-4">
                     <Form
-                      action={formLaunchCurrentSessionAction}
+                      // action={formLaunchCurrentSessionAction}
                       className="flex gap-8"
                     >
-                      {formLaunchCurrentSessionState.errors._form ? (
+                      {/* {formLaunchCurrentSessionState.errors._form ? (
                         <div className="text-danger text-sm">
                           {formLaunchCurrentSessionState.errors._form?.join(
                             ", "
                           )}
                         </div>
-                      ) : null}
+                      ) : null} */}
 
                       <Input
-                        type="text"
+                        type="hidden"
                         name="topicId"
                         value={currentTopicId}
                       />
@@ -225,7 +239,7 @@ export function CurrentStudySession({
                       <Input
                         type="hidden"
                         name="startedAt"
-                        value={hoursStartedAt}
+                        value={String(hoursStartedAt)}
                       />
                       <Autocomplete
                         aria-label="Selectionner une matière"
@@ -332,15 +346,26 @@ export function CurrentStudySession({
         </>
       ) : (
         <>
-          <Button
-            onPress={modal2.onOpen}
-            type="submit"
-            className="text-white rounded-full bg-secondary-300"
-          >
-            <Pause />
-            {/* <span>Lancer une nouvelle session </span> */}
-            <h2>{`${time.hr < 10 ? 0 : ""}${time.hr} : ${time.min < 10 ? 0 : ""}${time.min} : ${time.sec < 10 ? 0 : ""}${time.sec}`}</h2>
-          </Button>
+          <div className="flex flex-row items-center bg-success rounded-full ml-4 h-[45px]">
+            {isPlaying ? (
+              <Button className="text-white bg-success rounded-none rounded-l-full" onPress={pauseOrResume}>
+                <Pause size={25} />
+              </Button>
+            ) : (
+              <Button className="text-white bg-success rounded-none rounded-l-full" onPress={pauseOrResume}>
+                <Play size={25} />
+              </Button>
+            )}
+            <Button
+              onPress={modal2.onOpen}
+              type="submit"
+              className="text-white bg-green-500 rounded-r-full h-[35px] border-l"
+            >
+              <div className="w-[120px] h-[20px] text-base font-semibold">
+                {`${time.hr < 10 ? 0 : ""}${time.hr} h ${time.min < 10 ? 0 : ""}${time.min} min ${time.sec < 10 ? 0 : ""}${time.sec}`}
+              </div>
+            </Button>
+          </div>
           <Modal
             isOpen={modal2.isOpen}
             onOpenChange={modal2.onOpenChange}
@@ -350,88 +375,83 @@ export function CurrentStudySession({
               {(onClose) => (
                 <>
                   <ModalHeader className="flex flex-col gap-1 w-full mt-4 text-3xl">
-                    {/* <div>
+                    <div>
                       Vous avez une session en cours en{" "}
-                      <span className="text-sky-500">
-                        {currentStudySession.topic_name}
-                      </span>
+                      <span className="text-sky-500">{currentTopicName}</span>
                     </div>
-                    <span className="text-xl">
-                      {currentStudySession.studyprocess_name}
-                    </span> */}
                   </ModalHeader>
                   <ModalBody className="flex flex-col gap-4 w-full my-8 text-2xl">
-                    {/* <div>
+                    <div>
                       Session débutée le{" "}
                       {new Intl.DateTimeFormat("fr-Fr", {
                         dateStyle: "long",
-                      }).format(currentStudySession.startedAt)}{" "}
+                      }).format(
+                        new Date().setTime(
+                          Number(
+                            localStorage.getItem(
+                              "current_study_session_started_at"
+                            )
+                          )
+                        )
+                      )}{" "}
                       à{" "}
                       {new Intl.DateTimeFormat("fr-Fr", {
-                        timeStyle: "medium",
-                      }).format(currentStudySession.startedAt)}
+                        timeStyle: "short",
+                      }).format(
+                        new Date().setTime(
+                          Number(
+                            localStorage.getItem(
+                              "current_study_session_started_at"
+                            )
+                          )
+                        )
+                      )}
                     </div>
-                    <div className="text-3xl flex items-center gap-4"> */}
-
-                    <Clock size={30} />
-                    <h2>{`${time.hr < 10 ? 0 : ""}${time.hr} : ${time.min < 10 ? 0 : ""}${time.min} : ${time.sec < 10 ? 0 : ""}${time.sec}`}</h2>
-                    {/* {daysElapsedCurrentStudySession > 0 && (
-                                <div>{daysElapsedCurrentStudySession}j</div>
-                              )}
-          
-                              {hoursElapsedCurrentStudySession > 0 && (
-                                <div>{hoursElapsedCurrentStudySession}h</div>
-                              )}
-          
-                              {minutesElapsedCurrentStudySession > 0 && (
-                                <div className="w-[80px]">
-                                  {minutesElapsedCurrentStudySession}min
-                                </div>
-                              )}
-          
-                              <div className="w-[120px]">
-                                {secondsElapsedCurrentStudySession}sec
-                              </div> */}
-
-                    <Button
-                      className="bg-secondary-200 text-white"
-                      onPress={pauseOrResume}
-                    >
-                      {isTiming ? <Pause /> : <Play />}
-                    </Button>
-
-                    {/* </div> */}
+                    <div className="text-3xl flex items-center gap-4 bg-success rounded-full text-white font-semibold py-2 w-[340px]">
+                      {/* <Clock size={30} />
+                       */}
+                      <Button
+                        className="bg-success text-white border-r rounded-none rounded-l-full"
+                        onPress={pauseOrResume}
+                        >
+                        {isPlaying ? <Pause size={40} /> : <Play size={40} />}
+                      </Button>
+                      <div className="w-[250px]">{`${time.hr < 10 ? 0 : ""}${time.hr} h ${time.min < 10 ? 0 : ""}${time.min} min ${time.sec < 10 ? 0 : ""}${time.sec}`}</div>
+                    </div>
                   </ModalBody>
                   <ModalFooter className="justify-start">
                     {/* <Form
-                              action={formValidateCurrentSessionAction}
-                              className="flex flex-row"
-                            > */}
+                      action={formValidateCurrentSessionAction}
+                      className="flex flex-row gap-4"
+                    > */}
                     <div className="flex flex-row gap-4">
                       {/* <Input
-                                  type="hidden"
-                                  name="currentStudySessionStudyProcessId"
-                                  value={currentStudySession.studyprocess_id}
-                                  />
-                                  <Input
-                                  type="hidden"
-                                  name="currentStudySessionId"
-                                  value={currentStudySession.id}
-                                  /> */}
-                      {/* <Button type="button" className="bg-sky-500 text-white">
-                        <Link
-                          href={`/study-session/current/validate/${currentStudySession.id}`}
-                        >
+                        type="text"
+                        name="startedAt"
+                        value={String(hoursStartedAt)}
+                      />
+                      <Input
+                        type="text"
+                        name="topicId"
+                        value={currentTopicId}
+                      />
+                      <Input
+                        type="text"
+                        name="timer"
+                        value={JSON.stringify(time)}
+                      /> */}
+                      <Button type="submit" className="bg-sky-500 text-white">
+                        <Link href={"/study-session/current/validate/"}>
                           Terminer la session
                         </Link>
                       </Button>
-                      <Button type="button" variant="flat">
-                        <Link
+                      <Button type="button" variant="flat" onPress={reset} className="bg-secondary-300 text-white">
+                        {/* <Link
                           href={`/study-session/current/cancel/${currentStudySession.id}`}
-                        >
-                          Annuler la session
-                        </Link>
-                      </Button> */}
+                        > */}
+                        Annuler la session
+                        {/* </Link> */}
+                      </Button>
                       <Button
                         color="danger"
                         variant="light"
@@ -439,8 +459,8 @@ export function CurrentStudySession({
                       >
                         Fermer
                       </Button>
-                      {/* </Form> */}
                     </div>
+                    {/* </Form> */}
                   </ModalFooter>
                 </>
               )}
