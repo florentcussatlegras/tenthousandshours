@@ -70,7 +70,8 @@ export async function launchStudySessionAction(
   }
 
   try {
-      const objStartedAt = result.data.startedAt?.split(":");
+      // const objStartedAt = result.data.startedAt?.split(":");
+      // const objStartedAt = result.data.startedAt;
       const objCreatedAt = new Date();
   
       const dateCreatedAt = new Date(
@@ -82,14 +83,16 @@ export async function launchStudySessionAction(
         0
       );
   
-      const dateStartedAt = new Date(
-        objCreatedAt.getFullYear(),
-        objCreatedAt.getMonth(),
-        objCreatedAt.getDate(),
-        Number(objStartedAt[0]),
-        Number(objStartedAt[1]),
-        0
-      );
+      // const dateStartedAt = new Date(
+      //   objCreatedAt.getFullYear(),
+      //   objCreatedAt.getMonth(),
+      //   objCreatedAt.getDate(),
+      //   Number(objStartedAt[0]),
+      //   Number(objStartedAt[1]),
+      //   Number(objStartedAt[2]),
+      // );
+      const dateStartedAt = new Date(Number(result.data.startedAt) + 3000);
+      console.log(result.data.startedAt);
       console.log(dateStartedAt);
       const dateFinishedAt = null;
   

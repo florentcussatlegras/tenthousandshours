@@ -146,9 +146,9 @@ export default function DetailsStudyProcess({
         <span className="text-default-500 text-sm">
           Apprentissage débuté le {intl.format(studyProcess.createdAt)}
         </span>
-        <div className="ml-auto">
+        {/* <div className="ml-auto">
           <CurrentStudySession studyProcess={studyProcess} />
-        </div>
+        </div> */}
       </CardHeader>
       <CardBody className="flex flex-col">
         <Chip isDisabled color="secondary">

@@ -269,6 +269,19 @@ export async function fetchCurrentStudySession() {
   return null;
 }
 
+
+  export async function updateTotalSecondsStudySession(id: string, timeSpan: number) {
+    await prisma.studySession.update({
+      data: {
+        totalSeconds: timeSpan / 1000
+      },
+      where: {
+        id,
+      }
+    })
+  }
+
+
 export async function getTopicsOfaUser() {
 
   const userId = await getUser(); 

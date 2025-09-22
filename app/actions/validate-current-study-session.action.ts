@@ -136,8 +136,12 @@ export async function validateCurrentStudySessionAction(
       },
     });
 
-    const totalSecondsSession =
-      (new Date().getTime() - studySession?.startedAt?.getTime()) / 1000;
+    if (studySession.totalSeconds === 0) {
+      const totalSecondsSession =
+        (new Date().getTime() - studySession?.startedAt?.getTime()) / 1000;
+    } else {
+      // TODO
+    }
 
     await prisma.studySession.update({
       data: {
