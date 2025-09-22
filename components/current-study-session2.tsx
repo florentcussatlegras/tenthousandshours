@@ -105,45 +105,41 @@ export function CurrentStudySession2({
     }, 1000);
   }, []);
 
-  useEffect(() => {
-    if (currentStudySession !== null) {
-      let diffTime = 0;
-      if (Date.now() - Date.parse(currentStudySession.startedAt) > 0) {
-        // console.log(Date.now());
-        // console.log(Date.parse(currentStudySession.startedAt));
-        // console.log(currentStudySession.startedAt.getTime())
-        diffTime = Date.now() - currentStudySession.startedAt.getTime();
-      }
-      setTimespanCurrentStudySession(diffTime);
-
-      let id = setInterval(() => {
-        setTimespanCurrentStudySession((_timespan) => _timespan + 1000);
-      }, 1000);
-
-      setIntervalId(id);
-
-      setIsTiming(true);
-
-      // return () => {
-      //   clearInterval(intervalId);
-      // };
-    }
-  }, [currentStudySession]);
-
   // useEffect(() => {
-  //   setDaysElapsedCurrentStudySession(
-  //     Math.floor(timespanCurrentStudySession / DAY)
-  //   );
-  //   setHoursElapsedCurrentStudySession(
-  //     Math.floor((timespanCurrentStudySession / HOUR) % 24)
-  //   );
-  //   setMinutesElapsedCurrentStudySession(
-  //     Math.floor((timespanCurrentStudySession / MINUTE) % 60)
-  //   );
-  //   setSecondsElapsedCurrentStudySession(
-  //     Math.floor((timespanCurrentStudySession / SECOND) % 60)
-  //   );
-  // }, [timespanCurrentStudySession]);
+  //   if (currentStudySession !== null) {
+  //     let diffTime = 0;
+  //     if (Date.now() - Date.parse(currentStudySession.startedAt) > 0) {
+        
+  //       diffTime = Date.now() - currentStudySession.startedAt.getTime();
+  //     }
+  //     setTimespanCurrentStudySession(diffTime);
+
+  //     let id = setInterval(() => {
+  //       setTimespanCurrentStudySession((_timespan) => _timespan + 1000);
+  //     }, 1000);
+
+  //     setIntervalId(id);
+
+  //     setIsTiming(true);
+
+      
+  //   }
+  // }, [currentStudySession]);
+
+  useEffect(() => {
+    setDaysElapsedCurrentStudySession(
+      Math.floor(timespanCurrentStudySession / DAY)
+    );
+    setHoursElapsedCurrentStudySession(
+      Math.floor((timespanCurrentStudySession / HOUR) % 24)
+    );
+    setMinutesElapsedCurrentStudySession(
+      Math.floor((timespanCurrentStudySession / MINUTE) % 60)
+    );
+    setSecondsElapsedCurrentStudySession(
+      Math.floor((timespanCurrentStudySession / SECOND) % 60)
+    );
+  }, [timespanCurrentStudySession]);
 
   // useEffect(() => {
   //   async function updateTotalSecondsCurrentStudySession() {
