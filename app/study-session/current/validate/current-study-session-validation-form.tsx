@@ -24,25 +24,25 @@ export function CurrentStudySessionValidationForm({
 
   const [urls, setUrls] = useState([""]);
 
-  useEffect(() => {
-    async function toastAndRedirect() {
-      const newStudyProcess = await fetchStudyProcess(
-        currentStudySession.studyProcessId
-      );
+  // useEffect(() => {
+  //   async function toastAndRedirect() {
+  //     const newStudyProcess = await fetchStudyProcess(
+  //       currentStudySession.studyProcessId
+  //     );
 
-      if (formValidateCurrentSessionState.confirmValidation) {
-        addToast({
-          title: "Confirmation",
-          description: "La session a bien été ajoutée",
-          color: "success",
-        });
+  //     if (formValidateCurrentSessionState.confirmValidation) {
+  //       addToast({
+  //         title: "Confirmation",
+  //         description: "La session a bien été ajoutée",
+  //         color: "success",
+  //       });
 
-        redirect(`/study-process/${newStudyProcess?.slug}`);
-      }
-    }
+  //       redirect(`/study-process/${newStudyProcess?.slug}`);
+  //     }
+  //   }
 
-    toastAndRedirect();
-  }, [formValidateCurrentSessionState]);
+  //   toastAndRedirect();
+  // }, [formValidateCurrentSessionState]);
 
   function addUrl() {
     setUrls([...urls, ""]);
@@ -77,52 +77,61 @@ export function CurrentStudySessionValidationForm({
             {formValidateCurrentSessionState.errors._form?.join(", ")}
           </div>
         ) : null}
-        <div className="text-3xl">
-          {new Intl.DateTimeFormat("fr-Fr", {
-            dateStyle: "long",
-          }).format(
-            new Date().setTime(
-              Number(localStorage.getItem("current_study_session_started_at"))
-            )
-          )}
-        </div>
-        <div className="flex flex-row gap-2 text-2xl">
-          <div>
-            Heure de début:{" "}
-            {new Intl.DateTimeFormat("fr-Fr", {
-              timeStyle: "short",
-            }).format(
-              new Date().setTime(
-                Number(localStorage.getItem("current_study_session_started_at"))
-              )
-            )}
+
+        <div className="flex flex-col">
+        
+          <div className="flex flex-row gap-2 text-2xl">
+            <div>Début:</div>
+            <div>
+              {new Intl.DateTimeFormat("fr-Fr", {
+                dateStyle: "long",
+              }).format(
+                new Date().setTime(
+                  Number(localStorage.getItem("current_study_session_started_at"))
+                )
+              )}
+            </div>
+            <div>
+              {new Intl.DateTimeFormat("fr-Fr", {
+                timeStyle: "short",
+              }).format(
+                new Date().setTime(
+                  Number(localStorage.getItem("current_study_session_started_at"))
+                )
+              )}
+            </div>
           </div>
-          <div>-</div>
-          <div>
-            Heure de fin:{" "}
-            {new Intl.DateTimeFormat("fr-Fr", {
-              timeStyle: "short",
-            }).format(new Date())}
+
+          <div className="flex flex-row gap-2 text-2xl">
+            <div>Fin:</div>
+            <div>
+              {new Intl.DateTimeFormat("fr-Fr", {
+                dateStyle: "long",
+              }).format(
+                new Date().setTime(
+                  Number(localStorage.getItem("current_study_session_finished_at"))
+                )
+              )}
+            </div>
+            <div>
+              {new Intl.DateTimeFormat("fr-Fr", {
+                timeStyle: "short",
+              }).format(
+                new Date().setTime(
+                  Number(localStorage.getItem("current_study_session_finished_at"))
+                )
+              )}
+            </div>
           </div>
+
         </div>
-        <Input
-          type="text"
-          name="finishedAt"
-          value={new Intl.DateTimeFormat("fr-Fr", {
-            dateStyle: "medium",
-            timeStyle: "medium",
-          }).format(new Date())}
-        />
+        
         <Input
           type="text"
           name="topicId"
           value={String(localStorage.getItem("current_study_session_topic_id"))}
         />
-        <Input
-          type="text"
-          name="timer"
-          value={String(localStorage.getItem("current_study_session_timer"))}
-        />
+
         <Input
           type="text"
           name="startedAt"
@@ -130,6 +139,21 @@ export function CurrentStudySessionValidationForm({
             localStorage.getItem("current_study_session_started_at")
           )}
         />
+
+        <Input
+          type="text"
+          name="finishedAt"
+          value={String(
+            localStorage.getItem("current_study_session_finished_at")
+          )}
+        />
+
+        <Input
+          type="text"
+          name="timer"
+          value={String(localStorage.getItem("current_study_session_timer"))}
+        />
+        
         <Textarea
           className="flex-3"
           label="Vous pouvez ajouter une description"
@@ -171,7 +195,7 @@ export function CurrentStudySessionValidationForm({
             Terminer la session
           </Button>
           <Button type="button" variant="flat">
-            <Link href={`/profile`}>Continuer la session</Link>
+            <Link href={`/profile`}>Reprendre</Link>
           </Button>
         </div>
       </Form>
