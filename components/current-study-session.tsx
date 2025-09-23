@@ -105,6 +105,7 @@ export function CurrentStudySession({
   useEffect(() => {
     console.log("dans use effect is playing update");
     if (localStorage.getItem("current_study_session_resume") === "true") {
+      console.log("ouououou");
       localStorage.setItem("current_study_session_is_playing", "true");
       let id = setInterval(updateTimer, 1000);
       setIntervalId(id);
@@ -152,7 +153,13 @@ export function CurrentStudySession({
         "current_study_session_started_at",
         String(new Date().getTime())
       );
-      localStorage.setItem("current_study_session_timer", JSON.stringify(time));
+      const newTime = {
+        sec: 0,
+        min: 0,
+        hr: 0,
+      };
+      setTime(newTime);
+      localStorage.setItem("current_study_session_timer", JSON.stringify(newTime));
       localStorage.setItem("current_study_session_is_playing", "true");
     }
     // modal1.onClose();
