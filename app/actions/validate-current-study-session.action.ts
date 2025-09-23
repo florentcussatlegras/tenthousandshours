@@ -69,36 +69,36 @@ export async function validateCurrentStudySessionAction(
 
   console.log(formData);
 
-  const result = validateCurrentStudySessionSchema.safeParse(
-    Object.fromEntries(formData)
-  );
+  // const result = validateCurrentStudySessionSchema.safeParse(
+  //   Object.fromEntries(formData)
+  // );
 
-  if (!result.success) {
-    console.log(z.flattenError(result.error).fieldErrors);
-    return {
-      errors: z.flattenError(result.error).fieldErrors,
-      confirmValidation: false
-    };
-  }
+  // if (!result.success) {
+  //   console.log(z.flattenError(result.error).fieldErrors);
+  //   return {
+  //     errors: z.flattenError(result.error).fieldErrors,
+  //     confirmValidation: false
+  //   };
+  // }
 
-  let studyProcess = await prisma.studyProcess.findFirst({
-    where: {
-      id: result.data.currentStudySessionStudyProcessId,
-    },
-  });
+  // let studyProcess = await prisma.studyProcess.findFirst({
+  //   where: {
+  //     id: result.data.currentStudySessionStudyProcessId,
+  //   },
+  // });
 
-  if (studyProcess === null) {
-    return {
-      errors: {
-        _form: ["Cette session n'est liée à aucun apprentissage en cours."],
-      },
-      confirmValidation: false
-    };
-  }
+  // if (studyProcess === null) {
+  //   return {
+  //     errors: {
+  //       _form: ["Cette session n'est liée à aucun apprentissage en cours."],
+  //     },
+  //     confirmValidation: false
+  //   };
+  // }
 
-  const totalSecondsStudyProcess = studyProcess.totalSeconds;
+  // const totalSecondsStudyProcess = studyProcess.totalSeconds;
 
-  try {
+  // try {
     // const studyProcessInThisHours = await prisma.$queryRaw(Prisma.sql`
     //     SELECT * FROM public."StudySession"
     //     WHERE "StudySession"."studyProcessId" = ${result.data.studyProcessId}
@@ -115,73 +115,73 @@ export async function validateCurrentStudySessionAction(
     //   };
     // }
 
-    const dateJour = new Date();
-    const objFinishedAt = result.data.finishedAt?.split(":");
+  //   const dateJour = new Date();
+  //   const objFinishedAt = result.data.finishedAt?.split(":");
 
-    const dateFinishedAt = new Date(
-      dateJour.getFullYear(),
-      dateJour.getMonth(),
-      dateJour.getDay(),
-      Number(objFinishedAt[0]) + 2,
-      Number(objFinishedAt[1]),
-      Number(objFinishedAt[2])
-    );
+  //   const dateFinishedAt = new Date(
+  //     dateJour.getFullYear(),
+  //     dateJour.getMonth(),
+  //     dateJour.getDay(),
+  //     Number(objFinishedAt[0]) + 2,
+  //     Number(objFinishedAt[1]),
+  //     Number(objFinishedAt[2])
+  //   );
 
-    const studySession = await prisma.studySession.findFirst({
-      select: {
-        startedAt: true,
-      },
-      where: {
-        id: result.data.currentStudySessionId,
-      },
-    });
+  //   const studySession = await prisma.studySession.findFirst({
+  //     select: {
+  //       startedAt: true,
+  //     },
+  //     where: {
+  //       id: result.data.currentStudySessionId,
+  //     },
+  //   });
 
-    if (studySession.totalSeconds === 0) {
-      const totalSecondsSession =
-        (new Date().getTime() - studySession?.startedAt?.getTime()) / 1000;
-    } else {
-      // TODO
-    }
+  //   if (studySession.totalSeconds === 0) {
+  //     const totalSecondsSession =
+  //       (new Date().getTime() - studySession?.startedAt?.getTime()) / 1000;
+  //   } else {
+  //     // TODO
+  //   }
 
-    await prisma.studySession.update({
-      data: {
-        finishedAt: new Date(),
-        totalSeconds: totalSecondsSession,
-        description: result.data.description,
-        urls: result.data.urls,
-      },
-      where: {
-        id: result.data.currentStudySessionId,
-      },
-    });
+  //   await prisma.studySession.update({
+  //     data: {
+  //       finishedAt: new Date(),
+  //       totalSeconds: totalSecondsSession,
+  //       description: result.data.description,
+  //       urls: result.data.urls,
+  //     },
+  //     where: {
+  //       id: result.data.currentStudySessionId,
+  //     },
+  //   });
 
-    await prisma.studyProcess.update({
-      data: {
-        totalSeconds: totalSecondsStudyProcess + totalSecondsSession,
-      },
-      where: {
-        id: result.data.currentStudySessionStudyProcessId,
-      },
-    });
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      return {
-        errors: {
-          _form: [err.message],
-        },
-        confirmValidation: false
-      };
-    } else {
-      return {
-        errors: {
-          _form: [
-            "Une erreur est survenue lors de la création du processus de création",
-          ],
-        },
-        confirmValidation: false
-      };
-    }
-  }
+  //   await prisma.studyProcess.update({
+  //     data: {
+  //       totalSeconds: totalSecondsStudyProcess + totalSecondsSession,
+  //     },
+  //     where: {
+  //       id: result.data.currentStudySessionStudyProcessId,
+  //     },
+  //   });
+  // } catch (err: unknown) {
+  //   if (err instanceof Error) {
+  //     return {
+  //       errors: {
+  //         _form: [err.message],
+  //       },
+  //       confirmValidation: false
+  //     };
+  //   } else {
+  //     return {
+  //       errors: {
+  //         _form: [
+  //           "Une erreur est survenue lors de la création du processus de création",
+  //         ],
+  //       },
+  //       confirmValidation: false
+  //     };
+  //   }
+  // }
 
   return {
     errors: {},

@@ -25,7 +25,7 @@ import {
 import { Clock, Pause, Play, SearchIcon, Timer } from "lucide-react";
 import Link from "next/link";
 import { StudyProcess } from "@prisma/client";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const SECOND = 1_000;
 const MINUTE = SECOND * 60;
@@ -37,6 +37,8 @@ export function CurrentStudySession({
 }: {
   studyprocess?: StudyProcess;
 }) {
+  const router = useRouter();
+
   const modal1 = useDisclosure();
   const modal2 = useDisclosure();
 
@@ -72,6 +74,7 @@ export function CurrentStudySession({
   const [hoursStartedAt, setHoursStartedAt] = useState(0);
 
   useEffect(() => {
+    console.log("hello");
     async function getTopics() {
       const allTopics = await getTopicsOfaUser();
 
@@ -94,6 +97,7 @@ export function CurrentStudySession({
         localStorage.getItem("current_study_session_started_at")
       );
       setIsTiming(true);
+      console.log("je suis là");
       if (localStorage.getItem("current_study_session_is_playing") === "true") {
         let id = setInterval(updateTimer, 1000);
         setIntervalId(id);
@@ -144,6 +148,7 @@ export function CurrentStudySession({
   function handleLaunchSession() {
     pauseOrResume();
     setIsTiming(true);
+    setIsPlaying(true);
     setHoursStartedAt(new Date().getTime());
     if (!localStorage.getItem("current_study_session_topic_id")) {
       localStorage.setItem(
@@ -155,10 +160,7 @@ export function CurrentStudySession({
         String(new Date().getTime())
       );
       localStorage.setItem("current_study_session_timer", JSON.stringify(time));
-      localStorage.setItem(
-        "current_study_session_is_playing",
-        String(isPlaying)
-      );
+      localStorage.setItem("current_study_session_is_playing", "true");
     }
     modal1.onClose();
   }
@@ -170,10 +172,12 @@ export function CurrentStudySession({
       let id = setInterval(updateTimer, 1000);
       setIntervalId(id);
       setIsPlaying(true);
+      localStorage.setItem("current_study_session_is_playing", "true");
     } else {
       clearInterval(intervalId);
       setIntervalId("");
       setIsPlaying(false);
+      localStorage.setItem("current_study_session_is_playing", "false");
     }
   };
 
@@ -184,6 +188,9 @@ export function CurrentStudySession({
       min: 0,
       hr: 0,
     });
+    setIsTiming(false);
+    setIsPlaying(false);
+    localStorage.clear();
   };
 
   function handleTopicChange(value) {
@@ -191,6 +198,20 @@ export function CurrentStudySession({
       topics.filter((topic) => topic.topic_name === value)[0].topic_id
     );
     setCurrentTopicName(value);
+    localStorage.setItem("current_study_session_topic_name", value);
+  }
+
+  function onValidate() {
+    localStorage.setItem(
+      "current_study_session_finished_at",
+      String(new Date().getTime())
+    );
+    clearInterval(intervalId);
+    setIntervalId("");
+    setIsPlaying(false);
+    localStorage.setItem("current_study_session_is_playing", "false");
+    modal2.onClose();
+    router.push("/study-session/current/validate/");
   }
 
   return (
@@ -204,7 +225,7 @@ export function CurrentStudySession({
           >
             <Play />
             {/* <span>Lancer une nouvelle session </span> */}
-            <h2>{`${time.hr < 10 ? 0 : ""}${time.hr} : ${time.min < 10 ? 0 : ""}${time.min} : ${time.sec < 10 ? 0 : ""}${time.sec}`}</h2>
+            {/* <h2>{`${time.hr < 10 ? 0 : ""}${time.hr} : ${time.min < 10 ? 0 : ""}${time.min} : ${time.sec < 10 ? 0 : ""}${time.sec}`}</h2> */}
           </Button>
           <Modal
             isOpen={modal1.isOpen}
@@ -235,7 +256,6 @@ export function CurrentStudySession({
                         name="topicId"
                         value={currentTopicId}
                       />
-                      <Input type="text" name="studyProcessId" />
                       <Input
                         type="hidden"
                         name="startedAt"
@@ -348,11 +368,17 @@ export function CurrentStudySession({
         <>
           <div className="flex flex-row items-center bg-success rounded-full ml-4 h-[45px]">
             {isPlaying ? (
-              <Button className="text-white bg-success rounded-none rounded-l-full" onPress={pauseOrResume}>
+              <Button
+                className="text-white bg-success rounded-none rounded-l-full"
+                onPress={pauseOrResume}
+              >
                 <Pause size={25} />
               </Button>
             ) : (
-              <Button className="text-white bg-success rounded-none rounded-l-full" onPress={pauseOrResume}>
+              <Button
+                className="text-white bg-success rounded-none rounded-l-full"
+                onPress={pauseOrResume}
+              >
                 <Play size={25} />
               </Button>
             )}
@@ -413,7 +439,7 @@ export function CurrentStudySession({
                       <Button
                         className="bg-success text-white border-r rounded-none rounded-l-full"
                         onPress={pauseOrResume}
-                        >
+                      >
                         {isPlaying ? <Pause size={40} /> : <Play size={40} />}
                       </Button>
                       <div className="w-[250px]">{`${time.hr < 10 ? 0 : ""}${time.hr} h ${time.min < 10 ? 0 : ""}${time.min} min ${time.sec < 10 ? 0 : ""}${time.sec}`}</div>
@@ -440,12 +466,19 @@ export function CurrentStudySession({
                         name="timer"
                         value={JSON.stringify(time)}
                       /> */}
-                      <Button type="submit" className="bg-sky-500 text-white">
-                        <Link href={"/study-session/current/validate/"}>
-                          Terminer la session
-                        </Link>
+                      <Button
+                        type="button"
+                        className="bg-sky-500 text-white"
+                        onPress={onValidate}
+                      >
+                        Terminer la session
                       </Button>
-                      <Button type="button" variant="flat" onPress={reset} className="bg-secondary-300 text-white">
+                      <Button
+                        type="button"
+                        variant="flat"
+                        onPress={reset}
+                        className="bg-secondary-300 text-white"
+                      >
                         {/* <Link
                           href={`/study-session/current/cancel/${currentStudySession.id}`}
                         > */}
