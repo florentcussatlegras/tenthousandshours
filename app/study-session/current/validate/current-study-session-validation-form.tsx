@@ -9,7 +9,10 @@ import { useActionState, useState } from "react";
 import Link from "next/link";
 import { DeleteIcon } from "@/components/icons";
 import { redirect } from "next/navigation";
-import { fetchStudyProcess } from "@/app/actions/actions";
+import {
+  fetchStudyProcess,
+  fetchStudyProcessByTopic,
+} from "@/app/actions/actions";
 
 export function CurrentStudySessionValidationForm({
   currentStudySession,
@@ -24,25 +27,27 @@ export function CurrentStudySessionValidationForm({
 
   const [urls, setUrls] = useState([""]);
 
-  // useEffect(() => {
-  //   async function toastAndRedirect() {
-  //     const newStudyProcess = await fetchStudyProcess(
-  //       currentStudySession.studyProcessId
-  //     );
+  useEffect(() => {
+    async function toastAndRedirect() {
+      const newStudyProcess = await fetchStudyProcessByTopic(
+        localStorage.getItem("current_study_session_topic_id")
+      );
 
-  //     if (formValidateCurrentSessionState.confirmValidation) {
-  //       addToast({
-  //         title: "Confirmation",
-  //         description: "La session a bien été ajoutée",
-  //         color: "success",
-  //       });
+      if (formValidateCurrentSessionState.confirmValidation) {
+        addToast({
+          title: "Confirmation",
+          description: "La session a bien été ajoutée",
+          color: "success",
+        });
 
-  //       redirect(`/study-process/${newStudyProcess?.slug}`);
-  //     }
-  //   }
+        localStorage.clear();
 
-  //   toastAndRedirect();
-  // }, [formValidateCurrentSessionState]);
+        redirect(`/study-process/${newStudyProcess?.slug}`);
+      }
+    }
+
+    toastAndRedirect();
+  }, [formValidateCurrentSessionState]);
 
   function addUrl() {
     setUrls([...urls, ""]);
@@ -79,7 +84,6 @@ export function CurrentStudySessionValidationForm({
         ) : null}
 
         <div className="flex flex-col">
-        
           <div className="flex flex-row gap-2 text-2xl">
             <div>Début:</div>
             <div>
@@ -87,7 +91,9 @@ export function CurrentStudySessionValidationForm({
                 dateStyle: "long",
               }).format(
                 new Date().setTime(
-                  Number(localStorage.getItem("current_study_session_started_at"))
+                  Number(
+                    localStorage.getItem("current_study_session_started_at")
+                  )
                 )
               )}
             </div>
@@ -96,7 +102,9 @@ export function CurrentStudySessionValidationForm({
                 timeStyle: "short",
               }).format(
                 new Date().setTime(
-                  Number(localStorage.getItem("current_study_session_started_at"))
+                  Number(
+                    localStorage.getItem("current_study_session_started_at")
+                  )
                 )
               )}
             </div>
@@ -109,7 +117,9 @@ export function CurrentStudySessionValidationForm({
                 dateStyle: "long",
               }).format(
                 new Date().setTime(
-                  Number(localStorage.getItem("current_study_session_finished_at"))
+                  Number(
+                    localStorage.getItem("current_study_session_finished_at")
+                  )
                 )
               )}
             </div>
@@ -118,14 +128,15 @@ export function CurrentStudySessionValidationForm({
                 timeStyle: "short",
               }).format(
                 new Date().setTime(
-                  Number(localStorage.getItem("current_study_session_finished_at"))
+                  Number(
+                    localStorage.getItem("current_study_session_finished_at")
+                  )
                 )
               )}
             </div>
           </div>
-
         </div>
-        
+
         <Input
           type="text"
           name="topicId"
@@ -153,7 +164,7 @@ export function CurrentStudySessionValidationForm({
           name="timer"
           value={String(localStorage.getItem("current_study_session_timer"))}
         />
-        
+
         <Textarea
           className="flex-3"
           label="Vous pouvez ajouter une description"
