@@ -4,15 +4,12 @@ import { StudySession } from "@prisma/client";
 import React, { useEffect } from "react";
 import { validateCurrentStudySessionAction } from "@/app/actions/validate-current-study-session.action";
 import { addToast, Button, Form, Input, Textarea } from "@heroui/react";
-import { PlusIcon } from "lucide-react";
+import { Play, PlusIcon } from "lucide-react";
 import { useActionState, useState } from "react";
-import Link from "next/link";
 import { DeleteIcon } from "@/components/icons";
 import { redirect } from "next/navigation";
-import {
-  fetchStudyProcess,
-  fetchStudyProcessByTopic,
-} from "@/app/actions/actions";
+import { fetchStudyProcessByTopic } from "@/app/actions/actions";
+import { resumeCurrentStudySessionAction } from "@/app/actions/resume-current-study-session.action";
 
 export function CurrentStudySessionValidationForm({
   currentStudySession,
@@ -25,13 +22,22 @@ export function CurrentStudySessionValidationForm({
       confirmValidation: false,
     });
 
+  const [formResumeCurrentSessionState, formResumeCurrentSessionAction] =
+    useActionState(resumeCurrentStudySessionAction, {
+      resumeCurrentStudySession: false,
+    });
+
   const [urls, setUrls] = useState([""]);
+
+  const [studyProcess, setStudyProcess] = useState();
 
   useEffect(() => {
     async function toastAndRedirect() {
       const newStudyProcess = await fetchStudyProcessByTopic(
         localStorage.getItem("current_study_session_topic_id")
       );
+
+      setStudyProcess(newStudyProcess);
 
       if (formValidateCurrentSessionState.confirmValidation) {
         addToast({
@@ -48,6 +54,13 @@ export function CurrentStudySessionValidationForm({
 
     toastAndRedirect();
   }, [formValidateCurrentSessionState]);
+
+  useEffect(() => {
+    if (formResumeCurrentSessionState.resumeCurrentStudySession) {
+      localStorage.setItem("current_study_session_resume", "true");
+      redirect(`/study-process/${studyProcess.slug}`);
+    }
+  }, [formResumeCurrentSessionState]);
 
   function addUrl() {
     setUrls([...urls, ""]);
@@ -72,7 +85,7 @@ export function CurrentStudySessionValidationForm({
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <Form
         action={formValidateCurrentSessionAction}
         className="flex flex-col w-1/3 gap-4"
@@ -201,14 +214,16 @@ export function CurrentStudySessionValidationForm({
         >
           <PlusIcon />
         </Button>
-        <div className="flex flex-row gap-2">
-          <Button type="submit" className="bg-sky-500 text-white">
-            Terminer la session
-          </Button>
-          <Button type="button" variant="flat">
-            <Link href={`/profile`}>Reprendre</Link>
-          </Button>
-        </div>
+
+        <Button type="submit" className="bg-sky-500 text-white">
+          Terminer la session
+        </Button>
+      </Form>
+      <Form action={formResumeCurrentSessionAction}>
+        <Button type="submit">
+          <Play />
+          Reprendre
+        </Button>
       </Form>
     </div>
   );
