@@ -80,14 +80,22 @@ export function CurrentStudySessionValidationForm({
         <div className="text-3xl">
           {new Intl.DateTimeFormat("fr-Fr", {
             dateStyle: "long",
-          }).format(currentStudySession.createdAt)}
+          }).format(
+            new Date().setTime(
+              Number(localStorage.getItem("current_study_session_started_at"))
+            )
+          )}
         </div>
         <div className="flex flex-row gap-2 text-2xl">
           <div>
             Heure de début:{" "}
             {new Intl.DateTimeFormat("fr-Fr", {
               timeStyle: "short",
-            }).format(currentStudySession.startedAt)}
+            }).format(
+              new Date().setTime(
+                Number(localStorage.getItem("current_study_session_started_at"))
+              )
+            )}
           </div>
           <div>-</div>
           <div>
@@ -98,21 +106,29 @@ export function CurrentStudySessionValidationForm({
           </div>
         </div>
         <Input
-          type="hidden"
+          type="text"
           name="finishedAt"
           value={new Intl.DateTimeFormat("fr-Fr", {
+            dateStyle: "medium",
             timeStyle: "medium",
           }).format(new Date())}
         />
         <Input
-          type="hidden"
-          name="currentStudySessionStudyProcessId"
-          value={currentStudySession.studyProcessId}
+          type="text"
+          name="topicId"
+          value={String(localStorage.getItem("current_study_session_topic_id"))}
         />
         <Input
-          type="hidden"
-          name="currentStudySessionId"
-          value={currentStudySession.id}
+          type="text"
+          name="timer"
+          value={String(localStorage.getItem("current_study_session_timer"))}
+        />
+        <Input
+          type="text"
+          name="startedAt"
+          value={String(
+            localStorage.getItem("current_study_session_started_at")
+          )}
         />
         <Textarea
           className="flex-3"
