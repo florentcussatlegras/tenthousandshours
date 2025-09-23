@@ -233,18 +233,20 @@ export async function fetchStudySessionsPerDay(userId: UUID, dateSelect: Date) {
   return studySessions;
 }
 
-export async function fetchStudyProcess(id: String) {
+export async function fetchStudyProcessByTopic(topicId: string) {
+  const userId = await getUser();
+
   const studyProcess = await prisma.studyProcess.findFirst({
     where: {
-      id,
+      topicId,
+      userId,
     },
-  }); 
+  });
 
   return studyProcess;
 }
 
 export async function fetchCurrentStudySession() {
-
   const userId = await getUser();
 
   const studySession = await prisma.$queryRaw`SELECT
@@ -269,22 +271,22 @@ export async function fetchCurrentStudySession() {
   return null;
 }
 
-
-  export async function updateTotalSecondsStudySession(id: string, timeSpan: number) {
-    await prisma.studySession.update({
-      data: {
-        totalSeconds: timeSpan / 1000
-      },
-      where: {
-        id,
-      }
-    })
-  }
-
+export async function updateTotalSecondsStudySession(
+  id: string,
+  timeSpan: number
+) {
+  await prisma.studySession.update({
+    data: {
+      totalSeconds: timeSpan / 1000,
+    },
+    where: {
+      id,
+    },
+  });
+}
 
 export async function getTopicsOfaUser() {
-
-  const userId = await getUser(); 
+  const userId = await getUser();
 
   const topics = await prisma.$queryRaw`SELECT
         "Topic"."id" AS "topic_id",

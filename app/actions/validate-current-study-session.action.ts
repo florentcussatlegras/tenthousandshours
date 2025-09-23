@@ -12,20 +12,21 @@ import { cookies } from "next/headers";
 
 const validateCurrentStudySessionSchema = z
   .object({
-    currentStudySessionStudyProcessId: z.string(),
-    currentStudySessionId: z.string(),
+    topicId: z.string(),
+    startedAt: z.string(),
+    finishedAt: z.string(),
+    timer: z.string(),
     description: z.string(),
     urls: z.string(),
-    finishedAt: z.string(),
   })
-  .superRefine(({ urls }, ctx) => {
-    // if (startedAt !== "" && finishedAt !== "" && finishedAt < startedAt) {
-    //   ctx.addIssue({
-    //     code: "custom",
-    //     message: "L'heure de début doit être inférieure à l'heure de fin",
-    //     path: ["finishedAt"],
-    //   });
-    // }
+  .superRefine(({ urls, startedAt, finishedAt }, ctx) => {
+    if (startedAt !== "" && finishedAt !== "" && finishedAt < startedAt) {
+      ctx.addIssue({
+        code: "custom",
+        message: "L'heure de début doit être inférieure à l'heure de fin",
+        path: ["finishedAt"],
+      });
+    }
     if (urls.length > 0) {
       const arrayUrls = urls.split(",");
       var httpRegex =
@@ -44,13 +45,14 @@ const validateCurrentStudySessionSchema = z
 
 interface ValidateCurrentStudySessionState {
   errors: {
-    currentStudySessionStudyProcessId?: string[];
-    currentStudySessionId?: string[];
+    topicId?: string[];
+    startedAt?: string[];
     finishedAt?: string[];
+    timer?: string[];
     description?: string[];
     urls?: string[];
     _form?: string[];
-  },
+  };
   confirmValidation: boolean;
 }
 
@@ -69,124 +71,101 @@ export async function validateCurrentStudySessionAction(
 
   console.log(formData);
 
-  // const result = validateCurrentStudySessionSchema.safeParse(
-  //   Object.fromEntries(formData)
-  // );
+  const result = validateCurrentStudySessionSchema.safeParse(
+    Object.fromEntries(formData)
+  );
 
-  // if (!result.success) {
-  //   console.log(z.flattenError(result.error).fieldErrors);
-  //   return {
-  //     errors: z.flattenError(result.error).fieldErrors,
-  //     confirmValidation: false
-  //   };
-  // }
+  if (!result.success) {
+    console.log(z.flattenError(result.error).fieldErrors);
+    return {
+      errors: z.flattenError(result.error).fieldErrors,
+      confirmValidation: false,
+    };
+  }
 
-  // let studyProcess = await prisma.studyProcess.findFirst({
-  //   where: {
-  //     id: result.data.currentStudySessionStudyProcessId,
-  //   },
-  // });
+  let studyProcess = await prisma.studyProcess.findFirst({
+    where: {
+      userId: session?.user.id,
+      topicId: result.data.topicId,
+    },
+  });
 
-  // if (studyProcess === null) {
-  //   return {
-  //     errors: {
-  //       _form: ["Cette session n'est liée à aucun apprentissage en cours."],
-  //     },
-  //     confirmValidation: false
-  //   };
-  // }
+  console.log(studyProcess);
+
+  if (studyProcess === null) {
+    return {
+      errors: {
+        _form: ["Cette session n'est liée à aucun apprentissage en cours."],
+      },
+      confirmValidation: false,
+    };
+  }
 
   // const totalSecondsStudyProcess = studyProcess.totalSeconds;
 
-  // try {
-    // const studyProcessInThisHours = await prisma.$queryRaw(Prisma.sql`
-    //     SELECT * FROM public."StudySession"
-    //     WHERE "StudySession"."studyProcessId" = ${result.data.studyProcessId}
-    //     AND (("startedAt" <= ${dateStartedAt} AND "finishedAt" >= ${dateStartedAt})
-    //       OR ("startedAt" <= ${dateFinishedAt} AND "finishedAt" >= ${dateFinishedAt}))
-    // `);
+  try {
+    const dateStartedAt = new Date(Number(result.data.startedAt));
+    const dateCreatedAt = new Date(
+      dateStartedAt.getFullYear(),
+      dateStartedAt.getMonth(),
+      dateStartedAt.getDate(),
+      +2,
+      0,
+      0
+    );
+    const dateFinishedAt = new Date(Number(result.data.finishedAt));
 
-    // if (Array.from(studyProcessInThisHours).length !== 0) {
-    //   console.log(studyProcessInThisHours);
-    //   return {
-    //     errors: {
-    //       _form: ["Cette session dans cette tranche horaire existe dèja."],
-    //     },
-    //   };
-    // }
+    console.log(dateCreatedAt);
+    console.log(dateStartedAt);
+    console.log(dateFinishedAt);
 
-  //   const dateJour = new Date();
-  //   const objFinishedAt = result.data.finishedAt?.split(":");
+    const timer = JSON.parse(result.data.timer);
+    const totalSeconds = timer.sec + timer.min * 60 + timer.hr * 3600;
 
-  //   const dateFinishedAt = new Date(
-  //     dateJour.getFullYear(),
-  //     dateJour.getMonth(),
-  //     dateJour.getDay(),
-  //     Number(objFinishedAt[0]) + 2,
-  //     Number(objFinishedAt[1]),
-  //     Number(objFinishedAt[2])
-  //   );
+    await prisma.studySession.create({
+      data: {
+        createdAt: dateCreatedAt,
+        startedAt: dateStartedAt,
+        finishedAt: dateFinishedAt,
+        totalSeconds,
+        studyProcessId: studyProcess.id,
+        description: result.data.description,
+        urls: result.data.urls,
+      },
+    });
 
-  //   const studySession = await prisma.studySession.findFirst({
-  //     select: {
-  //       startedAt: true,
-  //     },
-  //     where: {
-  //       id: result.data.currentStudySessionId,
-  //     },
-  //   });
-
-  //   if (studySession.totalSeconds === 0) {
-  //     const totalSecondsSession =
-  //       (new Date().getTime() - studySession?.startedAt?.getTime()) / 1000;
-  //   } else {
-  //     // TODO
-  //   }
-
-  //   await prisma.studySession.update({
-  //     data: {
-  //       finishedAt: new Date(),
-  //       totalSeconds: totalSecondsSession,
-  //       description: result.data.description,
-  //       urls: result.data.urls,
-  //     },
-  //     where: {
-  //       id: result.data.currentStudySessionId,
-  //     },
-  //   });
-
-  //   await prisma.studyProcess.update({
-  //     data: {
-  //       totalSeconds: totalSecondsStudyProcess + totalSecondsSession,
-  //     },
-  //     where: {
-  //       id: result.data.currentStudySessionStudyProcessId,
-  //     },
-  //   });
-  // } catch (err: unknown) {
-  //   if (err instanceof Error) {
-  //     return {
-  //       errors: {
-  //         _form: [err.message],
-  //       },
-  //       confirmValidation: false
-  //     };
-  //   } else {
-  //     return {
-  //       errors: {
-  //         _form: [
-  //           "Une erreur est survenue lors de la création du processus de création",
-  //         ],
-  //       },
-  //       confirmValidation: false
-  //     };
-  //   }
-  // }
+    await prisma.studyProcess.update({
+      data: {
+        totalSeconds: studyProcess.totalSeconds + totalSeconds,
+      },
+      where: {
+        id: studyProcess.id,
+      },
+    });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      return {
+        errors: {
+          _form: [err.message],
+        },
+        confirmValidation: false,
+      };
+    } else {
+      return {
+        errors: {
+          _form: [
+            "Une erreur est survenue lors de la création du processus de création",
+          ],
+        },
+        confirmValidation: false,
+      };
+    }
+  }
 
   return {
     errors: {},
     confirmValidation: true,
-  }
+  };
 
   // cookieStore.set("confirmValidation", "false");
 

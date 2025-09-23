@@ -62,7 +62,6 @@ export function CurrentStudySession({
   });
 
   const [intervalId, setIntervalId] = useState();
-  const [isTiming, setIsTiming] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const [currentStudySession, setCurrentStudySession] = useState(null);
@@ -74,20 +73,12 @@ export function CurrentStudySession({
   const [hoursStartedAt, setHoursStartedAt] = useState(0);
 
   useEffect(() => {
-    console.log("hello");
     async function getTopics() {
       const allTopics = await getTopicsOfaUser();
 
       setTopics(allTopics);
     }
 
-    // async function getCurrentStudySession() {
-    //   const newCurrentStudySession = await fetchCurrentStudySession();
-
-    //   setCurrentStudySession(newCurrentStudySession);
-    // }
-
-    // getCurrentStudySession();
     getTopics();
 
     if (localStorage.getItem("current_study_session_timer")) {
@@ -96,8 +87,6 @@ export function CurrentStudySession({
       setHoursStartedAt(
         localStorage.getItem("current_study_session_started_at")
       );
-      setIsTiming(true);
-      console.log("je suis là");
       if (localStorage.getItem("current_study_session_is_playing") === "true") {
         let id = setInterval(updateTimer, 1000);
         setIntervalId(id);
@@ -110,18 +99,8 @@ export function CurrentStudySession({
         setIsPlaying(false);
       }
     }
+   
   }, []);
-
-  //   useEffect(() => {
-  //     if (currentStudySession !== null) {
-  //       let id = setInterval(updateTimer, 1000);
-  //       setIntervalId(id);
-  //     }
-
-  //     return () => {
-  //       clearInterval(intervalId);
-  //     };
-  //   }, [currentStudySession]);
 
   const updateTimer = () => {
     setTime((prev) => {
@@ -147,7 +126,6 @@ export function CurrentStudySession({
 
   function handleLaunchSession() {
     pauseOrResume();
-    setIsTiming(true);
     setIsPlaying(true);
     setHoursStartedAt(new Date().getTime());
     if (!localStorage.getItem("current_study_session_topic_id")) {
@@ -166,8 +144,6 @@ export function CurrentStudySession({
   }
 
   const pauseOrResume = () => {
-    console.log(hoursStartedAt);
-    console.log(currentTopicId);
     if (!intervalId) {
       let id = setInterval(updateTimer, 1000);
       setIntervalId(id);
@@ -188,7 +164,6 @@ export function CurrentStudySession({
       min: 0,
       hr: 0,
     });
-    setIsTiming(false);
     setIsPlaying(false);
     localStorage.clear();
   };
@@ -216,7 +191,7 @@ export function CurrentStudySession({
 
   return (
     <div className="mr-4">
-      {!isTiming ? (
+      {!localStorage.getItem('current_study_session_topic_id') ? (
         <>
           <Button
             onPress={modal1.onOpen}
