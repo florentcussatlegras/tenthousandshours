@@ -73,6 +73,7 @@ export function CurrentStudySession({
   const [hoursStartedAt, setHoursStartedAt] = useState(0);
 
   useEffect(() => {
+    console.log("je suis dans le useEffect mount de current study session");
     async function getTopics() {
       const allTopics = await getTopicsOfaUser();
 
@@ -99,8 +100,21 @@ export function CurrentStudySession({
         setIsPlaying(false);
       }
     }
-   
   }, []);
+
+  useEffect(() => {
+    console.log("dans use effect is playing update");
+    if (localStorage.getItem("current_study_session_resume") === "true") {
+      localStorage.setItem("current_study_session_is_playing", "true");
+      let id = setInterval(updateTimer, 1000);
+      setIntervalId(id);
+      setIsPlaying(true);
+
+      return () => {
+        clearInterval(id);
+      };
+    }
+  }, [localStorage.getItem("current_study_session_resume")]);
 
   const updateTimer = () => {
     setTime((prev) => {
@@ -125,6 +139,7 @@ export function CurrentStudySession({
   };
 
   function handleLaunchSession() {
+    console.log("je me positione là");
     pauseOrResume();
     setIsPlaying(true);
     setHoursStartedAt(new Date().getTime());
@@ -140,11 +155,12 @@ export function CurrentStudySession({
       localStorage.setItem("current_study_session_timer", JSON.stringify(time));
       localStorage.setItem("current_study_session_is_playing", "true");
     }
-    modal1.onClose();
+    // modal1.onClose();
   }
 
   const pauseOrResume = () => {
     if (!intervalId) {
+      console.log("je me positionne là 2");
       let id = setInterval(updateTimer, 1000);
       setIntervalId(id);
       setIsPlaying(true);
@@ -159,13 +175,17 @@ export function CurrentStudySession({
 
   const reset = () => {
     clearInterval(intervalId);
+    setIntervalId("");
     setTime({
       sec: 0,
       min: 0,
       hr: 0,
     });
     setIsPlaying(false);
+    console.log("into reset");
+    // localStorage.setItem('current_study_session_timer', 'foo');
     localStorage.clear();
+    // modal1.onClose();
   };
 
   function handleTopicChange(value) {
@@ -191,7 +211,7 @@ export function CurrentStudySession({
 
   return (
     <div className="mr-4">
-      {!localStorage.getItem('current_study_session_topic_id') ? (
+      {!localStorage.getItem("current_study_session_topic_id") ? (
         <>
           <Button
             onPress={modal1.onOpen}
@@ -204,7 +224,7 @@ export function CurrentStudySession({
           </Button>
           <Modal
             isOpen={modal1.isOpen}
-            onOpenChange={modal1.onOpenChange}
+            // onOpenChange={modal1.onOpenChange}
             size="xl"
           >
             <ModalContent>
