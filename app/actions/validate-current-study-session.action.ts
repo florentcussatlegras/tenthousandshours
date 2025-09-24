@@ -9,6 +9,7 @@ import { auth } from "../lib/auth";
 import { headers } from "next/headers";
 import { addToast } from "@heroui/react";
 import { cookies } from "next/headers";
+import { fetchStudyProcessByTopic } from "./actions";
 
 const validateCurrentStudySessionSchema = z
   .object({
@@ -83,14 +84,14 @@ export async function validateCurrentStudySessionAction(
     };
   }
 
-  let studyProcess = await prisma.studyProcess.findFirst({
-    where: {
-      userId: session?.user.id,
-      topicId: result.data.topicId,
-    },
-  });
+  // let studyProcess = await prisma.studyProcess.findFirst({
+  //   where: {
+  //     userId: session?.user.id,
+  //     topicId: result.data.topicId,
+  //   },
+  // });
 
-  console.log(studyProcess);
+  let studyProcess = await fetchStudyProcessByTopic(result.data.topicId);
 
   if (studyProcess === null) {
     return {
@@ -128,7 +129,7 @@ export async function validateCurrentStudySessionAction(
         startedAt: dateStartedAt,
         finishedAt: dateFinishedAt,
         totalSeconds,
-        studyProcessId: studyProcess.id,
+        studyProcessId: studyProcess?.id,
         description: result.data.description,
         urls: result.data.urls,
       },

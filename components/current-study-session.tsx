@@ -103,10 +103,10 @@ export function CurrentStudySession({
   }, []);
 
   useEffect(() => {
-    console.log("dans use effect is playing update");
     if (localStorage.getItem("current_study_session_resume") === "true") {
-      console.log("ouououou");
+
       localStorage.setItem("current_study_session_is_playing", "true");
+      // localStorage.setItem("current_study_session_resume", "false");
       let id = setInterval(updateTimer, 1000);
       setIntervalId(id);
       setIsPlaying(true);

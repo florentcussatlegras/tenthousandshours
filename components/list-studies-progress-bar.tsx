@@ -71,8 +71,10 @@ export const ThreeDotsIcon = () => {
 
 export default function ListStudiesProgressbar({
   userStudies,
+  studyProcessAchievedLength
 }: {
   userStudies: StudyProgression[];
+  studyProcessAchievedLength: Number;
 }) {
   return (
     <Card className="h-full rounded-none">
@@ -84,14 +86,17 @@ export default function ListStudiesProgressbar({
       </CardHeader> */}
       <CardBody className="p-6">
         <div className="flex flex-col gap-8 h-full justify-start">
-          <Button
-            startContent={<AddIcon />}
-            className="bg-sky-500 text-white ml-auto py-4"
-          >
-            <Link href="/study-process/new">
-              Ajouter un nouvel apprentissage
-            </Link>
-          </Button>
+          <div className="flex flex-row items-center">
+            <div className="text-default-500 text-sm uppercase">{studyProcessAchievedLength} objectifs atteints</div>
+            <Button
+              startContent={<AddIcon />}
+              className="bg-sky-500 text-white ml-auto py-4"
+            >
+              <Link href="/study-process/new">
+                Ajouter un nouvel apprentissage
+              </Link>
+            </Button>
+          </div>
           <div className="flex flex-col gap-4 items-stretch h-full justify-center">
             {userStudies.length !== 0 ? (
               userStudies.map((study) => {
@@ -101,7 +106,7 @@ export default function ListStudiesProgressbar({
                   <div className="flex items-end gap-4 relative" key={study.id}>
                     <Progress
                       aria-label="Loading..."
-                      label={study?.topic?.name}
+                      label={study?.topic_name}
                       className="w-full"
                       classNames={{
                         indicator: "bg-sky-500",

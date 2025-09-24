@@ -130,7 +130,9 @@ export default function DetailsStudyProcess({
   // const hours = Math.floor(studyProcess.totalSeconds / 3600);
   // const minutes = Math.floor((studyProcess.totalSeconds - hours * 3600) / 60);
   // const seconds = studyProcess.totalSeconds - hours * 3600 - minutes * 60;
-  const timeString = convertSecondsInHourMin(studyProcess.totalSeconds);
+  console.log(studyProcess);
+  console.log(studyProcess.totalSeconds);
+  const timeString = convertSecondsInHourMin(Number(studyProcess.totalSeconds));
 
   var intl = new Intl.DateTimeFormat("fr-Fr", {
     weekday: "long",

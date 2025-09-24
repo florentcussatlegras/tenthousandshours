@@ -13,6 +13,12 @@ import StudiesProgressBar from "@/components/list-studies-progress-bar";
 import prisma from "../lib/prisma";
 import Avatar from "@/components/avatar";
 import ListStudiesProgressbar from "@/components/list-studies-progress-bar";
+import {
+  getLastStudySessionByStudyProcess,
+  getStudyProcesses,
+  getStudyProcessesAchieved,
+} from "../actions/actions";
+import { Divider } from "@heroui/react";
 
 export default async function Page() {
   const headerList = await headers();
@@ -51,22 +57,23 @@ export default async function Page() {
     },
   });
 
-  const userStudies = await prisma.user.findFirst({
-    select: {
-      studyProcesses: {
-        select: {
-          id: true,
-          slug: true,
-          totalSeconds: true,
-          topic: {
-            select: {
-              name: true
-            }
-          }
-        }
-      }
-    }
-  });
+  const userStudies = await getStudyProcesses();
+
+  const studyProcessesAchieved = await getStudyProcessesAchieved();
+
+  let lastSessionDates = [];
+
+  for (let index = 0; index < studyProcessesAchieved.length; index++) {
+    const dateAchieved = await getLastStudySessionByStudyProcess(
+      studyProcessesAchieved[index].id
+    );
+    lastSessionDates.push({
+      'topic_name': studyProcessesAchieved[index].topic_name,
+      'date_achieved': dateAchieved
+    });
+  }
+
+  console.log(lastSessionDates);
 
   return (
     <div className="py-8 container mx-auto max-w-[1536px] space-y-8">
@@ -74,7 +81,9 @@ export default async function Page() {
       <div className="flex items-center gap-2">
         {session.user.role === "ADMIN" && (
           <Button className="bg-sky-500">
-            <Link href="/admin/dashboard" className="text-white">Admin Dashboard</Link>
+            <Link href="/admin/dashboard" className="text-white">
+              Admin Dashboard
+            </Link>
           </Button>
         )}
       </div>
@@ -82,7 +91,7 @@ export default async function Page() {
       <div className="grid grid-flow-col grid-col-4 gap-4 h-[356px]">
         <div>
           <Card className="h-full rounded-none relative">
-            <CardBody className="flex-col items-center justify-center gap-4">
+            <CardBody className="flex-col items-center justify-center gap-4 my-4">
               {session?.user.image ? (
                 <Avatar imgSrc={session?.user.image} />
               ) : (
@@ -105,19 +114,42 @@ export default async function Page() {
               <Link href="/settings">
                 <EditIcon className="text-default-600" />
               </Link>
-          
+
+              <Divider />
+
+              {studyProcessesAchieved !== null && (
+                <div className="flex flex-col items-start gap-4">
+                  <h1 className="font-semibold">Objectifs atteints :</h1>
+                  <ul>
+                    {studyProcessesAchieved.map((studyProcess) => {
+                      const element = lastSessionDates.find(el => el.topic_name === studyProcess.topic_name);
+                      return (
+                        <li>
+                          <span className="text-sky-500">
+                            {element.topic_name}
+                          </span>{" "}
+                          le{" "}
+                          {new Intl.DateTimeFormat("fr-Fr", {
+                            dateStyle: "short",
+                          }).format(element.date_achieved)}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+
               {/* <Link
                 href="/"
                 className="text-white uppercase text-xs absolute border"
               >
                 <EditIcon />fgdgfdgfg
               </Link> */}
-
             </CardBody>
           </Card>
         </div>
         <div className="col-span-3">
-          <ListStudiesProgressbar userStudies={userStudies?.studyProcesses} />
+          <ListStudiesProgressbar userStudies={userStudies} studyProcessAchievedLength={studyProcessesAchieved.length} />
         </div>
       </div>
 
