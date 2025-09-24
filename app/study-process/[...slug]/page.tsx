@@ -1,4 +1,4 @@
-import { fetchStudySessionsFinished } from "@/app/actions/actions";
+import { fetchStudySessionsFinished, getStudyProcessBySlug } from "@/app/actions/actions";
 import { auth } from "@/app/lib/auth";
 import prisma from "@/app/lib/prisma";
 import { Breadcrumb } from "@/components/breadcrumb";
@@ -21,18 +21,18 @@ export default async function studyProcessDetailPage({ params }) {
   // const cookieStore = await cookies();
   // const confirmValidation = cookieStore.get('confirmValidation');
 
-  const studyProcess = await prisma.studyProcess.findFirst({
-    select: {
-      id: true,
-      name: true,
-      createdAt: true,
-      description: true,
-      totalSeconds: true,
-      topic: {
-        select: {
-          name: true,
-        },
-      },
+  // const studyProcess = await prisma.studyProcess.findFirst({
+  //   select: {
+  //     id: true,
+  //     name: true,
+  //     createdAt: true,
+  //     description: true,
+  //     totalSeconds: true,
+  //     topic: {
+  //       select: {
+  //         name: true,
+  //       },
+  //     },
       // studySessions: {
       //   select: {
       //     description: true,
@@ -47,12 +47,16 @@ export default async function studyProcessDetailPage({ params }) {
       //     finishedAt: null
       //   }
       // },
-    },
-    where: {
-      slug,
-      userId: session?.user.id,
-    },
-  });
+  //   },
+  //   where: {
+  //     slug,
+  //     userId: session?.user.id,
+  //   },
+  // });
+
+  console.log(slug);
+  const studyProcess = await getStudyProcessBySlug(slug);
+  console.log(studyProcess);
 
   const studySessions = await fetchStudySessionsFinished(studyProcess.id);
 
@@ -61,13 +65,13 @@ export default async function studyProcessDetailPage({ params }) {
       <Breadcrumb
         steps={[
           { label: "Mes apprentissages", url: "/profile" },
-          { label: `${studyProcess?.topic.name}` },
+          { label: `${studyProcess?.topic_name}` },
         ]}
       />
       {/* {confirmValidation && <ConfirmCurrentSessionValidation />} */}
       <h1 className="text-3xl font-bold">
         Mes sessions de travail{" "}
-        <span className="text-sky-500">{studyProcess.topic.name}</span>
+        <span className="text-sky-500">{studyProcess.topic_name}</span>
       </h1>
       <div className="flex flex-col gap-4">
         <div className="w-full">

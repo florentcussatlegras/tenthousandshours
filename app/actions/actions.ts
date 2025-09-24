@@ -236,14 +236,21 @@ export async function fetchStudySessionsPerDay(userId: UUID, dateSelect: Date) {
 export async function fetchStudyProcessByTopic(topicId: string) {
   const userId = await getUser();
 
-  const studyProcess = await prisma.studyProcess.findFirst({
-    where: {
-      topicId,
-      userId,
-    },
-  });
+  // const studyProcess = await prisma.studyProcess.findFirst({
+  //   where: {
+  //     topicId,
+  //     userId,
+  //   },
+  // });
 
-  return studyProcess;
+  const studyProcess = await prisma.$queryRaw`SELECT
+        *
+      FROM public."StudyProcess" 
+      WHERE "StudyProcess"."topicId" = ${topicId}
+      AND "StudyProcess"."userId" = ${userId}
+  `;
+
+  return studyProcess[0];
 }
 
 export async function fetchCurrentStudySession() {
@@ -347,6 +354,73 @@ export async function getTopicStudySession(studySession: StudySession) {
   });
 
   return topic;
+}
+
+export async function getStudyProcessBySlug(slug: String) {
+  const userId = await getUser();
+
+  const studyProcess = await prisma.$queryRaw`SELECT
+        "StudyProcess"."id",
+        "StudyProcess"."name",
+        "StudyProcess"."createdAt",
+        "StudyProcess"."totalSeconds",
+        "Topic"."id" AS "topic_id",
+        "Topic"."name" AS "topic_name"
+      FROM public."StudyProcess"
+      LEFT JOIN public."Topic"
+      ON "StudyProcess"."topicId" = "Topic"."id"
+      WHERE "StudyProcess"."userId" = ${userId}
+      AND "StudyProcess"."slug" = ${slug}
+  `;
+
+  return studyProcess[0];
+}
+
+
+export async function getStudyProcesses() {
+  const userId = await getUser();
+
+  const studyProcesses = await prisma.$queryRaw`SELECT
+        "StudyProcess"."id",
+        "StudyProcess"."totalSeconds",
+        "StudyProcess"."slug",
+        "Topic"."id" AS "topic_id",
+        "Topic"."name" AS "topic_name"
+      FROM public."StudyProcess"
+      LEFT JOIN public."Topic"
+      ON "StudyProcess"."topicId" = "Topic"."id"
+      WHERE "StudyProcess"."userId" = ${userId}
+  `;
+
+  return studyProcesses;
+}
+
+export async function getStudyProcessesAchieved() {
+  const userId = await getUser();
+
+  const studyProcesses = await prisma.$queryRaw`SELECT
+        "StudyProcess"."id",
+        "StudyProcess"."slug",
+        "Topic"."id" AS "topic_id",
+        "Topic"."name" AS "topic_name"
+      FROM public."StudyProcess"
+      LEFT JOIN public."Topic"
+      ON "StudyProcess"."topicId" = "Topic"."id"
+      WHERE "StudyProcess"."userId" = ${userId}
+      AND "StudyProcess"."totalSeconds" >= 36000000
+  `;
+
+  return studyProcesses;
+}
+
+export async function getLastStudySessionByStudyProcess(studyProcessId: UUID) {
+  const studySession = await prisma.$queryRaw`SELECT
+    max("createdAt")
+    FROM public."StudySession"
+    WHERE "StudySession"."studyProcessId" = ${studyProcessId} 
+  `;
+
+  return studySession[0].max;
 }
 
 // export async function getFilterStudySessions(dateStartFilter: Date, dateEndFilter: Date) {
