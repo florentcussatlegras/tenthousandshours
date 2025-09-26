@@ -1,4 +1,7 @@
-import { fetchStudySessionsFinished, getStudyProcessBySlug } from "@/app/actions/actions";
+import {
+  fetchStudySessionsFinished,
+  getStudyProcessBySlug,
+} from "@/app/actions/actions";
 import { auth } from "@/app/lib/auth";
 import prisma from "@/app/lib/prisma";
 import { Breadcrumb } from "@/components/breadcrumb";
@@ -33,20 +36,20 @@ export default async function studyProcessDetailPage({ params }) {
   //         name: true,
   //       },
   //     },
-      // studySessions: {
-      //   select: {
-      //     description: true,
-      //     id: true,
-      //     createdAt: true,
-      //     totalSeconds: true,
-      //     startedAt: true,
-      //     finishedAt: true,
-      //     studyProcessId: true,
-      //   },
-      //   where: {
-      //     finishedAt: null
-      //   }
-      // },
+  // studySessions: {
+  //   select: {
+  //     description: true,
+  //     id: true,
+  //     createdAt: true,
+  //     totalSeconds: true,
+  //     startedAt: true,
+  //     finishedAt: true,
+  //     studyProcessId: true,
+  //   },
+  //   where: {
+  //     finishedAt: null
+  //   }
+  // },
   //   },
   //   where: {
   //     slug,
@@ -54,10 +57,7 @@ export default async function studyProcessDetailPage({ params }) {
   //   },
   // });
 
-  console.log(slug);
   const studyProcess = await getStudyProcessBySlug(slug);
-  console.log(studyProcess);
-
   const studySessions = await fetchStudySessionsFinished(studyProcess.id);
 
   return (

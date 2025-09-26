@@ -155,7 +155,7 @@ export default function DetailsStudyProcess({
           </div>
         ) : (
           <div className="ml-auto flex items-center gap-4 text-default-500 text-sm uppercase">
-          <span>A ce rythme là vous aurez atteint les 10000 heures de pratique vers le {<RemainingTime studyProcess={studyProcess} />}, persevérez !</span>
+          <span>A ce rythme là vous aurez atteint les 10000 heures de pratique {<RemainingTime studyProcess={studyProcess} />}, persevérez !</span>
             <ThumbsUpIcon size={50} className="mb-4" />
           </div>
         )}

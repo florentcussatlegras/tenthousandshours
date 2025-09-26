@@ -243,7 +243,7 @@ export function CurrentStudySession({
           <Button
             onPress={modal1.onOpen}
             type="submit"
-            className="text-white rounded-full bg-secondary-300"
+            className="text-white rounded-full bg-secondary"
           >
             <Play />
             {/* <span>Lancer une nouvelle session </span> */}
@@ -258,7 +258,7 @@ export function CurrentStudySession({
               {(onClose) => (
                 <>
                   <ModalHeader className="flex flex-col gap-1 w-full mt-4">
-                    <h1>Lancer une nouvelle session de travail</h1>
+                    <h1>Nouvelle session de travail</h1>
                   </ModalHeader>
                   <ModalBody className="flex flex-col gap-2 w-full my-4">
                     <Form
@@ -500,7 +500,7 @@ export function CurrentStudySession({
                         type="button"
                         variant="flat"
                         onPress={reset}
-                        className="bg-secondary-300 text-white"
+                        className="bg-secondary text-white"
                       >
                         {/* <Link
                           href={`/study-session/current/cancel/${currentStudySession.id}`}

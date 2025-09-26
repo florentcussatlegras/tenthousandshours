@@ -68,12 +68,12 @@ export default async function Page() {
       studyProcessesAchieved[index].id
     );
     lastSessionDates.push({
-      'topic_name': studyProcessesAchieved[index].topic_name,
-      'date_achieved': dateAchieved
+      topic_name: studyProcessesAchieved[index].topic_name,
+      date_achieved: dateAchieved,
     });
   }
 
-  console.log(lastSessionDates);
+  console.log(studyProcessesAchieved);
 
   return (
     <div className="py-8 container mx-auto max-w-[1536px] space-y-8">
@@ -115,14 +115,17 @@ export default async function Page() {
                 <EditIcon className="text-default-600" />
               </Link>
 
-              <Divider />
-
-              {studyProcessesAchieved !== null && (
+              {studyProcessesAchieved.length > 0 && (
                 <div className="flex flex-col items-start gap-4">
-                  <h1 className="font-semibold">Bravo! Vous êtes un expert en :</h1>
+                  <Divider />
+                  <h1 className="font-semibold">
+                    Bravo! Vous êtes un expert en :
+                  </h1>
                   <ul>
                     {studyProcessesAchieved.map((studyProcess) => {
-                      const element = lastSessionDates.find(el => el.topic_name === studyProcess.topic_name);
+                      const element = lastSessionDates.find(
+                        (el) => el.topic_name === studyProcess.topic_name
+                      );
                       return (
                         <li>
                           <span className="text-sky-500 uppercase">
@@ -149,7 +152,10 @@ export default async function Page() {
           </Card>
         </div>
         <div className="col-span-3">
-          <ListStudiesProgressbar userStudies={userStudies} studyProcessAchievedLength={studyProcessesAchieved.length} />
+          <ListStudiesProgressbar
+            userStudies={userStudies}
+            studyProcessAchievedLength={studyProcessesAchieved.length}
+          />
         </div>
       </div>
 
