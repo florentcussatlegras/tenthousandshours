@@ -10,6 +10,7 @@ import {
   DropdownMenu,
   DropdownItem,
   Button,
+  Input,
 } from "@heroui/react";
 import Link from "next/link";
 import { AddIcon, DeleteIcon, VerticalDotsIcon } from "./icons";
@@ -23,10 +24,10 @@ interface StudyProgression {
   };
 }
 
-import React from "react";
+import React, { useState } from "react";
 import { StudyProcess } from "@prisma/client";
 import { UUID } from "crypto";
-import { Timer } from "lucide-react";
+import { Check, CheckCircle, SearchIcon, Timer } from "lucide-react";
 
 export const EyeIcon = () => {
   return (
@@ -71,11 +72,25 @@ export const ThreeDotsIcon = () => {
 
 export default function ListStudiesProgressbar({
   userStudies,
-  studyProcessAchievedLength
+  studyProcessAchievedLength,
 }: {
   userStudies: StudyProgression[];
   studyProcessAchievedLength: Number;
 }) {
+  const [studyProcesses, setStudyProcesses] = useState(userStudies);
+  const [searchItem, setSearchItem] = useState("");
+
+  function handleInputChange(e) {
+    const searchTerm = e.target.value;
+    setSearchItem(searchItem);
+
+    const filteredStudyProcesses = userStudies.filter((study) => {
+      return study.topic_name.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+
+    setStudyProcesses(filteredStudyProcesses);
+  }
+
   return (
     <Card className="h-full rounded-none">
       {/* <CardHeader className="flex flex-col items-start gap-3 p-4">
@@ -86,11 +101,21 @@ export default function ListStudiesProgressbar({
       </CardHeader> */}
       <CardBody className="p-6">
         <div className="flex flex-col gap-8 h-full justify-start">
-          <div className="flex flex-row items-center">
-            <div className="text-default-500 text-sm uppercase">{studyProcessAchievedLength} objectifs atteints</div>
+          <div className="flex flex-row items-center gap-4">
+            <div className="text-default-500 text-sm uppercase">
+              {studyProcessAchievedLength} objectifs atteints
+            </div>
+            <div className="flex-1/3 justify-center flex">
+              <Input
+                startContent={<SearchIcon />}
+                onChange={handleInputChange}
+                className="w-[300px]"
+              />
+            </div>
+
             <Button
               startContent={<AddIcon />}
-              className="bg-sky-500 text-white ml-auto py-4"
+              className="bg-sky-500 text-white ml-auto py-4 f"
             >
               <Link href="/study-process/new">
                 Ajouter un nouvel apprentissage
@@ -98,8 +123,8 @@ export default function ListStudiesProgressbar({
             </Button>
           </div>
           <div className="flex flex-col gap-4 items-stretch h-full justify-center">
-            {userStudies.length !== 0 ? (
-              userStudies.map((study) => {
+            {studyProcesses.length !== 0 ? (
+              studyProcesses.map((study) => {
                 const ratioProgress =
                   (Number(study.totalSeconds) / 36000000) * 100;
                 return (
@@ -116,6 +141,9 @@ export default function ListStudiesProgressbar({
                       value={ratioProgress}
                       showValueLabel={true}
                     />
+                    <div className="absolute top-0 right-26">
+                      <CheckCircle color="green" />
+                    </div>
                     <Dropdown>
                       <DropdownTrigger>
                         {/* <Button className="bg-white w-[20px] border border-default-100 place-items-end">

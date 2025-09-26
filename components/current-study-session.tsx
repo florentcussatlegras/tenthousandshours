@@ -67,13 +67,12 @@ export function CurrentStudySession({
   const [currentStudySession, setCurrentStudySession] = useState(null);
 
   const [topics, setTopics] = useState([]);
-  const [currentTopicId, setCurrentTopicId] = useState();
+  const [currentTopicId, setCurrentTopicId] = useState("");
   const [currentTopicName, setCurrentTopicName] = useState();
 
   const [hoursStartedAt, setHoursStartedAt] = useState(0);
 
   useEffect(() => {
-    console.log("je suis dans le useEffect mount de current study session");
     async function getTopics() {
       const allTopics = await getTopicsOfaUser();
 
@@ -104,7 +103,6 @@ export function CurrentStudySession({
 
   useEffect(() => {
     if (localStorage.getItem("current_study_session_resume") === "true") {
-
       localStorage.setItem("current_study_session_is_playing", "true");
       // localStorage.setItem("current_study_session_resume", "false");
       let id = setInterval(updateTimer, 1000);
@@ -139,8 +137,17 @@ export function CurrentStudySession({
     });
   };
 
+  function clearStorage() {
+    localStorage.removeItem("current_study_session_topic_id");
+    localStorage.removeItem("current_study_session_started_at");
+    localStorage.removeItem("current_study_session_timer");
+    localStorage.removeItem("current_study_session_is_playing");
+    localStorage.removeItem("current_study_session_finished_at");
+    localStorage.removeItem("current_study_session_topic_name");
+    localStorage.removeItem("current_study_session_resume");
+  }
+
   function handleLaunchSession() {
-    console.log("je me positione là");
     pauseOrResume();
     setIsPlaying(true);
     setHoursStartedAt(new Date().getTime());
@@ -159,15 +166,17 @@ export function CurrentStudySession({
         hr: 0,
       };
       setTime(newTime);
-      localStorage.setItem("current_study_session_timer", JSON.stringify(newTime));
+      localStorage.setItem(
+        "current_study_session_timer",
+        JSON.stringify(newTime)
+      );
       localStorage.setItem("current_study_session_is_playing", "true");
     }
-    // modal1.onClose();
+    modal2.onOpen();
   }
 
   const pauseOrResume = () => {
     if (!intervalId) {
-      console.log("je me positionne là 2");
       let id = setInterval(updateTimer, 1000);
       setIntervalId(id);
       setIsPlaying(true);
@@ -189,16 +198,19 @@ export function CurrentStudySession({
       hr: 0,
     });
     setIsPlaying(false);
-    console.log("into reset");
-    // localStorage.setItem('current_study_session_timer', 'foo');
-    localStorage.clear();
-    // modal1.onClose();
+    clearStorage();
+    modal1.onClose();
   };
 
   function handleTopicChange(value) {
-    setCurrentTopicId(
-      topics.filter((topic) => topic.topic_name === value)[0].topic_id
-    );
+    console.log("topic change");
+    if (value === "") {
+      setCurrentTopicId("");
+    } else {
+      setCurrentTopicId(
+        topics.filter((topic) => topic.topic_name === value)[0].topic_id
+      );
+    }
     setCurrentTopicName(value);
     localStorage.setItem("current_study_session_topic_name", value);
   }
@@ -348,6 +360,7 @@ export function CurrentStudySession({
                           type="button"
                           className="bg-sky-500 text-white"
                           onPress={handleLaunchSession}
+                          isDisabled={currentTopicId === ""}
                         >
                           Lancer la session
                         </Button>
