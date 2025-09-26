@@ -53,10 +53,10 @@ export function RemainingTime({
 
   return (
     <span>
-      dans {remainingDaysUntilGoal} jours soit le{" "}
-      {new Intl.DateTimeFormat("fr-Fr", { dateStyle: "short" }).format(
+      dans environ <span className="font-semibold">{remainingDaysUntilGoal} jours</span> soit le{" "}
+      <span className="font-semibold">{new Intl.DateTimeFormat("fr-Fr", { dateStyle: "short" }).format(
         dateGoal
-      )}
+      )}</span>
     </span>
   );
 }

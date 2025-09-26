@@ -11,6 +11,11 @@ import {
   DropdownItem,
   Button,
   Input,
+  Chip,
+  CheckboxGroup,
+  Checkbox,
+  RadioGroup,
+  Radio,
 } from "@heroui/react";
 import Link from "next/link";
 import { AddIcon, DeleteIcon, VerticalDotsIcon } from "./icons";
@@ -91,6 +96,20 @@ export default function ListStudiesProgressbar({
     setStudyProcesses(filteredStudyProcesses);
   }
 
+  function handleSelectChange(value: string) {
+    let filteredStudyProcesses = null;
+
+    if (value === "expert") {
+      filteredStudyProcesses = userStudies.filter((study) => {
+        return study?.totalSeconds >= 36000000;
+      });
+    }else{
+      filteredStudyProcesses = userStudies;
+    }
+
+    setStudyProcesses(filteredStudyProcesses);
+  }
+
   return (
     <Card className="h-full rounded-none">
       {/* <CardHeader className="flex flex-col items-start gap-3 p-4">
@@ -103,19 +122,25 @@ export default function ListStudiesProgressbar({
         <div className="flex flex-col gap-8 h-full justify-start">
           <div className="flex flex-row items-center gap-4">
             <div className="text-default-500 text-sm uppercase">
-              {studyProcessAchievedLength} objectifs atteints
+              {studyProcessAchievedLength} objectif
+              {studyProcessAchievedLength > 1 && "s"} atteint{" "}
+              {studyProcessAchievedLength > 1 && "s"}
             </div>
-            <div className="flex-1/3 justify-center flex">
+            <div className="flex-1/3 justify-center flex flex-row items-center gap-12">
               <Input
                 startContent={<SearchIcon />}
                 onChange={handleInputChange}
                 className="w-[300px]"
               />
+              <RadioGroup defaultValue="all" orientation="horizontal" onValueChange={handleSelectChange}>
+                <Radio value="all">Tous</Radio>
+                <Radio value="expert">Expert</Radio>
+              </RadioGroup>
             </div>
 
             <Button
               startContent={<AddIcon />}
-              className="bg-sky-500 text-white ml-auto py-4 f"
+              className="bg-secondary text-white ml-auto py-4"
             >
               <Link href="/study-process/new">
                 Ajouter un nouvel apprentissage
@@ -128,7 +153,10 @@ export default function ListStudiesProgressbar({
                 const ratioProgress =
                   (Number(study.totalSeconds) / 36000000) * 100;
                 return (
-                  <div className="flex items-end gap-4 relative" key={study.id}>
+                  <div
+                    className="flex items-center gap-4 relative"
+                    key={study.id}
+                  >
                     <Progress
                       aria-label="Loading..."
                       label={study?.topic_name}
@@ -141,9 +169,14 @@ export default function ListStudiesProgressbar({
                       value={ratioProgress}
                       showValueLabel={true}
                     />
-                    <div className="absolute top-0 right-26">
-                      <CheckCircle color="green" />
-                    </div>
+                    {ratioProgress >= 100 && (
+                      <div className="absolute -top-1 left-18">
+                        {/* <CheckCircle color="green" /> */}
+                        <Chip color="success" className="text-white">
+                          Expert
+                        </Chip>
+                      </div>
+                    )}
                     <Dropdown>
                       <DropdownTrigger>
                         {/* <Button className="bg-white w-[20px] border border-default-100 place-items-end">
