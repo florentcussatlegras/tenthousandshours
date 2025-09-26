@@ -413,6 +413,17 @@ export async function getStudyProcessesAchieved() {
   return studyProcesses;
 }
 
+export async function foo(studyProcessId: UUID) {
+  const studySession = await prisma.$queryRaw`SELECT
+    max("createdAt")
+    FROM public."StudySession"
+    WHERE "StudySession"."studyProcessId" = ${studyProcessId} 
+  `;
+  console.log('totototot');
+  console.log(studySession);
+  return 'fooooooo';
+}
+
 export async function getLastStudySessionByStudyProcess(studyProcessId: UUID) {
   const studySession = await prisma.$queryRaw`SELECT
     max("createdAt")
@@ -421,6 +432,16 @@ export async function getLastStudySessionByStudyProcess(studyProcessId: UUID) {
   `;
 
   return studySession[0].max;
+}
+
+export async function getFirstStudySessionByStudyProcess(studyProcessId: UUID) {
+  const studySession = await prisma.$queryRaw`SELECT
+    min("createdAt")
+    FROM public."StudySession"
+    WHERE "StudySession"."studyProcessId" = ${studyProcessId} 
+  `;
+
+  return studySession[0].min;
 }
 
 // export async function getFilterStudySessions(dateStartFilter: Date, dateEndFilter: Date) {

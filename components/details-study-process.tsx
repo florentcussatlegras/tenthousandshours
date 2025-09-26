@@ -26,6 +26,7 @@ import Link from "next/link";
 import { validateCurrentStudySessionAction } from "@/app/actions/validate-current-study-session.action";
 import { CurrentStudySession } from "./current-study-session";
 import { convertSecondsInHourMin } from "@/app/lib/utils";
+import { RemainingTime } from "./remaining-time";
 
 const SECOND = 1_000;
 const MINUTE = SECOND * 60;
@@ -147,10 +148,15 @@ export default function DetailsStudyProcess({
         <span className="text-default-500 text-sm">
           Apprentissage débuté le {intl.format(studyProcess.createdAt)}
         </span>
-        {studyProcess.totalSeconds > 36000000 && (
-          <div className="ml-auto flex text-xl items-center gap-4 text-success">
-            <span>Bravo ! Vous avez atteint les 10000 heures, vous êtes un pro.</span>
+        {studyProcess.totalSeconds > 36000000 ? (
+          <div className="ml-auto flex text-sm items-center gap-4 text-success uppercase">
+            <span>Bravo ! Vous avez atteint les 10000 heures, vous êtes un pro !</span>
             <CheckCircle size={50} />
+          </div>
+        ) : (
+          <div className="ml-auto flex items-center gap-4 text-default-500 text-sm uppercase">
+          <span>A ce rythme là vous aurez atteint les 10000 heures de pratique vers le {<RemainingTime studyProcess={studyProcess} />}, persevérez !</span>
+            <ThumbsUpIcon size={50} className="mb-4" />
           </div>
         )}
         {/* <div className="ml-auto">
