@@ -243,7 +243,7 @@ export function CurrentStudySession({
           <Button
             onPress={modal1.onOpen}
             type="submit"
-            className="text-white rounded-full bg-secondary"
+            className="text-white rounded-full bg-secondary-400"
           >
             <Play />
             {/* <span>Lancer une nouvelle session </span> */}

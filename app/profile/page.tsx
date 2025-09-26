@@ -116,9 +116,9 @@ export default async function Page() {
               </Link>
 
               {studyProcessesAchieved.length > 0 && (
-                <div className="flex flex-col items-start gap-4">
+                <div className="flex flex-col items-start gap-4 w-full px-8">
                   <Divider />
-                  <h1 className="font-semibold">
+                  <h1 className="font-semibold mt-1">
                     Bravo! Vous êtes un expert en :
                   </h1>
                   <ul>
@@ -128,9 +128,9 @@ export default async function Page() {
                       );
                       return (
                         <li>
-                          <span className="text-sky-500 uppercase">
+                          <Link className="text-sky-500 uppercase" href={`/study-process/${element?.topic_name}`}>
                             {element.topic_name}
-                          </span>{" "}
+                          </Link>{" "}
                           le{" "}
                           {new Intl.DateTimeFormat("fr-Fr", {
                             dateStyle: "short",
