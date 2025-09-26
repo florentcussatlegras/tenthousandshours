@@ -119,13 +119,13 @@ export default async function Page() {
 
               {studyProcessesAchieved !== null && (
                 <div className="flex flex-col items-start gap-4">
-                  <h1 className="font-semibold">Objectifs atteints :</h1>
+                  <h1 className="font-semibold">Bravo! Vous êtes un expert en :</h1>
                   <ul>
                     {studyProcessesAchieved.map((studyProcess) => {
                       const element = lastSessionDates.find(el => el.topic_name === studyProcess.topic_name);
                       return (
                         <li>
-                          <span className="text-sky-500">
+                          <span className="text-sky-500 uppercase">
                             {element.topic_name}
                           </span>{" "}
                           le{" "}
