@@ -483,7 +483,7 @@ export function CurrentStudySession2({
 
                     {isTiming ? (
                       <Button
-                        className="bg-secondary-200 text-white"
+                        className="bg-secondary-400 text-white"
                         onPress={handlePauseTiming}
                       >
                         <Pause />
@@ -491,7 +491,7 @@ export function CurrentStudySession2({
                       </Button>
                     ) : (
                       <Button
-                        className="bg-secondary-200 text-white"
+                        className="bg-secondary-400 text-white"
                         onPress={handleResumeTiming}
                       >
                         <Play />

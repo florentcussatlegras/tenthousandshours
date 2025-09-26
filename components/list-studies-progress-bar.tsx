@@ -32,7 +32,7 @@ interface StudyProgression {
 import React, { useState } from "react";
 import { StudyProcess } from "@prisma/client";
 import { UUID } from "crypto";
-import { Check, CheckCircle, SearchIcon, Timer } from "lucide-react";
+import { Check, CheckCircle, PlusIcon, SearchIcon, Timer } from "lucide-react";
 
 export const EyeIcon = () => {
   return (
@@ -99,12 +99,30 @@ export default function ListStudiesProgressbar({
   function handleSelectChange(value: string) {
     let filteredStudyProcesses = null;
 
-    if (value === "expert") {
-      filteredStudyProcesses = userStudies.filter((study) => {
-        return study?.totalSeconds >= 36000000;
-      });
-    }else{
-      filteredStudyProcesses = userStudies;
+    switch (value) {
+      case "beginner":
+        filteredStudyProcesses = userStudies.filter((study) => {
+          return study?.totalSeconds <= 18000000;
+        });
+        break;
+
+      case "intermediate":
+        filteredStudyProcesses = userStudies.filter((study) => {
+          return (
+            study?.totalSeconds > 18000000 && study?.totalSeconds < 36000000
+          );
+        });
+        break;
+
+      case "expert":
+        filteredStudyProcesses = userStudies.filter((study) => {
+          return study?.totalSeconds >= 36000000;
+        });
+        break;
+
+      default:
+        filteredStudyProcesses = userStudies;
+        break;
     }
 
     setStudyProcesses(filteredStudyProcesses);
@@ -132,20 +150,30 @@ export default function ListStudiesProgressbar({
                 onChange={handleInputChange}
                 className="w-[300px]"
               />
-              <RadioGroup defaultValue="all" orientation="horizontal" onValueChange={handleSelectChange}>
+              <RadioGroup
+                defaultValue="all"
+                orientation="horizontal"
+                onValueChange={handleSelectChange}
+              >
                 <Radio value="all">Tous</Radio>
+                <Radio value="beginner">Débutant</Radio>
+                <Radio value="intermediate">Intermédiaire</Radio>
                 <Radio value="expert">Expert</Radio>
               </RadioGroup>
             </div>
 
-            <Button
+            {/* <Button
               startContent={<AddIcon />}
-              className="bg-secondary text-white ml-auto py-4"
+              className="bg-secondary-400 text-white ml-auto py-4"
+            > */}
+            <Link
+              href="/study-process/new"
+              className="bg-secondary-400 text-white ml-auto p-4 rounded-2xl"
             >
-              <Link href="/study-process/new">
-                Ajouter un nouvel apprentissage
-              </Link>
-            </Button>
+              <PlusIcon />
+              {/* Ajouter un nouvel apprentissage */}
+            </Link>
+            {/* </Button> */}
           </div>
           <div className="flex flex-col gap-4 items-stretch h-full justify-center">
             {studyProcesses.length !== 0 ? (
@@ -169,14 +197,21 @@ export default function ListStudiesProgressbar({
                       value={ratioProgress}
                       showValueLabel={true}
                     />
-                    {ratioProgress >= 100 && (
-                      <div className="absolute -top-1 left-18">
-                        {/* <CheckCircle color="green" /> */}
+                    <div className="absolute -top-1 left-18">
+                      {ratioProgress >= 100 ? (
                         <Chip color="success" className="text-white">
                           Expert
                         </Chip>
-                      </div>
-                    )}
+                      ) : ratioProgress >= 50 ? (
+                        <Chip color="warning" className="text-white">
+                          Intermédiaire
+                        </Chip>
+                      ) : (
+                        <Chip color="default" className="text-white">
+                          Débutant
+                        </Chip>
+                      )}
+                    </div>
                     <Dropdown>
                       <DropdownTrigger>
                         {/* <Button className="bg-white w-[20px] border border-default-100 place-items-end">

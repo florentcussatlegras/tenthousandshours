@@ -148,15 +148,27 @@ export default function DetailsStudyProcess({
         <span className="text-default-500 text-sm">
           Apprentissage débuté le {intl.format(studyProcess.createdAt)}
         </span>
-        {studyProcess.totalSeconds > 36000000 ? (
+        {studyProcess.totalSeconds >= 36000000 ? (
           <div className="ml-auto flex text-sm items-center gap-4 text-success uppercase">
-            <span>Bravo ! Vous avez atteint les 10000 heures, vous êtes un pro !</span>
+            <span>
+              Bravo ! Vous avez atteint les 10000 heures, vous êtes un pro !
+            </span>
             <CheckCircle size={50} />
           </div>
         ) : (
           <div className="ml-auto flex items-center gap-4 text-default-500 text-sm uppercase">
-          <span>A ce rythme là vous aurez atteint les 10000 heures de pratique {<RemainingTime studyProcess={studyProcess} />}, persevérez !</span>
-            <ThumbsUpIcon size={50} className="mb-4" />
+            {studyProcess.totalSeconds === 0 ? (
+              <span>
+                Lancez-vous ! C'est toujours le premier pas le plus difficile
+              </span>
+            ) : (
+              <span>
+                A ce rythme là vous aurez atteint les 10000 heures de pratique{" "}
+                {<RemainingTime studyProcess={studyProcess} />}, persevérez !
+              </span>
+            )}
+
+            <ThumbsUpIcon size={40} className="mb-4 text-success" />
           </div>
         )}
         {/* <div className="ml-auto">

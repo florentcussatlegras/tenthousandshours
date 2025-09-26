@@ -164,7 +164,7 @@ export const NewStudySessionForm = ({
 
             <Button
               onPress={addUrl}
-              className="ml-auto bg-secondary-200 text-white min-w-15"
+              className="ml-auto bg-secondary-400 text-white min-w-15"
             >
               <PlusIcon />
             </Button>

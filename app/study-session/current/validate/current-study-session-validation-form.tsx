@@ -95,7 +95,7 @@ export function CurrentStudySessionValidationForm({
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 relative">
       <Form
         action={formValidateCurrentSessionAction}
         className="flex flex-col w-1/3 gap-4"
@@ -220,7 +220,7 @@ export function CurrentStudySessionValidationForm({
         })}
         <Button
           onPress={addUrl}
-          className="ml-auto bg-secondary-200 text-white min-w-15"
+          className="ml-auto bg-secondary-400 text-white min-w-15"
         >
           <PlusIcon />
         </Button>
@@ -230,7 +230,7 @@ export function CurrentStudySessionValidationForm({
         </Button>
       </Form>
       <Form action={formResumeCurrentSessionAction}>
-        <Button type="submit">
+        <Button type="submit" className="absolute bottom-4 left-45">
           <Play />
           Reprendre
         </Button>
