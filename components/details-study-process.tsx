@@ -20,7 +20,7 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { StudyProcess } from "@prisma/client";
-import { Timer } from "lucide-react";
+import { CheckCheckIcon, CheckCircle, ThumbsUpIcon, Timer } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 import Link from "next/link";
 import { validateCurrentStudySessionAction } from "@/app/actions/validate-current-study-session.action";
@@ -130,8 +130,7 @@ export default function DetailsStudyProcess({
   // const hours = Math.floor(studyProcess.totalSeconds / 3600);
   // const minutes = Math.floor((studyProcess.totalSeconds - hours * 3600) / 60);
   // const seconds = studyProcess.totalSeconds - hours * 3600 - minutes * 60;
-  console.log(studyProcess);
-  console.log(studyProcess.totalSeconds);
+
   const timeString = convertSecondsInHourMin(Number(studyProcess.totalSeconds));
 
   var intl = new Intl.DateTimeFormat("fr-Fr", {
@@ -148,6 +147,12 @@ export default function DetailsStudyProcess({
         <span className="text-default-500 text-sm">
           Apprentissage débuté le {intl.format(studyProcess.createdAt)}
         </span>
+        {studyProcess.totalSeconds > 36000000 && (
+          <div className="ml-auto flex text-xl items-center gap-4 text-success">
+            <span>Bravo ! Vous avez atteint les 10000 heures, vous êtes un pro.</span>
+            <CheckCircle size={50} />
+          </div>
+        )}
         {/* <div className="ml-auto">
           <CurrentStudySession studyProcess={studyProcess} />
         </div> */}
