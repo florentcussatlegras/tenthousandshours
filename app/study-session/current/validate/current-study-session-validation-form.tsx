@@ -46,7 +46,7 @@ export function CurrentStudySessionValidationForm({
           color: "success",
         });
 
-        localStorage.clear();
+        clearStorage();
 
         redirect(`/study-process/${newStudyProcess?.slug}`);
       }
@@ -82,6 +82,16 @@ export function CurrentStudySessionValidationForm({
     });
 
     setUrls(nextUrls);
+  }
+
+  function clearStorage() {
+    localStorage.removeItem("current_study_session_topic_id");
+    localStorage.removeItem("current_study_session_started_at");
+    localStorage.removeItem("current_study_session_timer");
+    localStorage.removeItem("current_study_session_is_playing");
+    localStorage.removeItem("current_study_session_finished_at");
+    localStorage.removeItem("current_study_session_topic_name");
+    localStorage.removeItem("current_study_session_resume");
   }
 
   return (
@@ -151,13 +161,13 @@ export function CurrentStudySessionValidationForm({
         </div>
 
         <Input
-          type="text"
+          type="hidden"
           name="topicId"
           value={String(localStorage.getItem("current_study_session_topic_id"))}
         />
 
         <Input
-          type="text"
+          type="hidden"
           name="startedAt"
           value={String(
             localStorage.getItem("current_study_session_started_at")
@@ -165,7 +175,7 @@ export function CurrentStudySessionValidationForm({
         />
 
         <Input
-          type="text"
+          type="hidden"
           name="finishedAt"
           value={String(
             localStorage.getItem("current_study_session_finished_at")
@@ -173,7 +183,7 @@ export function CurrentStudySessionValidationForm({
         />
 
         <Input
-          type="text"
+          type="hidden"
           name="timer"
           value={String(localStorage.getItem("current_study_session_timer"))}
         />

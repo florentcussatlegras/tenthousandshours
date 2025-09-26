@@ -21,6 +21,7 @@ import {
   useDisclosure,
   Autocomplete,
   AutocompleteItem,
+  addToast,
 } from "@heroui/react";
 import { Clock, Pause, Play, SearchIcon, Timer } from "lucide-react";
 import Link from "next/link";
@@ -80,6 +81,8 @@ export function CurrentStudySession({
     }
 
     getTopics();
+    modal1.onClose();
+    console.log("c'est là que je viens de fermer la modal 1");
 
     if (localStorage.getItem("current_study_session_timer")) {
       setTime(JSON.parse(localStorage.getItem("current_study_session_timer")));
@@ -199,11 +202,15 @@ export function CurrentStudySession({
     });
     setIsPlaying(false);
     clearStorage();
+    addToast({
+      title: "Session annulée",
+      description: "La session a bien été annulée",
+      color: "success",
+    })
     modal1.onClose();
   };
 
   function handleTopicChange(value) {
-    console.log("topic change");
     if (value === "") {
       setCurrentTopicId("");
     } else {
@@ -224,6 +231,7 @@ export function CurrentStudySession({
     setIntervalId("");
     setIsPlaying(false);
     localStorage.setItem("current_study_session_is_playing", "false");
+    modal1.onClose();
     modal2.onClose();
     router.push("/study-session/current/validate/");
   }
@@ -418,7 +426,7 @@ export function CurrentStudySession({
                   <ModalHeader className="flex flex-col gap-1 w-full mt-4 text-3xl">
                     <div>
                       Vous avez une session en cours en{" "}
-                      <span className="text-sky-500">{currentTopicName}</span>
+                      <span className="text-sky-500">{localStorage.getItem('current_study_session_topic_name')}</span>
                     </div>
                   </ModalHeader>
                   <ModalBody className="flex flex-col gap-4 w-full my-8 text-2xl">
