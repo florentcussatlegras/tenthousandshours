@@ -30,7 +30,7 @@ interface StudyProgression {
 }
 
 import React, { useState } from "react";
-import { StudyProcess } from "@prisma/client";
+import { CategoryTopic, StudyProcess } from "@prisma/client";
 import { UUID } from "crypto";
 import { Check, CheckCircle, PlusIcon, SearchIcon, Timer } from "lucide-react";
 
@@ -77,9 +77,11 @@ export const ThreeDotsIcon = () => {
 
 export default function ListStudiesProgressbar({
   userStudies,
+  categoryTopics,
   studyProcessAchievedLength,
 }: {
   userStudies: StudyProgression[];
+  categoryTopics: CategoryTopic[];
   studyProcessAchievedLength: Number;
 }) {
   const [studyProcesses, setStudyProcesses] = useState(userStudies);
@@ -175,79 +177,100 @@ export default function ListStudiesProgressbar({
             </Link>
             {/* </Button> */}
           </div>
-          <div className="flex flex-col gap-4 items-stretch h-full justify-center">
+          <div className="flex flex-col gap-6 items-stretch h-full justify-center">
             {studyProcesses.length !== 0 ? (
-              studyProcesses.map((study) => {
-                const ratioProgress =
-                  (Number(study.totalSeconds) / 36000000) * 100;
-                return (
-                  <div
-                    className="flex items-center gap-4 relative"
-                    key={study.id}
-                  >
-                    <Progress
-                      aria-label="Loading..."
-                      label={study?.topic_name}
-                      className="w-full"
-                      classNames={{
-                        indicator: "bg-sky-500",
-                        track: "drop-shadow-md border border-default",
-                        value: "ml-auto text-foreground/60 text-sm",
-                      }}
-                      value={ratioProgress}
-                      showValueLabel={true}
-                    />
-                    <div className="absolute -top-1 left-18">
-                      {ratioProgress >= 100 ? (
-                        <Chip color="success" className="text-white">
-                          Expert
-                        </Chip>
-                      ) : ratioProgress >= 50 ? (
-                        <Chip color="warning" className="text-white">
-                          Intermédiaire
-                        </Chip>
-                      ) : (
-                        <Chip color="default" className="text-white">
-                          Débutant
-                        </Chip>
-                      )}
-                    </div>
-                    <Dropdown>
-                      <DropdownTrigger>
-                        {/* <Button className="bg-white w-[20px] border border-default-100 place-items-end">
+              categoryTopics.map((categoryTopic, index) => {
+                const newStudyProcesses = studyProcesses.filter(
+                  (study) =>
+                    study.category_topic_id === categoryTopic.category_topic_id
+                );
+                if (newStudyProcesses.length > 0) {
+                  return (
+                    <div key={index} className="flex flex-col gap-4">
+                      <h1 className="uppercase">
+                        {categoryTopic.category_topic_name}
+                      </h1>
+                      {newStudyProcesses.map((study) => {
+                        // if (study.category_topic_id === categoryTopic.category_topic_id) {
+                        const ratioProgress =
+                          (Number(study.totalSeconds) / 36000000) * 100;
+                        return (
+                          <div
+                            className="flex items-center gap-4 relative"
+                            key={study.id}
+                          >
+                            <Progress
+                              aria-label="Loading..."
+                              label={study?.topic_name}
+                              className="w-full"
+                              classNames={{
+                                indicator: "bg-sky-500",
+                                track: "drop-shadow-md border border-default",
+                                value: "ml-auto text-foreground/60 text-sm",
+                              }}
+                              value={ratioProgress}
+                              showValueLabel={true}
+                            />
+                            <div className="absolute -top-1 right-26">
+                              {ratioProgress >= 100 ? (
+                                <Chip color="success" className="text-white">
+                                  Expert
+                                </Chip>
+                              ) : ratioProgress >= 50 ? (
+                                <Chip color="warning" className="text-white">
+                                  Intermédiaire
+                                </Chip>
+                              ) : (
+                                <Chip color="default" className="text-white">
+                                  Débutant
+                                </Chip>
+                              )}
+                            </div>
+                            <Dropdown>
+                              <DropdownTrigger>
+                                {/* <Button className="bg-white w-[20px] border border-default-100 place-items-end">
                           <ThreeDotsIcon />
                         </Button> */}
-                        <Button isIconOnly size="sm" variant="light">
-                          <VerticalDotsIcon className="text-default-300" />
-                        </Button>
-                      </DropdownTrigger>
-                      <DropdownMenu aria-label="Static Actions">
-                        <DropdownItem key="details">
-                          <Link
-                            href={`/study-process/${study?.slug}`}
-                            className="text-lg cursor-pointer active:opacity-50 flex flex-row items-center gap-2"
-                          >
-                            <EyeIcon />
-                            <span className="text-sm">
-                              Afficher les détails
-                            </span>
-                          </Link>
-                        </DropdownItem>
-                        <DropdownItem key="delete">
-                          <Link
-                            href=""
-                            className="text-lg text-danger cursor-pointer active:opacity-50 flex flex-row items-center gap-2"
-                          >
-                            <DeleteIcon />
-                            <span className="text-sm">
-                              Supprimer l'apprentissage
-                            </span>
-                          </Link>
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </div>
-                );
+                                <Button isIconOnly size="sm" variant="light">
+                                  <VerticalDotsIcon className="text-default-300" />
+                                </Button>
+                              </DropdownTrigger>
+                              <DropdownMenu aria-label="Static Actions">
+                                <DropdownItem key="details">
+                                  <Link
+                                    href={`/study-process/${study?.slug}`}
+                                    className="text-lg cursor-pointer active:opacity-50 flex flex-row items-center gap-2"
+                                  >
+                                    <EyeIcon />
+                                    <span className="text-sm">
+                                      Afficher les détails
+                                    </span>
+                                  </Link>
+                                </DropdownItem>
+                                <DropdownItem key="delete">
+                                  <Link
+                                    href=""
+                                    className="text-lg text-danger cursor-pointer active:opacity-50 flex flex-row items-center gap-2"
+                                  >
+                                    <DeleteIcon />
+                                    <span className="text-sm">
+                                      Supprimer l'apprentissage
+                                    </span>
+                                  </Link>
+                                </DropdownItem>
+                              </DropdownMenu>
+                            </Dropdown>
+                          </div>
+                        );
+                        // } else {
+                        //   return null;
+                        // }
+                      })}
+                    </div>
+                  );
+                } else {
+                  return null;
+                }
               })
             ) : (
               <span className="text-default-400 uppercase w-full text-center">

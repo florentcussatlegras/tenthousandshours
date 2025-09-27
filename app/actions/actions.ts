@@ -98,6 +98,24 @@ export async function getListCategoryTopic() {
   return categories;
 }
 
+export async function getCategoryTopicUsedByUser() {
+  const userId = await getUser();
+
+  const categoryTopics = await prisma.$queryRaw`
+        SELECT DISTINCT "CategoryTopic"."id" AS "category_topic_id",
+        "CategoryTopic"."name" AS "category_topic_name"
+          -- "CategoryTopic"."name" AS "category_topic_name"
+        FROM public."CategoryTopic" 
+        LEFT JOIN public."Topic"
+        ON "CategoryTopic"."id" = "Topic"."categoryTopicId"
+        LEFT JOIN public."StudyProcess"
+        ON "Topic"."id" = "StudyProcess"."topicId"
+        WHERE "StudyProcess"."userId" = ${userId}
+      `;
+
+  return categoryTopics;
+}
+
 export async function getTopic(slug) {
   const topic = await prisma.topic.findFirst({
     select: {
@@ -376,7 +394,6 @@ export async function getStudyProcessBySlug(slug: String) {
   return studyProcess[0];
 }
 
-
 export async function getStudyProcesses() {
   const userId = await getUser();
 
@@ -385,10 +402,14 @@ export async function getStudyProcesses() {
         "StudyProcess"."totalSeconds",
         "StudyProcess"."slug",
         "Topic"."id" AS "topic_id",
-        "Topic"."name" AS "topic_name"
+        "Topic"."name" AS "topic_name",
+        "CategoryTopic"."id" AS "category_topic_id",
+        "CategoryTopic"."name" AS "category_topic_name"
       FROM public."StudyProcess"
       LEFT JOIN public."Topic"
       ON "StudyProcess"."topicId" = "Topic"."id"
+      LEFT JOIN public."CategoryTopic"
+      ON "Topic"."categoryTopicId" = "CategoryTopic"."id"
       WHERE "StudyProcess"."userId" = ${userId}
   `;
 
@@ -419,9 +440,9 @@ export async function foo(studyProcessId: UUID) {
     FROM public."StudySession"
     WHERE "StudySession"."studyProcessId" = ${studyProcessId} 
   `;
-  console.log('totototot');
+  console.log("totototot");
   console.log(studySession);
-  return 'fooooooo';
+  return "fooooooo";
 }
 
 export async function getLastStudySessionByStudyProcess(studyProcessId: UUID) {
