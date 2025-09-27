@@ -14,7 +14,9 @@ import prisma from "../lib/prisma";
 import Avatar from "@/components/avatar";
 import ListStudiesProgressbar from "@/components/list-studies-progress-bar";
 import {
+  getCategoryTopicUsedByUser,
   getLastStudySessionByStudyProcess,
+  getListCategoryTopic,
   getStudyProcesses,
   getStudyProcessesAchieved,
 } from "../actions/actions";
@@ -61,6 +63,9 @@ export default async function Page() {
 
   const studyProcessesAchieved = await getStudyProcessesAchieved();
 
+  const categoryTopics = await getCategoryTopicUsedByUser();
+  console.log(categoryTopics);
+
   let lastSessionDates = [];
 
   for (let index = 0; index < studyProcessesAchieved.length; index++) {
@@ -72,8 +77,6 @@ export default async function Page() {
       date_achieved: dateAchieved,
     });
   }
-
-  console.log(studyProcessesAchieved);
 
   return (
     <div className="py-8 container mx-auto max-w-[1536px] space-y-8">
@@ -154,6 +157,7 @@ export default async function Page() {
         <div className="col-span-3">
           <ListStudiesProgressbar
             userStudies={userStudies}
+            categoryTopics={categoryTopics}
             studyProcessAchievedLength={studyProcessesAchieved.length}
           />
         </div>
