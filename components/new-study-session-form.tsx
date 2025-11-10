@@ -15,7 +15,7 @@ import { Time } from "@internationalized/date";
 import { useDateFormatter } from "@react-aria/i18n";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { StudyProcess } from "@prisma/client";
-import { PlusIcon } from "lucide-react";
+import { LinkIcon, PlusIcon } from "lucide-react";
 import { useActionState, useState } from "react";
 import { DeleteIcon } from "./icons";
 
@@ -144,7 +144,8 @@ export const NewStudySessionForm = ({
 
             {urls.map((url, index) => {
               return (
-                <div key={index} className="flex flex-row w-full gap-4">
+                <div key={index} className="flex flex-row w-full gap-4 items-center">
+                  <LinkIcon />
                   <Input
                     type="text"
                     value={url}
