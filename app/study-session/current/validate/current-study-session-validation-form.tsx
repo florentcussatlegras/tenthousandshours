@@ -4,7 +4,7 @@ import { StudySession } from "@prisma/client";
 import React, { useEffect } from "react";
 import { validateCurrentStudySessionAction } from "@/app/actions/validate-current-study-session.action";
 import { addToast, Button, Form, Input, Textarea } from "@heroui/react";
-import { Play, PlusIcon } from "lucide-react";
+import { LinkIcon, Play, PlusIcon } from "lucide-react";
 import { useActionState, useState } from "react";
 import { DeleteIcon } from "@/components/icons";
 import { redirect } from "next/navigation";
@@ -201,7 +201,8 @@ export function CurrentStudySessionValidationForm({
         ) : null}
         {urls.map((url, index) => {
           return (
-            <div key={index} className="flex flex-row w-full gap-4">
+            <div key={index} className="flex flex-row w-full gap-4 items-center">
+              <LinkIcon />
               <Input
                 type="text"
                 value={url}

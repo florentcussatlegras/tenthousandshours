@@ -10,7 +10,7 @@ import {
   TimeInput,
 } from "@heroui/react";
 import { StudyProcess, StudySession } from "@prisma/client";
-import { PlusIcon } from "lucide-react";
+import { LinkIcon, PlusIcon } from "lucide-react";
 import { useActionState, useState } from "react";
 import { DeleteIcon, EditIcon } from "./icons";
 import { Time } from "@internationalized/date";
@@ -169,7 +169,8 @@ export function UpdateStudySessionForm({
 
             {urls.map((url, index) => {
               return (
-                <div key={index} className="flex flex-row w-full gap-4">
+                <div key={index} className="flex flex-row w-full gap-4 items-center">
+                  <LinkIcon />
                   <Input
                     id={`url-${index}`}
                     type="text"

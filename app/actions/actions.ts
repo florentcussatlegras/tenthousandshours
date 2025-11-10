@@ -116,7 +116,7 @@ export async function getCategoryTopicUsedByUser() {
   return categoryTopics;
 }
 
-export async function getTopic(slug) {
+export async function getTopic(slug: String) {
   const topic = await prisma.topic.findFirst({
     select: {
       id: true,
@@ -126,7 +126,7 @@ export async function getTopic(slug) {
       categoryTopicId: true,
     },
     where: {
-      slug,
+      slug: String(slug),
     },
   });
 
@@ -146,7 +146,7 @@ export async function getListTopics() {
   return topics;
 }
 
-export async function fetchStudySessionsFinished(studyProcessId) {
+export async function fetchStudySessionsFinished(studyProcessId: Number) {
   const studySessions = await prisma.$queryRaw`SELECT 
         "StudySession"."id", 
         "StudySession"."createdAt",
@@ -173,9 +173,9 @@ export async function fetchStudySessionsPerRangeDays(
   monthEnd: number | null,
   dayEnd: number | null
 ) {
-  let studySessions = [];
+  let studySessions: any[] = [];
 
-  if (yearStart !== null) {
+  if (yearStart !== null && monthStart !== null && dayStart !== null && yearEnd !== null && monthEnd !== null && dayEnd !== null) {
     const dateStartFilter = new Date(
       yearStart,
       monthStart - 1,
@@ -184,6 +184,7 @@ export async function fetchStudySessionsPerRangeDays(
       0,
       0
     );
+
     const dateEndFilter = new Date(yearEnd, monthEnd - 1, dayEnd + 1, 1, 59, 0);
 
     studySessions = await prisma.$queryRaw`
@@ -261,7 +262,7 @@ export async function fetchStudyProcessByTopic(topicId: string) {
   //   },
   // });
 
-  const studyProcess = await prisma.$queryRaw`SELECT
+  const studyProcess: any[] = await prisma.$queryRaw`SELECT
         *
       FROM public."StudyProcess" 
       WHERE "StudyProcess"."topicId" = ${topicId}
@@ -274,7 +275,7 @@ export async function fetchStudyProcessByTopic(topicId: string) {
 export async function fetchCurrentStudySession() {
   const userId = await getUser();
 
-  const studySession = await prisma.$queryRaw`SELECT
+  const studySession: any[] = await prisma.$queryRaw`SELECT
         "StudySession"."id" AS "id",
         "StudySession"."startedAt",
         "StudySession"."studyProcessId" AS "studyprocess_id",
@@ -377,7 +378,7 @@ export async function getTopicStudySession(studySession: StudySession) {
 export async function getStudyProcessBySlug(slug: String) {
   const userId = await getUser();
 
-  const studyProcess = await prisma.$queryRaw`SELECT
+  const studyProcess: any[] = await prisma.$queryRaw`SELECT
         "StudyProcess"."id",
         "StudyProcess"."name",
         "StudyProcess"."createdAt",
@@ -446,7 +447,7 @@ export async function foo(studyProcessId: UUID) {
 }
 
 export async function getLastStudySessionByStudyProcess(studyProcessId: UUID) {
-  const studySession = await prisma.$queryRaw`SELECT
+  const studySession: any[] = await prisma.$queryRaw`SELECT
     max("createdAt")
     FROM public."StudySession"
     WHERE "StudySession"."studyProcessId" = ${studyProcessId} 
