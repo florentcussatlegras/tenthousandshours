@@ -11,11 +11,7 @@ import { redirect } from "next/navigation";
 import { fetchStudyProcessByTopic } from "@/app/actions/actions";
 import { resumeCurrentStudySessionAction } from "@/app/actions/resume-current-study-session.action";
 
-export function CurrentStudySessionValidationForm({
-  currentStudySession,
-}: {
-  currentStudySession: StudySession;
-}) {
+export function CurrentStudySessionValidationForm() {
   const [formValidateCurrentSessionState, formValidateCurrentSessionAction] =
     useActionState(validateCurrentStudySessionAction, {
       errors: {},
@@ -29,7 +25,7 @@ export function CurrentStudySessionValidationForm({
 
   const [urls, setUrls] = useState([""]);
 
-  const [studyProcess, setStudyProcess] = useState();
+  const [studyProcess, setStudyProcess] = useState<any>(null);
 
   useEffect(() => {
     async function toastAndRedirect() {
@@ -70,7 +66,7 @@ export function CurrentStudySessionValidationForm({
     setUrls(urls.filter((url, i) => index !== i));
   }
 
-  function handleUrlChange(evt) {
+  function handleUrlChange(evt: React.ChangeEvent<HTMLInputElement>) {
     const index = Number(evt.currentTarget.dataset.index);
 
     const nextUrls = urls.map((url, i) => {
@@ -201,7 +197,10 @@ export function CurrentStudySessionValidationForm({
         ) : null}
         {urls.map((url, index) => {
           return (
-            <div key={index} className="flex flex-row w-full gap-4 items-center">
+            <div
+              key={index}
+              className="flex flex-row w-full gap-4 items-center"
+            >
               <LinkIcon />
               <Input
                 type="text"

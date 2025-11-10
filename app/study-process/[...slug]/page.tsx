@@ -13,7 +13,7 @@ import { StudySessions } from "@/components/study-sessions";
 import { addToast, Card } from "@heroui/react";
 import { headers, cookies } from "next/headers";
 
-export default async function studyProcessDetailPage({ params }) {
+export default async function studyProcessDetailPage({ params }: { params: Promise<{slug: string[]}> }) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });

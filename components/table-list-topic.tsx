@@ -13,29 +13,42 @@ import {
   Tooltip,
 } from "@heroui/react";
 
-import { EyeIcon, EditIcon, DeleteIcon } from '@/components/icons'
-import { Topic } from "@prisma/client";
+import { EyeIcon, EditIcon, DeleteIcon } from "@/components/icons";
+import { CategoryTopic, Topic } from "@prisma/client";
 import Link from "next/link";
 
 export const columns = [
-  {name: "ID", uid: "id"},  
-  {name: "NAME", uid: "name"},
-  {name: "DESCRIPTION", uid: "description"},
-  {name: "CATEGORY", uid: "category"},
-  {name: "STATUS", uid: "status"},
-  {name: "ACTIONS", uid: "actions"},
+  { name: "ID", uid: "id" },
+  { name: "NAME", uid: "name" },
+  { name: "DESCRIPTION", uid: "description" },
+  { name: "CATEGORY", uid: "category" },
+  { name: "STATUS", uid: "status" },
+  { name: "ACTIONS", uid: "actions" },
 ];
 
-const statusColorMap = {
+const statusColorMap: any = {
   active: "success",
   paused: "danger",
   vacation: "warning",
 };
 
-export default function TableListTopic({ topics }: { topics: Promise<Topic[]> }) {
+interface TopicsProps {
+  id: string;
+  name: String;
+  createdAt: Date;
+  updatedAt: Date;
+  slug: String;
+  description: String;
+  status: Boolean;
+  category: CategoryTopic;
+}
 
-  const renderCell = React.useCallback((topic, columnKey) => {
-
+export default function TableListTopic({
+  topics,
+}: {
+  topics: TopicsProps[];
+}) {
+  const renderCell = React.useCallback((topic: any, columnKey: any) => {
     const cellValue = topic[columnKey];
 
     switch (columnKey) {
@@ -43,7 +56,9 @@ export default function TableListTopic({ topics }: { topics: Promise<Topic[]> })
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize">{cellValue}</p>
-            <p className="text-bold text-sm capitalize text-default-400">{topic.id.slice(8)}</p>
+            <p className="text-bold text-sm capitalize text-default-400">
+              {topic.id.slice(8)}
+            </p>
           </div>
         );
       case "name":
@@ -55,18 +70,27 @@ export default function TableListTopic({ topics }: { topics: Promise<Topic[]> })
       case "description":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize text-default-400">{topic.description}</p>
+            <p className="text-bold text-sm capitalize text-default-400">
+              {topic.description}
+            </p>
           </div>
         );
       case "category":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize text-default-400">{topic.category.name}</p>
+            <p className="text-bold text-sm capitalize text-default-400">
+              {topic.category.name}
+            </p>
           </div>
         );
       case "status":
         return (
-          <Chip className="capitalize" color={statusColorMap[topic.status]} size="sm" variant="flat">
+          <Chip
+            className="capitalize"
+            color={statusColorMap[topic.status]}
+            size="sm"
+            variant="flat"
+          >
             {cellValue}
           </Chip>
         );
@@ -79,12 +103,18 @@ export default function TableListTopic({ topics }: { topics: Promise<Topic[]> })
               </span>
             </Tooltip> */}
             <Tooltip content="Modifier la matière">
-              <Link href={`/admin/dashboard/topic/edit/${topic.slug}`} className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Link
+                href={`/admin/dashboard/topic/edit/${topic.slug}`}
+                className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              >
                 <EditIcon />
               </Link>
             </Tooltip>
             <Tooltip color="danger" content="Supprimer la matière">
-              <Link href={`/admin/dashboard/topic/delete/${topic.slug}`} className="text-lg text-danger cursor-pointer active:opacity-50">
+              <Link
+                href={`/admin/dashboard/topic/delete/${topic.slug}`}
+                className="text-lg text-danger cursor-pointer active:opacity-50"
+              >
                 <DeleteIcon />
               </Link>
             </Tooltip>
@@ -96,10 +126,18 @@ export default function TableListTopic({ topics }: { topics: Promise<Topic[]> })
   }, []);
 
   return (
-    <Table aria-label="List table topic" className="border-none" shadow="none" radius="none">
+    <Table
+      aria-label="List table topic"
+      className="border-none"
+      shadow="none"
+      radius="none"
+    >
       <TableHeader columns={columns}>
         {(column) => (
-          <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
+          <TableColumn
+            key={column.uid}
+            align={column.uid === "actions" ? "center" : "start"}
+          >
             {column.name}
           </TableColumn>
         )}
@@ -107,12 +145,12 @@ export default function TableListTopic({ topics }: { topics: Promise<Topic[]> })
       <TableBody items={topics}>
         {(item) => (
           <TableRow key={item.id}>
-            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+            {(columnKey) => (
+              <TableCell>{renderCell(item, columnKey)}</TableCell>
+            )}
           </TableRow>
         )}
       </TableBody>
     </Table>
   );
-
 }
-

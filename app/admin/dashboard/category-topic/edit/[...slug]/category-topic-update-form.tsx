@@ -9,21 +9,21 @@ import { useActionState, useState } from "react";
 export default function CategoryTopicUpdateForm({
   categoryTopic,
 }: {
-  categoryTopic: CategoryTopic;
+  categoryTopic: CategoryTopic | null;
 }) {
   const [formState, formAction] = useActionState(updateCategoryTopic, {
     errors: {},
   });
 
-  const { id, name, description } = categoryTopic;
+  // const { id, name, description } = categoryTopic;
 
-  const [currentName, setCurrentName] = useState(name);
-  const [currentDescription, setCurrentDescription] = useState(description);
+  const [currentName, setCurrentName] = useState(categoryTopic?.name);
+  const [currentDescription, setCurrentDescription] = useState(categoryTopic?.description);
 
   return (
     <Form action={formAction} className="gap-4">
 
-      <Input type="hidden" name="id" value={id} />
+      <Input type="hidden" name="id" value={categoryTopic?.id} />
 
       <Input
         color={formState.errors.name !== undefined ? "danger" : "default"}

@@ -187,7 +187,7 @@ export const SearchIcon = (props: IconSvgProps) => (
   </svg>
 );
 
-export const EyeIcon = (props) => {
+export const EyeIcon = (props: any) => {
   return (
     <svg
       aria-hidden="true"
@@ -237,7 +237,7 @@ export const MoveRightIcon = () => {
   );
 };
 
-export const AddIcon = (props) => {
+export const AddIcon = (props: any) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -257,7 +257,7 @@ export const AddIcon = (props) => {
   );
 };
 
-export const DeleteIcon = (props) => {
+export const DeleteIcon = (props: any) => {
   return (
     <svg
       aria-hidden="true"
@@ -308,7 +308,7 @@ export const DeleteIcon = (props) => {
   );
 };
 
-export const EditIcon = (props) => {
+export const EditIcon = (props: any) => {
   return (
     <svg
       aria-hidden="true"
@@ -348,16 +348,16 @@ export const EditIcon = (props) => {
   );
 };
 
-export const PlusIcon = ({ size = 24, width, height, ...props }) => {
+export const PlusIcon = ({ size = 24, width, height, ...props }: { size: Number, width: Number, height: Number }) => {
   return (
     <svg
       aria-hidden="true"
       fill="none"
       focusable="false"
-      height={size || height}
+      height={Number(size || height)}
       role="presentation"
       viewBox="0 0 24 24"
-      width={size || width}
+      width={Number(size || width)}
       {...props}
     >
       <g
@@ -374,16 +374,16 @@ export const PlusIcon = ({ size = 24, width, height, ...props }) => {
   );
 };
 
-export const VerticalDotsIcon = ({ size = 24, width, height, ...props }) => {
+export const VerticalDotsIcon = ({ size = 24, width, height, ...props }: { size: Number, width: Number | null, height: Number | null }) => {
   return (
     <svg
       aria-hidden="true"
       fill="none"
       focusable="false"
-      height={size || height}
+      height={Number(size || height)}
       role="presentation"
       viewBox="0 0 24 24"
-      width={size || width}
+      width={Number(size || width)}
       {...props}
     >
       <path

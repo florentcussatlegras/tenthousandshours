@@ -27,7 +27,7 @@ export default function ContactForm () {
             placeholder='Votre nom'
             type='text'
             name='name'
-            value={session?.user.lastname}
+            value={session?.user.name}
             size="lg"
             required={true}
         />

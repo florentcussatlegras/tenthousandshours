@@ -17,26 +17,26 @@ export default function TopicUpdateForm({
   topic,
   categoriesTopic,
 }: {
-  topic: Topic;
+  topic: Topic | null;
   categoriesTopic: CategoryTopic[];
 }) {
   const [formState, formAction] = useActionState(updateTopic, {
     errors: {},
   });
 
-  const { id, name, description } = topic;
+  // const { id, name, description } = topic;
 
-  const [currentName, setCurrentName] = useState(name);
-  const [currentDescription, setCurrentDescription] = useState(description);
+  const [currentName, setCurrentName] = useState(topic?.name);
+  const [currentDescription, setCurrentDescription] = useState(topic?.description);
   const [currentCategoryTopicId, setCurrentCategoryTopicId] = useState(
     categoriesTopic.filter(
-      (category) => category.id === topic.categoryTopicId
+      (category) => category.id === topic?.categoryTopicId
     )[0].id
   );
 
   return (
     <Form action={formAction} className="gap-4">
-      <Input type="hidden" name="id" value={id} />
+      <Input type="hidden" name="id" value={topic?.id} />
 
       <Input
         color={formState.errors.name !== undefined ? "danger" : "default"}

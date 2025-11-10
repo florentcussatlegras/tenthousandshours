@@ -15,7 +15,7 @@ interface TopicState {
   studyProcesses: string[];
 }
 
-export const CustomCheckbox = (props) => {
+export const CustomCheckbox = (props: any) => {
   const checkbox = tv({
     slots: {
       base: "bg-secondary hover:bg-secondary border-none",
@@ -62,7 +62,7 @@ export const CustomCheckbox = (props) => {
         color="secondary"
         startContent={isSelected ? <CheckIcon className="ml-1" /> : null}
         variant="faded"
-        {...getLabelProps()}
+        // {...getLabelProps()}
       >
         {children ? children : isSelected ? "Enabled" : "Disabled"}
       </Chip>
@@ -71,7 +71,7 @@ export const CustomCheckbox = (props) => {
 };
 
 export function ListTopicsUser({ topics }: { topics: TopicState[] }) {
-  const [groupSelected, setGroupSelected] = React.useState([]);
+  const [groupSelected, setGroupSelected] = React.useState<any>([]);
 
   return (
     <div className="flex flex-col w-full gap-2">

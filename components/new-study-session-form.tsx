@@ -28,7 +28,7 @@ export const NewStudySessionForm = ({
     errors: {},
   });
   const [urls, setUrls] = useState([""]);
-  const [dateCreation, setDateCreation] = useState(
+  const [dateCreation, setDateCreation] = useState<any>(
     parseDate(new Date().toISOString().substring(0, 10))
   );
 
@@ -42,7 +42,7 @@ export const NewStudySessionForm = ({
     setUrls(urls.filter((url, i) => index !== i));
   }
 
-  function handleUrlChange(evt) {
+  function handleUrlChange(evt: React.ChangeEvent<HTMLInputElement>) {
     const index = Number(evt.currentTarget.dataset.index);
 
     const nextUrls = urls.map((url, i) => {
