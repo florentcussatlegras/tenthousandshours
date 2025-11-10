@@ -64,7 +64,6 @@ export default async function Page() {
   const studyProcessesAchieved = await getStudyProcessesAchieved();
 
   const categoryTopics = await getCategoryTopicUsedByUser();
-  console.log(categoryTopics);
 
   let lastSessionDates = [];
 
@@ -132,12 +131,12 @@ export default async function Page() {
                       return (
                         <li>
                           <Link className="text-sky-500 uppercase" href={`/study-process/${element?.topic_name}`}>
-                            {element.topic_name}
+                            {element?.topic_name}
                           </Link>{" "}
                           le{" "}
                           {new Intl.DateTimeFormat("fr-Fr", {
                             dateStyle: "short",
-                          }).format(element.date_achieved)}
+                          }).format(element?.date_achieved)}
                         </li>
                       );
                     })}

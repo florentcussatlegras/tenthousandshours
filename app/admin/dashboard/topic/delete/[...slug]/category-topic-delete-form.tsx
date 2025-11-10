@@ -8,20 +8,20 @@ import Link from "next/link";
 export default function TopicDeleteForm({
   topic,
 }: {
-  topic: Topic;
+  topic: Topic | null;
 }) {
 
-  const { id, name, description } = topic;
+  // const { id, name, description } = topic;
 
   return (
     <Form action={deleteTopic} className="gap-4">
 
       <div className="flex items-center">
         <span>Etes-vous sûr de vouloir supprimer la matière</span>
-        <span className="font-bold ml-2">{name}</span> ?
+        <span className="font-bold ml-2">{topic?.name}</span> ?
       </div> 
 
-      <Input type="hidden" value={id} name="id" />
+      <Input type="hidden" value={topic?.id} name="id" />
 
       <div className="flex gap-4">
         <Button type="submit" color="danger" className="font-bold uppercase">

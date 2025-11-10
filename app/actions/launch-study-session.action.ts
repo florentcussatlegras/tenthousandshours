@@ -96,7 +96,7 @@ export async function launchStudySessionAction(
       console.log(dateStartedAt);
       const dateFinishedAt = null;
   
-      const studyProcessInThisHours = await prisma.$queryRaw`
+      const studyProcessInThisHours: any[] = await prisma.$queryRaw`
           SELECT * FROM public."StudySession" 
           WHERE "StudySession"."studyProcessId" = ${result.data.studyProcessId}
           AND ("startedAt" <= ${dateStartedAt} AND "finishedAt" >= ${dateStartedAt})

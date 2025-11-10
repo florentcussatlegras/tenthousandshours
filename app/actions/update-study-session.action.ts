@@ -138,7 +138,7 @@ export async function updateStudySessionAction(
 
     console.log(dateCreatedAt, dateStartedAt, dateFinishedAt);
 
-    const studyProcessInThisHours = await prisma.$queryRaw(Prisma.sql`
+    const studyProcessInThisHours: any[] = await prisma.$queryRaw(Prisma.sql`
               SELECT * FROM public."StudySession" 
               WHERE "StudySession"."id" != ${result.data.studySessionId}
                 AND "StudySession"."studyProcessId" = ${result.data.studyProcessId}

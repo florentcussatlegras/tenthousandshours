@@ -14,9 +14,9 @@ export function StudySessions({
   studySessions: StudySession[];
   studyProcess: StudyProcess;
 }) {
-  const [currentStudySession, setCurrentStudySession] = useState(null);
+  const [currentStudySession, setCurrentStudySession] = useState<any>(null);
 
-  const handleEditForm = React.useCallback(async (studySessionId) => {
+  const handleEditForm = React.useCallback(async (studySessionId: any) => {
 
     if(studySessionId !== null) {
         const studySessionToEdit = await getStudySession(studySessionId);
@@ -25,7 +25,7 @@ export function StudySessions({
 
   }, []);
 
-  const resetEditForm = React.useCallback(() => {
+  const resetEditForm = React.useCallback<any>(() => {
         setCurrentStudySession(null);
   }, []);
 
@@ -38,7 +38,7 @@ export function StudySessions({
       )}
       <ListStudiesSession
         onEditClick={handleEditForm}
-        studyProcessId={studyProcess.id}
+        studyProcessId={Number(studyProcess.id)}
         studySessions={studySessions}
       />
     </div>

@@ -36,7 +36,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
-import { StudySession } from "@prisma/client";
+import { StudySession, Topic } from "@prisma/client";
 import { fetchStudySessionsPerDay, getTopicsOfaUser } from "@/app/actions/actions";
 import { useDateFormatter } from "@react-aria/i18n";
 import ModalStudySessionView from "./modal-study-session-view";
@@ -84,7 +84,7 @@ function getCurrentWeek(currentDate: Date) {
   return dayWeeks;
 }
 
-export const CustomCheckbox = (props) => {
+export const CustomCheckbox = (props: any) => {
   const checkbox = tv({
     slots: {
       base: "bg-secondary hover:bg-secondary border-none",
@@ -131,7 +131,7 @@ export const CustomCheckbox = (props) => {
         color="secondary"
         startContent={isSelected ? <CheckIcon className="ml-1" /> : null}
         variant="faded"
-        {...getLabelProps()}
+        // {...getLabelProps()}
       >
         {children ? children : isSelected ? "Enabled" : "Disabled"}
       </Chip>
@@ -143,25 +143,25 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
   let formatter = useDateFormatter();
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [groupSelected, setGroupSelected] = useState([]);
+  const [groupSelected, setGroupSelected] = useState<any>([]);
   const [haveUsedTopicSelection, setHaveUsedTopicSelection] = useState(false);
 
   const [currentDate, setCurrentDate] = useState(defaultDate);
   const [currentWeek, setCurrentWeek] = useState(getCurrentWeek(currentDate));
 
-  const [valueDatePicker, setValueDatePicker] = useState(
+  const [valueDatePicker, setValueDatePicker] = useState<any>(
     parseDate(currentDate.toISOString().substring(0, 10))
   );
-  const [studySessions, setStudySessions] = useState([]);
-  const [studySessionsFilter, setStudySessionsFilter] = useState([]);
+  const [studySessions, setStudySessions] = useState<any>([]);
+  const [studySessionsFilter, setStudySessionsFilter] = useState<any>([]);
   // const [studySessionToView, setStudySessionToView] = useState(null);
-  const [studySessionsPerDay, setStudySessionsPerDay] = useState([]);
-  const [studySessionsPerDayFilter, setStudySessionsPerDayFilter] = useState(
+  const [studySessionsPerDay, setStudySessionsPerDay] = useState<any>([]);
+  const [studySessionsPerDayFilter, setStudySessionsPerDayFilter] = useState<any>(
     []
   );
 
-  const [topics, setTopics] = useState([]);
-  const [displayTab, setDisplayTab] = useState("day");
+  const [topics, setTopics] = useState<any>([]);
+  const [displayTab, setDisplayTab] = useState<string>("day");
 
   // const [searchItem, setSearchItem] = useState("");
 
@@ -170,14 +170,14 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
   useEffect(() => {
     async function getStudySessions() {
       const newStudySessions = await fetchStudySessionsPerDay(
-        session?.user.id,
+        String(session?.user.id),
         currentDate
       );
 
       setStudySessions(newStudySessions);
 
       if (groupSelected.length !== 0) {
-        const newStudySessionsFilter = newStudySessions.filter((item) => {
+        const newStudySessionsFilter = newStudySessions.filter((item: any) => {
           return groupSelected.includes(item.topic_id);
         });
         setStudySessionsFilter(newStudySessionsFilter);
@@ -189,8 +189,8 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
     async function getStudySessionsPerDay() {
       let newStudySessionsPerDay = [];
 
-      const getStudySessionPerDay = async (day) => {
-        return await fetchStudySessionsPerDay(session?.user.id, day);
+      const getStudySessionPerDay = async (day: any) => {
+        return await fetchStudySessionsPerDay(String(session?.user.id), day);
       };
 
       for (let index = 0; index < currentWeek.length; index++) {
@@ -199,10 +199,10 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
       }
 
       if (groupSelected.length !== 0) {
-        let newStudySessionsPerDayFilter = [];
+        let newStudySessionsPerDayFilter: any[] = [];
 
         newStudySessionsPerDay.forEach((items, indexDay) => {
-          const newitems = items.filter((item) => {
+          const newitems = items.filter((item: any) => {
             return groupSelected.includes(item.topic_id);
           });
           newStudySessionsPerDayFilter[indexDay] = newitems;
@@ -218,7 +218,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
     }
 
     async function getTopicsUser() {
-      const topics = await getTopicsOfaUser(session?.user.id);
+      const topics = await getTopicsOfaUser();
       setTopics(topics);
     }
 
@@ -234,15 +234,15 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
   useEffect(() => {
     if (groupSelected.length !== 0) {
       console.log(groupSelected);
-      const newitems = studySessions.filter((item) => {
+      const newitems = studySessions.filter((item: any) => {
         return groupSelected.includes(item.topic_id);
       });
       setStudySessionsFilter(newitems);
 
-      let result = [];
+      let result: any[] = [];
 
-      studySessionsPerDay.forEach((items, indexDay) => {
-        const newitems = items.filter((item) => {
+      studySessionsPerDay.forEach((items: any, indexDay: any) => {
+        const newitems = items.filter((item: any) => {
           return groupSelected.includes(item.topic_id);
         });
         result[indexDay] = newitems;
@@ -309,7 +309,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
     );
   }
 
-  function handleDateCalendarChange(value) {
+  function handleDateCalendarChange(value: any) {
     setValueDatePicker(value);
     const newDate = new Date(value.year, value.month - 1, value.day);
     setCurrentDate(value.toDate());
@@ -400,7 +400,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
               value={groupSelected}
               onChange={setGroupSelected}
             >
-              {topics.map((topic) => (
+              {topics.map((topic: any) => (
                 <CustomCheckbox
                   key={topic.topic_id}
                   value={topic.topic_id}

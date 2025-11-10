@@ -22,6 +22,7 @@ export function UpdateStudySessionForm({
   studyProcess,
   studySession,
 }: {
+  onReset: any
   studyProcess: StudyProcess;
   studySession: StudySession;
 }) {
@@ -30,7 +31,7 @@ export function UpdateStudySessionForm({
   });
 
   const [urls, setUrls] = useState(studySession.urls.split(","));
-  const [dateCreation, setDateCreation] = useState(
+  const [dateCreation, setDateCreation] = useState<any>(
     parseDate(studySession.createdAt.toISOString().substring(0, 10))
   );
 
@@ -44,7 +45,7 @@ export function UpdateStudySessionForm({
     setUrls(urls.filter((url, i) => index !== i));
   }
 
-  function handleUrlChange(evt) {
+  function handleUrlChange(evt: React.ChangeEvent<HTMLInputElement>) {
     const index = Number(evt.currentTarget.dataset.index);
 
     const nextUrls = urls.map((url, i) => {
@@ -67,8 +68,8 @@ export function UpdateStudySessionForm({
 
   const [finishedAtValue, setFinishedAtValue] = useState(
     new Time(
-      studySession.finishedAt.getHours(),
-      studySession.finishedAt.getMinutes()
+      studySession.finishedAt?.getHours(),
+      studySession.finishedAt?.getMinutes()
     )
   );
 

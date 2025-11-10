@@ -4,8 +4,9 @@ import { DeleteUserButton, PlaceholderDeleteUserButton } from './delete-user-but
 import { UserRoleSelect } from './user-role-select'
 import { User, UserRole } from '@prisma/client'
 import { Card, CardBody } from '@heroui/react'
+import { UserWithRole } from 'better-auth/plugins';
 
-export default function TableListUsers({ sortedUsers }: {sortedUsers: User[]}) {
+export default function TableListUsers({ sortedUsers }: {sortedUsers: UserWithRole[]}) {
   return (
     <Card className="rounded-none">
         <CardBody>

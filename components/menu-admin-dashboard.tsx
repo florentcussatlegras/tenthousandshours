@@ -5,13 +5,13 @@ import { Card, CardBody } from '@heroui/react';
 import {Listbox, ListboxItem} from "@heroui/react";
 import Link from 'next/link';
 
-export const ListboxWrapper = ({children}) => (
+export const ListboxWrapper = ({children}: {children: any}) => (
   <div className="w-full max-w-[260px]">
     {children}
   </div>
 );
 
-export default function MenuAdminDashBoard({ keySelected }) {
+export default function MenuAdminDashBoard({ keySelected }: { keySelected: any }) {
   return (
     <Card className="rounded-none">
         <CardBody>

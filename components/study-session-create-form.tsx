@@ -25,7 +25,7 @@ export default function StudySessionCreateForm() {
                 >
                     Remember me
                 </Checkbox>
-                <Link color="primary" href="#" size="sm">
+                <Link color="primary" href="#">
                     Forgot password?
                 </Link>
             </div>

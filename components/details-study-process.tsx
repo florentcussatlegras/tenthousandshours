@@ -148,7 +148,7 @@ export default function DetailsStudyProcess({
         <span className="text-default-500 text-sm">
           Apprentissage débuté le {intl.format(studyProcess.createdAt)}
         </span>
-        {studyProcess.totalSeconds >= 36000000 ? (
+        {studyProcess.totalSeconds && studyProcess.totalSeconds >= 36000000 ? (
           <div className="ml-auto flex text-sm items-center gap-4 text-success uppercase">
             <span>
               Bravo ! Vous avez atteint les 10000 heures, vous êtes un pro !

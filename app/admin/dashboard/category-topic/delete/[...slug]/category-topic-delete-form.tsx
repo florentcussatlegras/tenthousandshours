@@ -8,20 +8,22 @@ import Link from "next/link";
 export default function CategoryTopicDeleteForm({
   categoryTopic,
 }: {
-  categoryTopic: CategoryTopic;
+  categoryTopic: CategoryTopic | null;
 }) {
 
-  const { id, name, description } = categoryTopic;
+  // if (categoryTopic !== null) {
+  //   const { id, name, description } = categoryTopic;
+  // }
 
   return (
     <Form action={deleteCategoryTopic} className="gap-4">
       
       <div className="flex items-center">
         <span>Etes-vous sûr de vouloir supprimer la catégorie</span>
-        <span className="font-bold ml-2">{name}</span> ?
+        <span className="font-bold ml-2">{categoryTopic?.name}</span> ?
       </div> 
 
-      <Input type="hidden" value={id} name="id" />
+      <Input type="hidden" value={categoryTopic?.id} name="id" />
 
       <div className="flex gap-4">
         <Button type="submit" color="danger" className="uppercase font-bold">

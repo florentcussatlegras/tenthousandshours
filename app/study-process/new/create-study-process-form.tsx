@@ -45,18 +45,18 @@ export default function StudyProcessCreateForm({
   const [currentTopicId, setCurrentTopicId] = useState(initialTopicId);
   const [currentTopicName, setCurrentTopicName] = useState(topicName);
 
-  function handleTopicChange(value) {
+  function handleTopicChange(value: string | null) {
     setCurrentTopicName(value);
     setCurrentTopicId(topics.filter((topic) => topic.name === value)[0].id);
   }
 
   return (
     <Form action={formAction} className='space-y-8 max-w-[600px]'>
-      <Input type="hidden" name="topicId" value={currentTopicId} />
+      <Input type="hidden" name="topicId" value={String(currentTopicId)} />
 
       <Autocomplete
         aria-label="Selectionner une matière"
-        inputValue={currentTopicName}
+        inputValue={String(currentTopicName)}
         classNames={{
           base: "max-w-full mb-8",
           listboxWrapper: "max-h-[320px]",

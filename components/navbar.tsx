@@ -151,8 +151,8 @@ export const AcmeLogo = () => {
 export const SearchIcon = ({
   size = 24,
   strokeWidth = 1.5,
-  width,
-  height,
+  width = null,
+  height = null,
   ...props
 }) => {
   return (

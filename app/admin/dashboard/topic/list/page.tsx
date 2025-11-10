@@ -5,10 +5,12 @@ import { Link } from "@heroui/link";
 import { AddIcon } from "@/components/icons";
 
 export default async function App() {
-  const topics = await prisma.topic.findMany({
+  const topics: any[] = await prisma.topic.findMany({
     select: {
       id: true,
       name: true,
+      createdAt: true,
+      updatedAt: true,
       slug: true,
       description: true,
       status: true,

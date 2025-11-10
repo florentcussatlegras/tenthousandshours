@@ -7,7 +7,7 @@ export function WeekCalendar({
   studySessionsPerDay,
 }: {
   currentWeek: Date[];
-  studySessionsPerDay: StudySession[];
+  studySessionsPerDay: any[];
 }) {
   const { data: session } = useSession();
 
@@ -43,7 +43,7 @@ export function WeekCalendar({
               </div>
               <div className="w-full text-center flex flex-col gap-3 py-4 px-2">
                 {studySessionsPerDay[day.getDay()] !== undefined
-                  ? studySessionsPerDay[day.getDay()].map((session) => (
+                  ? studySessionsPerDay[day.getDay()].map((session: any) => (
                       <div className="bg-sky-500 text-white text-tiny py-1 rounded-sm font-semibold">
                         {session.topic_name}
                       </div>

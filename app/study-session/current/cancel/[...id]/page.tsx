@@ -5,9 +5,14 @@ import { Breadcrumb } from "@/components/breadcrumb";
 import prisma from "@/app/lib/prisma";
 import StudySessionDeleteForm from "@/app/study-session/delete/[...id]/study-session-delete-form";
 
-export default async function StudySessionDeletePage({ params }) {
+interface StudySessionDeleteFormProps {
+  id: string,
+  studyProcessId: string,
+}
+
+export default async function StudySessionDeletePage({ params }: { params: Promise<{id: string[]}> }) {
     const { id } = await params;
-    const studySession = await prisma.studySession.findFirst({
+    const studySession: StudySessionDeleteFormProps | null = await prisma.studySession.findFirst({
         where: {
             id: String(id),
         },

@@ -33,11 +33,7 @@ const MINUTE = SECOND * 60;
 const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
 
-export function CurrentStudySession({
-  studyProcess,
-}: {
-  studyprocess?: StudyProcess;
-}) {
+export function CurrentStudySession() {
   const router = useRouter();
 
   const modal1 = useDisclosure();
@@ -56,18 +52,18 @@ export function CurrentStudySession({
   //     confirmValidation: false,
   //   });
 
-  const [time, setTime] = useState({
+  const [time, setTime] = useState<any>({
     sec: 0,
     min: 0,
     hr: 0,
   });
 
-  const [intervalId, setIntervalId] = useState();
+  const [intervalId, setIntervalId] = useState<any>();
   const [isPlaying, setIsPlaying] = useState(false);
 
   const [currentStudySession, setCurrentStudySession] = useState(null);
 
-  const [topics, setTopics] = useState([]);
+  const [topics, setTopics] = useState<any>([]);
   const [currentTopicId, setCurrentTopicId] = useState("");
   const [currentTopicName, setCurrentTopicName] = useState();
 
@@ -75,7 +71,7 @@ export function CurrentStudySession({
 
   useEffect(() => {
     async function getTopics() {
-      const allTopics = await getTopicsOfaUser();
+      const allTopics: any[] = await getTopicsOfaUser();
 
       setTopics(allTopics);
     }
@@ -85,10 +81,10 @@ export function CurrentStudySession({
     console.log("c'est là que je viens de fermer la modal 1");
 
     if (localStorage.getItem("current_study_session_timer")) {
-      setTime(JSON.parse(localStorage.getItem("current_study_session_timer")));
-      setCurrentTopicId(localStorage.getItem("current_study_session_topic_id"));
+      setTime(JSON.parse(String(localStorage.getItem("current_study_session_timer"))));
+      setCurrentTopicId(String(localStorage.getItem("current_study_session_topic_id")));
       setHoursStartedAt(
-        localStorage.getItem("current_study_session_started_at")
+        Number(localStorage.getItem("current_study_session_started_at"))
       );
       if (localStorage.getItem("current_study_session_is_playing") === "true") {
         let id = setInterval(updateTimer, 1000);
@@ -119,7 +115,7 @@ export function CurrentStudySession({
   }, [localStorage.getItem("current_study_session_resume")]);
 
   const updateTimer = () => {
-    setTime((prev) => {
+    setTime((prev: any) => {
       let newTime = { ...prev };
       // update sec and see if we need to increase min
       if (newTime.sec < 59) newTime.sec += 1;
@@ -210,12 +206,12 @@ export function CurrentStudySession({
     modal1.onClose();
   };
 
-  function handleTopicChange(value) {
+  function handleTopicChange(value: any) {
     if (value === "") {
       setCurrentTopicId("");
     } else {
       setCurrentTopicId(
-        topics.filter((topic) => topic.topic_name === value)[0].topic_id
+        topics.filter((topic: any) => topic.topic_name === value)[0].topic_id
       );
     }
     setCurrentTopicName(value);
@@ -335,7 +331,7 @@ export function CurrentStudySession({
                         variant="bordered"
                         onInputChange={handleTopicChange}
                       >
-                        {(item) => (
+                        {(item: any) => (
                           <AutocompleteItem
                             key={item.topic_id}
                             textValue={item.topic_name}

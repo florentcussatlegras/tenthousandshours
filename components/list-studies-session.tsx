@@ -72,7 +72,7 @@ export const statusOptions = [
   { name: "Vacation", uid: "vacation" },
 ];
 
-export function capitalize(s) {
+export function capitalize(s: any) {
   return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : "";
 }
 
@@ -94,20 +94,22 @@ export default function ListStudiesSession({
   studyProcessId,
   studySessions,
 }: {
+  onEditClick: any,
+  studyProcessId: Number,
   studySessions: StudySession[];
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [studySessionToView, setStudySessionToView] = React.useState(null);
+  const [studySessionToView, setStudySessionToView] = React.useState<StudySession>();
 
   const [filterValue, setFilterValue] = React.useState(null);
   const [filteredItems, setFilteredItems] = React.useState(studySessions);
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
+  const [selectedKeys, setSelectedKeys] = React.useState<any>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
-  const [statusFilter, setStatusFilter] = React.useState("all");
+  const [statusFilter, setStatusFilter] = React.useState<String>("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [sortDescriptor, setSortDescriptor] = React.useState({
+  const [sortDescriptor, setSortDescriptor] = React.useState<any>({
     column: "age",
     direction: "ascending",
   });
@@ -116,7 +118,7 @@ export default function ListStudiesSession({
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
-    if (visibleColumns === "all") return columns;
+    if (String(visibleColumns) === "all") return columns;
 
     return columns.filter((column) =>
       Array.from(visibleColumns).includes(column.uid)
@@ -152,7 +154,7 @@ export default function ListStudiesSession({
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a, b) => {
+    return [...items].sort((a: any, b: any) => {
       const first = a[sortDescriptor.column];
       const second = b[sortDescriptor.column];
       const cmp = first < second ? -1 : first > second ? 1 : 0;
@@ -166,7 +168,7 @@ export default function ListStudiesSession({
     onOpen();
   };
 
-  const renderCell = React.useCallback((studySession, columnKey) => {
+  const renderCell = React.useCallback((studySession: any, columnKey: any) => {
     const cellValue = studySession[columnKey];
 
     const createdAt = new Intl.DateTimeFormat("fr-FR", {
@@ -194,7 +196,7 @@ export default function ListStudiesSession({
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-300" />
+                  <VerticalDotsIcon size={24} width={24} height={24} />
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
@@ -246,16 +248,16 @@ export default function ListStudiesSession({
     }
   }, [page]);
 
-  const onRowsPerPageChange = React.useCallback((e) => {
+  const onRowsPerPageChange = React.useCallback((e: any) => {
     setRowsPerPage(Number(e.target.value));
     setPage(1);
   }, []);
 
-  const onSearchChange = React.useCallback(async (value) => {
+  const onSearchChange = React.useCallback(async (value: any) => {
     if (value) {
       setFilterValue(value);
       const result = await fetchStudySessionsPerRangeDays(
-        studyProcessId,
+        String(studyProcessId),
         value.start.year,
         value.start.month,
         value.start.day,
@@ -273,7 +275,7 @@ export default function ListStudiesSession({
   const onClear = React.useCallback(async () => {
     setFilterValue(null);
     const result = await fetchStudySessionsPerRangeDays(
-      studyProcessId,
+      String(studyProcessId),
       null,
       null,
       null,
@@ -384,7 +386,7 @@ export default function ListStudiesSession({
     return (
       <div className="py-2 px-2 flex justify-between items-center">
         <span className="w-[30%] text-small text-default-400">
-          {selectedKeys === "all"
+          {String(selectedKeys) === "all"
             ? "Toutes les sessions sélectionnées"
             : `${selectedKeys.size} of ${filteredItems.length} selectionné`}
         </span>

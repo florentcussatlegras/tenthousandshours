@@ -32,7 +32,7 @@ export const SignOutButton = () => {
     }
 
     return (
-        <Button onPress={handleClick} color="light" disabled={isPending} className="p-0 h-6 gap-1">
+        <Button onPress={handleClick} color="secondary" disabled={isPending} className="p-0 h-6 gap-1">
             <LogOut />
             Déconnexion
         </Button>

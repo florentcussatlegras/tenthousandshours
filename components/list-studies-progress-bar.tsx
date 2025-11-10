@@ -21,12 +21,16 @@ import Link from "next/link";
 import { AddIcon, DeleteIcon, VerticalDotsIcon } from "./icons";
 
 interface StudyProgression {
-  id?: UUID;
-  slug?: String;
-  totalSeconds?: Number;
-  topic?: {
-    name?: String;
-  };
+  id: UUID;
+  totalSeconds: String;
+  slug: String;
+  topic_id: String;
+  topic_name: String;
+  category_topic_id: String;
+  category_topic_name: String;
+  // topic?: {
+  //   name?: String;
+  // };
 }
 
 import React, { useState } from "react";
@@ -81,14 +85,14 @@ export default function ListStudiesProgressbar({
   studyProcessAchievedLength,
 }: {
   userStudies: StudyProgression[];
-  categoryTopics: CategoryTopic[];
+  categoryTopics: any[];
   studyProcessAchievedLength: Number;
 }) {
   const [studyProcesses, setStudyProcesses] = useState(userStudies);
   const [searchItem, setSearchItem] = useState("");
 
-  function handleInputChange(e) {
-    const searchTerm = e.target.value;
+  function handleInputChange(evt: React.ChangeEvent<HTMLInputElement>) {
+    const searchTerm = evt.currentTarget.value;
     setSearchItem(searchItem);
 
     const filteredStudyProcesses = userStudies.filter((study) => {
@@ -104,21 +108,21 @@ export default function ListStudiesProgressbar({
     switch (value) {
       case "beginner":
         filteredStudyProcesses = userStudies.filter((study) => {
-          return study?.totalSeconds <= 18000000;
+          return Number(study.totalSeconds) <= 18000000;
         });
         break;
 
       case "intermediate":
         filteredStudyProcesses = userStudies.filter((study) => {
           return (
-            study?.totalSeconds > 18000000 && study?.totalSeconds < 36000000
+            Number(study.totalSeconds) > 18000000 && Number(study?.totalSeconds) < 36000000
           );
         });
         break;
 
       case "expert":
         filteredStudyProcesses = userStudies.filter((study) => {
-          return study?.totalSeconds >= 36000000;
+          return Number(study?.totalSeconds) >= 36000000;
         });
         break;
 
@@ -142,9 +146,9 @@ export default function ListStudiesProgressbar({
         <div className="flex flex-col gap-8 h-full justify-start">
           <div className="flex flex-row items-center gap-4">
             <div className="text-default-500 text-sm uppercase">
-              {studyProcessAchievedLength} objectif
-              {studyProcessAchievedLength > 1 && "s"} atteint{" "}
-              {studyProcessAchievedLength > 1 && "s"}
+              {Number(studyProcessAchievedLength)} objectif
+              {Number(studyProcessAchievedLength) > 1 && "s"} atteint{" "}
+              {Number(studyProcessAchievedLength) > 1 && "s"}
             </div>
             <div className="flex-1/3 justify-center flex flex-row items-center gap-12">
               <Input
@@ -232,7 +236,7 @@ export default function ListStudiesProgressbar({
                           <ThreeDotsIcon />
                         </Button> */}
                                 <Button isIconOnly size="sm" variant="light">
-                                  <VerticalDotsIcon className="text-default-300" />
+                                  <VerticalDotsIcon size={24} width={24} height={24} />
                                 </Button>
                               </DropdownTrigger>
                               <DropdownMenu aria-label="Static Actions">

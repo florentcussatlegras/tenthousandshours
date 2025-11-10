@@ -25,15 +25,15 @@ export const columns = [
   {name: "ACTIONS", uid: "actions"},
 ];
 
-const statusColorMap = {
+const statusColorMap: any = {
   active: "success",
   paused: "danger",
   vacation: "warning",
 };
 
-export default function TableListCategoryTopic({ categories }: { categories: Promise<CategoryTopic[]> }) {
+export default function TableListCategoryTopic({ categories }: { categories: CategoryTopic[] }) {
 
-  const renderCell = React.useCallback((category, columnKey) => {
+  const renderCell = React.useCallback((category: any, columnKey: any) => {
     const cellValue = category[columnKey];
 
     switch (columnKey) {

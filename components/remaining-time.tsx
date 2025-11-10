@@ -14,8 +14,8 @@ export function RemainingTime({
 }: {
   studyProcess: StudyProcess;
 }) {
-  const [remainingDaysUntilGoal, setRemainingDaysUntilGoal] = useState();
-  const [dateGoal, setDateGoal] = useState();
+  const [remainingDaysUntilGoal, setRemainingDaysUntilGoal] = useState<any>();
+  const [dateGoal, setDateGoal] = useState<any>();
 
   useEffect(() => {
     async function getFirstAndLastSessions() {
@@ -33,9 +33,9 @@ export function RemainingTime({
         60 /
         24;
 
-      const averageDaySpendingTime = studyProcess.totalSeconds / diffDays;
+      const averageDaySpendingTime = Number(studyProcess.totalSeconds) / diffDays;
 
-      const remainingTimeUntilGoal = 36000000 - studyProcess.totalSeconds;
+      const remainingTimeUntilGoal = 36000000 - Number(studyProcess.totalSeconds);
       const newRemainingDaysUntilGoal =
         remainingTimeUntilGoal / averageDaySpendingTime;
 

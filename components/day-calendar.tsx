@@ -31,7 +31,7 @@ export function DayCalendar({
           </span>
 
           <Accordion variant="splitted">
-            {studySessions.map((session) => {
+            {studySessions.map((session: any) => {
               const ratioProgress =
                 (Number(session.study_process_total_hours) / 10000) * 100;
 
@@ -99,7 +99,7 @@ export function DayCalendar({
                           session de travail :
                         </h2>
                         <ul>
-                          {session.urls.split(",").map((url) => (
+                          {session.urls.split(",").map((url: string) => (
                             <li className="text-sky-500">
                               <Link href={url}>{url}</Link>
                             </li>
