@@ -33,7 +33,7 @@ export default function StudyProcessCreateForm({
   // const [currentDescription, setCurrentDescription] = useState(description);
   let topicName: string | null = "";
   let initialTopicId = null;
-  if (localStorage.getItem("new_study_process")) {
+  if (typeof window !== 'undefined' && localStorage.getItem("new_study_process")) {
     topicName = localStorage.getItem("new_study_process");
     localStorage.removeItem("new_study_process");
     initialTopicId = topics.filter((topic) => topic.name === topicName)[0].id;
