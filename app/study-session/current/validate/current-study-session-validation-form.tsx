@@ -29,22 +29,24 @@ export function CurrentStudySessionValidationForm() {
 
   useEffect(() => {
     async function toastAndRedirect() {
-      const newStudyProcess = await fetchStudyProcessByTopic(
-        localStorage.getItem("current_study_session_topic_id")
-      );
+      if (typeof window !== "undefined") {
+        const newStudyProcess = await fetchStudyProcessByTopic(
+          localStorage.getItem("current_study_session_topic_id")
+        );
 
-      setStudyProcess(newStudyProcess);
+        setStudyProcess(newStudyProcess);
 
-      if (formValidateCurrentSessionState.confirmValidation) {
-        addToast({
-          title: "Confirmation",
-          description: "La session a bien été ajoutée",
-          color: "success",
-        });
+        if (formValidateCurrentSessionState.confirmValidation) {
+          addToast({
+            title: "Confirmation",
+            description: "La session a bien été ajoutée",
+            color: "success",
+          });
 
-        clearStorage();
+          clearStorage();
 
-        redirect(`/study-process/${newStudyProcess?.slug}`);
+          redirect(`/study-process/${newStudyProcess?.slug}`);
+        }
       }
     }
 
@@ -52,9 +54,11 @@ export function CurrentStudySessionValidationForm() {
   }, [formValidateCurrentSessionState]);
 
   useEffect(() => {
-    if (formResumeCurrentSessionState.resumeCurrentStudySession) {
-      localStorage.setItem("current_study_session_resume", "true");
-      redirect(`/study-process/${studyProcess.slug}`);
+    if (typeof window !== "undefined") {
+      if (formResumeCurrentSessionState.resumeCurrentStudySession) {
+        localStorage.setItem("current_study_session_resume", "true");
+        redirect(`/study-process/${studyProcess.slug}`);
+      }
     }
   }, [formResumeCurrentSessionState]);
 
@@ -81,13 +85,15 @@ export function CurrentStudySessionValidationForm() {
   }
 
   function clearStorage() {
-    localStorage.removeItem("current_study_session_topic_id");
-    localStorage.removeItem("current_study_session_started_at");
-    localStorage.removeItem("current_study_session_timer");
-    localStorage.removeItem("current_study_session_is_playing");
-    localStorage.removeItem("current_study_session_finished_at");
-    localStorage.removeItem("current_study_session_topic_name");
-    localStorage.removeItem("current_study_session_resume");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("current_study_session_topic_id");
+      localStorage.removeItem("current_study_session_started_at");
+      localStorage.removeItem("current_study_session_timer");
+      localStorage.removeItem("current_study_session_is_playing");
+      localStorage.removeItem("current_study_session_finished_at");
+      localStorage.removeItem("current_study_session_topic_name");
+      localStorage.removeItem("current_study_session_resume");
+    }
   }
 
   return (
@@ -111,7 +117,8 @@ export function CurrentStudySessionValidationForm() {
               }).format(
                 new Date().setTime(
                   Number(
-                    localStorage.getItem("current_study_session_started_at")
+                    typeof window !== "undefined" &&
+                      localStorage.getItem("current_study_session_started_at")
                   )
                 )
               )}
@@ -122,7 +129,8 @@ export function CurrentStudySessionValidationForm() {
               }).format(
                 new Date().setTime(
                   Number(
-                    localStorage.getItem("current_study_session_started_at")
+                    typeof window !== "undefined" &&
+                      localStorage.getItem("current_study_session_started_at")
                   )
                 )
               )}
@@ -137,7 +145,8 @@ export function CurrentStudySessionValidationForm() {
               }).format(
                 new Date().setTime(
                   Number(
-                    localStorage.getItem("current_study_session_finished_at")
+                    typeof window !== "undefined" &&
+                      localStorage.getItem("current_study_session_finished_at")
                   )
                 )
               )}
@@ -148,7 +157,8 @@ export function CurrentStudySessionValidationForm() {
               }).format(
                 new Date().setTime(
                   Number(
-                    localStorage.getItem("current_study_session_finished_at")
+                    typeof window !== "undefined" &&
+                      localStorage.getItem("current_study_session_finished_at")
                   )
                 )
               )}
@@ -159,14 +169,18 @@ export function CurrentStudySessionValidationForm() {
         <Input
           type="hidden"
           name="topicId"
-          value={String(localStorage.getItem("current_study_session_topic_id"))}
+          value={String(
+            typeof window !== "undefined" &&
+              localStorage.getItem("current_study_session_topic_id")
+          )}
         />
 
         <Input
           type="hidden"
           name="startedAt"
           value={String(
-            localStorage.getItem("current_study_session_started_at")
+            typeof window !== "undefined" &&
+              localStorage.getItem("current_study_session_started_at")
           )}
         />
 
@@ -174,14 +188,18 @@ export function CurrentStudySessionValidationForm() {
           type="hidden"
           name="finishedAt"
           value={String(
-            localStorage.getItem("current_study_session_finished_at")
+            typeof window !== "undefined" &&
+              localStorage.getItem("current_study_session_finished_at")
           )}
         />
 
         <Input
           type="hidden"
           name="timer"
-          value={String(localStorage.getItem("current_study_session_timer"))}
+          value={String(
+            typeof window !== "undefined" &&
+              localStorage.getItem("current_study_session_timer")
+          )}
         />
 
         <Textarea
