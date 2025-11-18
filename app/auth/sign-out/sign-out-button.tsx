@@ -8,33 +8,41 @@ import { toast } from "sonner";
 import { LogOut } from "lucide-react";
 
 export const SignOutButton = () => {
-    const [isPending, setIsPending] = React.useState(false);
-    const router = useRouter();
-    
-    async function handleClick() {
-        await signOut({
-            fetchOptions: {
-                onRequest: () => {
-                    setIsPending(true)
-                },
-                onResponse: () => {
-                    setIsPending(false)
-                },
-                onError: (ctx) => {
-                    toast.error(ctx.error.message);
-                },
-                onSuccess: () => {
-                    router.push("/auth/sign-in");
-                    router.refresh();
-                }
-            }
-        });
-    }
+  const [isPending, setIsPending] = React.useState(false);
+  const router = useRouter();
 
-    return (
-        <Button onPress={handleClick} color="secondary" disabled={isPending} className="p-0 h-6 gap-1">
-            <LogOut />
-            Déconnexion
-        </Button>
-    );
-}
+  async function handleClick() {
+    await signOut({
+      fetchOptions: {
+        onRequest: () => {
+          setIsPending(true);
+        },
+        onResponse: () => {
+          setIsPending(false);
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+        },
+        onSuccess: () => {
+          router.push("/auth/sign-in");
+          router.refresh();
+        },
+      },
+    });
+  }
+
+  return (
+    <Button
+      onPress={handleClick}
+      disabled={isPending}
+      className="p-0 h-6 gap-1 bg-transparent hover:bg-transparent 
+  data-[hover=true]:bg-transparent 
+  active:bg-transparent 
+  data-[active=true]:bg-transparent"
+      variant="light"
+    >
+      <LogOut />
+      Déconnexion
+    </Button>
+  );
+};

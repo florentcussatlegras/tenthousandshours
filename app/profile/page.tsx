@@ -90,8 +90,8 @@ export default async function Page() {
         )}
       </div>
 
-      <div className="grid grid-flow-col grid-col-4 gap-4 h-[356px]">
-        <div>
+      <div className="grid grid-flow-row xl:grid-flow-col grid-col-4 gap-4 h-[356px]">
+        <div className="col-span-2 xl:col-span-1">
           <Card className="h-full rounded-none relative">
             <CardBody className="flex-col items-center justify-center gap-4 my-4">
               {session?.user.image ? (
@@ -153,7 +153,7 @@ export default async function Page() {
             </CardBody>
           </Card>
         </div>
-        <div className="col-span-3">
+        <div className="col-span-2 xl:col-span-3">
           <ListStudiesProgressbar
             userStudies={userStudies}
             categoryTopics={categoryTopics}
