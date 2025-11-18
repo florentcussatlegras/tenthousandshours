@@ -15,7 +15,7 @@ export default function ForgetPasswordPage() {
           resaisir votre mot de passe.
         </p>
       </CardHeader>
-      <CardBody className="overflow-x-hidden">
+      <CardBody className="overflow-x-hidden p-0">
         <ForgetPasswordForm />
       </CardBody>
     </Card>

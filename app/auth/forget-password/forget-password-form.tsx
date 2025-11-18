@@ -47,7 +47,7 @@ export const ForgetPasswordForm = () => {
   return (
     <Form
       onSubmit={handleSubmit}
-      className="justify-center items-start mx-auto flex flex-col gap-6 w-full"
+      className="justify-center items-start mx-auto flex flex-col gap-6 w-full px-0"
     >
 
       <Input
