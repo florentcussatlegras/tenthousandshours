@@ -144,13 +144,13 @@ export default function ListStudiesProgressbar({
       </CardHeader> */}
       <CardBody className="p-6">
         <div className="flex flex-col gap-8 h-full justify-start">
-          <div className="flex flex-row items-center gap-4">
+          <div className="flex flex-col md:flex-row items-center gap-4">
             <div className="text-default-500 text-sm uppercase">
               {Number(studyProcessAchievedLength)} objectif
               {Number(studyProcessAchievedLength) > 1 && "s"} atteint{" "}
               {Number(studyProcessAchievedLength) > 1 && "s"}
             </div>
-            <div className="flex-1/3 justify-center flex flex-row items-center gap-12">
+            <div className="flex-1/3 justify-center flex flex-col md:flex-row items-center gap-12">
               <Input
                 startContent={<SearchIcon />}
                 onChange={handleInputChange}
@@ -174,7 +174,7 @@ export default function ListStudiesProgressbar({
             > */}
             <Link
               href="/study-process/new"
-              className="bg-secondary-400 text-white ml-auto p-4 rounded-2xl"
+              className="bg-secondary-400 text-white md:ml-auto p-4 rounded-2xl"
             >
               <PlusIcon />
               {/* Ajouter un nouvel apprentissage */}
