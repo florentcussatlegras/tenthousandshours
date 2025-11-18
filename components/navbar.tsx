@@ -110,9 +110,9 @@ export default function NavBarPage() {
   return (
     <>
       <Navbar
-        className="bg-white dark:bg-black/90 p-0 m-0"
+        className="bg-white dark:bg-black/90"
         maxWidth="2xl"
-        classNames={{ wrapper: "px-4" }}
+        classNames={{ wrapper: "px-4 md:px-8" }}
       >
         <NavbarContent className="md:hidden" justify="start">
           <button className="p-2" onClick={() => setSidebarOpen(true)}>
@@ -121,7 +121,7 @@ export default function NavBarPage() {
         </NavbarContent>
 
 
-        <NavbarBrand className="hidden md:flex md:w-1/10 md:max-w-1/10 lg:w-1/3 lg:min-w-1/3">
+        <NavbarBrand className="hidden md:flex md:w-1/10 md:max-w-1/10 lg:w-1/4 lg:min-w-1/4">
           <Link href="/" className="text-default-600 hidden md:flex">
             <AcmeLogo />
             <p className="hidden lg:flex font-bold text-default-600 text-xl">
@@ -131,7 +131,7 @@ export default function NavBarPage() {
         </NavbarBrand>
 
         <NavbarContent
-          className="flex-row flex-nowrap items-center data-[justify=start]:justify-start data-[justify=start]:flex-grow data-[justify=start]:basis-0 data-[justify=center]:justify-center data-[justify=end]:justify-end data-[justify=end]:flex-grow data-[justify=end]:basis-0 bg-content2 dark:bg-content1 ml-4 hidden h-12 w-full max-w-fit gap-4 rounded-full px-4 md:flex"
+          className="ml-auto flex-row flex-nowrap items-center data-[justify=start]:justify-start data-[justify=start]:flex-grow data-[justify=start]:basis-0 data-[justify=center]:justify-center data-[justify=end]:justify-end data-[justify=end]:flex-grow data-[justify=end]:basis-0 bg-content2 dark:bg-content1 hidden h-12 w-full max-w-fit gap-4 rounded-full px-4 md:flex"
           data-justify="start"
         >
           <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
