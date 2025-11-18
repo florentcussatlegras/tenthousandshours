@@ -115,7 +115,7 @@ export default function SignUpForm() {
 
   return (
     <Form
-      className="justify-center items-start mx-auto"
+      className="justify-center items-start mx-auto w-2/3"
       // validationErrors={errors}
       // onReset={() => setSubmitted(null)}
       onSubmit={onSubmit}

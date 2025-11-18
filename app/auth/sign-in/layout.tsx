@@ -9,11 +9,11 @@ export default function SignInLayout({
 }) {
   return (
     <section className="flex items-center h-full justify-center gap-4 bg-white dark:bg-black/90">
-      <div className="flex flex-row w-full h-full items-stretch justify-center flex-1/2">
-          <div className="hidden flex-1/2 items-center md:flex justify-center">
+      <div className="flex flex-row w-full h-full items-stretch justify-center max-w-7xl mx-auto">
+          <div className="hidden w-1/2 items-center lg:flex justify-center">
               <Hero imageUrl={urlImageHero} imageAlt="Books and watches on a desk" />
           </div>
-          <div className="flex-1/2 items-center flex">
+          <div className="w-full xl:w-2/3 items-center flex justify-center">
               {children}
           </div>
       </div>
