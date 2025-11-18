@@ -9,12 +9,9 @@ import { useSession } from "../lib/auth-client";
 export default function SettingsPage() {
   const { data: session } = useSession();
 
-  console.log("here");
-  console.log(session);
-
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-start gap-4">
+      <div className="flex flex-col md:flex-row items-start gap-4">
         <div className="flex flex-row items-center gap-4">
           {session?.user.image ? (
             <img
@@ -38,7 +35,7 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <div className="ml-auto text-sm rounded-full bg-success/20 text-success-700 px-4 py-2 font-semibold">
+        <div className="md:ml-auto text-xs md:text-sm rounded-full bg-success/20 text-success-700 px-4 py-2 font-semibold">
           Vous êtes inscrit le {new Intl.DateTimeFormat('fr-Fr', {dateStyle: 'medium'}).format(session?.user.createdAt)}
         </div>
       </div>

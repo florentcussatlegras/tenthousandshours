@@ -348,8 +348,8 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
 
   return (
     <div className="w-full">
-      <div className="flex flex-row gap-6">
-        <Card className="flex flex-col rounded-none items-center relative p-4 gap-4 w-1/5">
+      <div className="flex flex-col md:flex-row gap-6">
+        <Card className="flex flex-col rounded-none items-center relative p-4 gap-4 w-full md:w-1/3 xl:w-1/5">
           <div className="flex justify-between text-default-900 rounded-2xl w-full">
             <Button
               className="cursor-pointer bg-default-100 hover:bg-default-200 px-4 py-2 rounded-2xl transition-color duration-500 text-default-500 font-semibold"
@@ -413,7 +413,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
           </div>
         </Card>
 
-        <Card className="rounded-none relative p-4 gap-0 w-4/5 flex flex-col">
+        <Card className="rounded-none relative p-4 gap-0 w-full md:w-2/3 xl:w-4/5 flex flex-col">
           <Tabs aria-label="Options" className="font-semibold">
             <Tab key="day" title="Jour" onClick={() => setDisplayTab("day")}>
               <DayCalendar

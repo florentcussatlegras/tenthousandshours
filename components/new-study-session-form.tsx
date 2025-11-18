@@ -61,15 +61,15 @@ export const NewStudySessionForm = ({
   }).format(dateCreation.toDate(getLocalTimeZone()));
 
   return (
-    <Card className="rounded-none relative p-4 w-2/5">
+    <Card className="rounded-none relative p-4 w-full lg:w-2/5">
       <CardBody>
         <div className="flex flex-col gap-4">
           <Form
             action={formAction}
             className="flex flex-col justify-start w-full gap-6"
           >
-            <div className="flex flex-row items-center justify-around w-full">
-              <h1>
+            <div className="flex flex-row items-center justify-around w-full gap-2">
+              <h1 className="text-xs sm:text-lg">
                 {dateCreationStr.slice(0, 1).toUpperCase() +
                   dateCreationStr.slice(1)}
               </h1>

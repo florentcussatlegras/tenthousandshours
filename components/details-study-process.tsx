@@ -143,9 +143,9 @@ export default function DetailsStudyProcess({
 
   return (
     <Card className="rounded-none relative p-4">
-      <CardHeader className="flex">
+      <CardHeader className="flex gap-2 items-start">
         {/* <h2 className="font-bold text-sky-500">{studyProcess.topic.name}</h2> */}
-        <span className="text-default-500 text-sm">
+        <span className="text-default-500 text-xs md:text-sm">
           Apprentissage débuté le {intl.format(studyProcess.createdAt)}
         </span>
         {studyProcess.totalSeconds && studyProcess.totalSeconds >= 36000000 ? (
@@ -156,7 +156,7 @@ export default function DetailsStudyProcess({
             <CheckCircle size={50} />
           </div>
         ) : (
-          <div className="ml-auto flex items-center gap-4 text-default-500 text-sm uppercase">
+          <div className="ml-auto flex items-center gap-4 text-default-500 text-xs md:text-sm uppercase">
             {studyProcess.totalSeconds === 0 ? (
               <span>
                 Lancez-vous ! C'est toujours le premier pas le plus difficile
@@ -168,7 +168,7 @@ export default function DetailsStudyProcess({
               </span>
             )}
 
-            <ThumbsUpIcon size={40} className="mb-4 text-success" />
+            <ThumbsUpIcon size={40} className="mb-4 text-success hidden md:block" />
           </div>
         )}
         {/* <div className="ml-auto">

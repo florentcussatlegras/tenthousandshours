@@ -12,6 +12,11 @@ import React, { useCallback, useEffect, useState } from "react";
 
 function ModalStudySessionView(props: any) {
   const studySession = props.studySession;
+
+  if (!studySession) {
+    return null; // ou <div>Chargement…</div>
+  }
+
   const [topicName, setTopicName] = useState("");
 
   React.useEffect(() => {
@@ -26,7 +31,7 @@ function ModalStudySessionView(props: any) {
 
   let dateCreatedAt, hourStartedAt, hourFinishedAt;
 
-  if (studySession !== null) {
+  if (studySession) {
     dateCreatedAt = studySession.createdAt;
     hourStartedAt = studySession.startedAt;
     hourFinishedAt = studySession.finishedAt;
