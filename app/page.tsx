@@ -10,13 +10,13 @@ export default async function Home() {
   return (
     <section className="flex items-center h-full justify-center gap-4 bg-white dark:bg-black/90">
       <div className="flex flex-row w-full h-full items-stretch justify-center flex-1/2">
-        <div className="hidden flex-1/2 items-center md:flex justify-center">
+        <div className="hidden items-center xl:flex justify-center max-w-7xl mx-auto">
           <Hero
             imageUrl={urlImageHero}
             imageAlt="Books and watches on a desk"
           />
         </div>
-        <div className="flex-1/2 w-full h-full flex flex-col gap-10 items-start justify-center pr-24">
+        <div className="w-full md:w-2/3 h-full flex flex-col gap-10 items-start justify-center">
           <h1 className="text-5xl font-bold text-default-600 dark:text-white/90">
             Quel domaine souhaitez-vous{" "}
             <span className="text-sky-500">maîtriser</span> ?
