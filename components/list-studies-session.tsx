@@ -291,7 +291,7 @@ export default function ListStudiesSession({
     return (
       <div className="flex flex-col gap-4">
         <div className="flex justify-between gap-3 items-end">
-          <div className="flex flex-row items-center gap-4">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
             <DateRangePicker
               aria-labelledby="date range picker for study session list"
               className="max-w-xs"
@@ -424,7 +424,7 @@ export default function ListStudiesSession({
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
   return (
-    <Card radius="none" className="w-2/3 px-6 py-8">
+    <Card radius="none" className="w-full lg:w-2/3 px-6 py-8">
       <div>
         <ModalStudySessionView
           isOpen={isOpen}

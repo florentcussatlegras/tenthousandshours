@@ -54,11 +54,13 @@ export function CurrentStudySessionValidationForm() {
   }, [formValidateCurrentSessionState]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      if (formResumeCurrentSessionState.resumeCurrentStudySession) {
-        localStorage.setItem("current_study_session_resume", "true");
-        redirect(`/study-process/${studyProcess.slug}`);
-      }
+    if (
+      typeof window !== "undefined" &&
+      formResumeCurrentSessionState.resumeCurrentStudySession &&
+      studyProcess !== null // 🔒 empêcher l'accès avant le chargement
+    ) {
+      localStorage.setItem("current_study_session_resume", "true");
+      redirect(`/study-process/${studyProcess.slug}`);
     }
   }, [formResumeCurrentSessionState]);
 
@@ -100,7 +102,7 @@ export function CurrentStudySessionValidationForm() {
     <div className="flex flex-col gap-4 relative">
       <Form
         action={formValidateCurrentSessionAction}
-        className="flex flex-col w-1/3 gap-4"
+        className="flex flex-col w-full md:w-1/2 xl:w-1/3 gap-4"
       >
         {formValidateCurrentSessionState.errors._form ? (
           <div className="text-danger text-sm">
