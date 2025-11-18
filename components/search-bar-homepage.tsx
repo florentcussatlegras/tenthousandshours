@@ -76,7 +76,7 @@ export default function SearchBarHomepage({ topics }: { topics: TopicsProps[] })
   return (
     <Form
       onSubmit={handleSubmit(onSubmit, onError)}
-      className="space-y-8 w-[750px]"
+      className="space-y-8 w-4/5 md:w-[600px] lg:w-[750px]"
     >
       <div className="w-full relative place-items-center grid">
         <Autocomplete
