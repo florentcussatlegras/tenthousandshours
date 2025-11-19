@@ -8,6 +8,23 @@ import { StudyProcess, Prisma, User } from "@prisma/client";
 import { auth } from "../lib/auth";
 import { headers } from "next/headers";
 
+function buildLocalDate(dateStr: string, timeStr: string) {
+  // dateStr = "2025-01-18"
+  // timeStr = "16:23"
+
+  const [year, month, day] = dateStr.split("-").map(Number);
+  const [hour, minute] = timeStr.split(":").map(Number);
+
+  // On construit une date ISO locale sans timezone
+  const iso = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(
+    2,
+    "0"
+  )}T${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00`;
+
+  // Puis on laisse new Date() interpréter correctement en local
+  return new Date(iso);
+}
+
 const createStudySessionSchema = z
   .object({
     description: z.string(),
@@ -26,18 +43,19 @@ const createStudySessionSchema = z
       });
     }
     if (urls.length > 0) {
-    const arrayUrls = urls.split(',');
-    var httpRegex = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
-    arrayUrls.forEach(url => {
-      if (httpRegex.test(url) === false) {
-        ctx.addIssue({
-          code: "custom",
-          message: "Merci de saisir une url valide",
-          path: ["urls"]
-        });
-      } 
-    });
-  }
+      const arrayUrls = urls.split(",");
+      var httpRegex =
+        /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
+      arrayUrls.forEach((url) => {
+        if (httpRegex.test(url) === false) {
+          ctx.addIssue({
+            code: "custom",
+            message: "Merci de saisir une url valide",
+            path: ["urls"],
+          });
+        }
+      });
+    }
   });
 
 createStudySessionSchema.refine((obj) => obj.startedAt < obj.finishedAt);
@@ -93,43 +111,49 @@ export async function createStudySessionAction(
   const totalSecondsStudyProcess = studyProcess.totalSeconds;
 
   try {
-    const objStartedAt = result.data.startedAt?.split(":");
-    const objFinishedAt = result.data.finishedAt?.split(":");
-    const objCreatedAt = result.data.date.split('-');
+    // const objStartedAt = result.data.startedAt?.split(":");
+    // const objFinishedAt = result.data.finishedAt?.split(":");
+    // const objCreatedAt = result.data.date.split('-');
 
-    const dateCreatedAt = new Date(
-      Number(objCreatedAt[0]),
-      Number(objCreatedAt[1]) - 1,
-      Number(objCreatedAt[2]) + 1,
-      -22,
-      0,
-      0
-    );
+    // const dateCreatedAt = new Date(
+    //   Number(objCreatedAt[0]),
+    //   Number(objCreatedAt[1]) - 1,
+    //   Number(objCreatedAt[2]) + 1,
+    //   -22,
+    //   0,
+    //   0
+    // );
 
-    const dateStartedAt = new Date(
-      Number(objCreatedAt[0]),
-      Number(objCreatedAt[1]) - 1,
-      Number(objCreatedAt[2]),
-      Number(objStartedAt[0]) + 2,
-      Number(objStartedAt[1]),
-      Number(objStartedAt[2])
-    );
-    const dateFinishedAt = new Date(
-      Number(objCreatedAt[0]),
-      Number(objCreatedAt[1]) - 1,
-      Number(objCreatedAt[2]),
-      Number(objFinishedAt[0]) + 2,
-      Number(objFinishedAt[1]),
-      Number(objFinishedAt[2])
-    );
+    // const dateStartedAt = new Date(
+    //   Number(objCreatedAt[0]),
+    //   Number(objCreatedAt[1]) - 1,
+    //   Number(objCreatedAt[2]),
+    //   Number(objStartedAt[0]) + 2,
+    //   Number(objStartedAt[1]),
+    //   Number(objStartedAt[2])
+    // );
+    // const dateFinishedAt = new Date(
+    //   Number(objCreatedAt[0]),
+    //   Number(objCreatedAt[1]) - 1,
+    //   Number(objCreatedAt[2]),
+    //   Number(objFinishedAt[0]) + 2,
+    //   Number(objFinishedAt[1]),
+    //   Number(objFinishedAt[2])
+    // );
 
-    console.log(dateCreatedAt, dateStartedAt, dateFinishedAt);
+    const startedAt = buildLocalDate(result.data.date, result.data.startedAt);
+    const finishedAt = buildLocalDate(result.data.date, result.data.finishedAt);
+
+    // Pour createdAt si tu veux :
+    const createdAt = buildLocalDate(result.data.date, "00:00");
+
+    console.log(createdAt, startedAt, finishedAt);
 
     const studyProcessInThisHours: any[] = await prisma.$queryRaw(Prisma.sql`
         SELECT * FROM public."StudySession" 
         WHERE "StudySession"."studyProcessId" = ${result.data.studyProcessId}
-        AND (("startedAt" <= ${dateStartedAt} AND "finishedAt" >= ${dateStartedAt}) 
-          OR ("startedAt" <= ${dateFinishedAt} AND "finishedAt" >= ${dateFinishedAt}))
+        AND (("startedAt" <= ${startedAt} AND "finishedAt" >= ${startedAt}) 
+          OR ("startedAt" <= ${finishedAt} AND "finishedAt" >= ${finishedAt}))
     `);
 
     if (Array.from(studyProcessInThisHours).length !== 0) {
@@ -142,14 +166,14 @@ export async function createStudySessionAction(
     }
 
     const totalSecondsSession =
-      (dateFinishedAt.getTime() - dateStartedAt.getTime()) / 1000;
+      (finishedAt.getTime() - startedAt.getTime()) / 1000;
 
     const studySession = await prisma.studySession.create({
       data: {
         description: result.data.description,
-        createdAt: dateCreatedAt,
-        startedAt: dateStartedAt,
-        finishedAt: dateFinishedAt,
+        createdAt: createdAt,
+        startedAt: startedAt,
+        finishedAt: finishedAt,
         totalSeconds: totalSecondsSession,
         studyProcessId: result.data.studyProcessId,
         urls: result.data.urls,
@@ -183,5 +207,5 @@ export async function createStudySessionAction(
   }
 
   revalidateTag("studySession");
-  redirect(`/study-process/${studyProcess?.slug}`);
+  // redirect(`/study-process/${studyProcess?.slug}`);
 }

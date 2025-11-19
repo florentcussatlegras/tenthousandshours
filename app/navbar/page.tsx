@@ -11,11 +11,11 @@ export default async function NavBarPage() {
   const c = await cookies();
 
   // Log basic cookie info
-  console.log(">>> SERVER raw header cookie:", String(h.get("cookie")));
-  console.log(">>> SERVER cookies list:", c.getAll().map(x => ({
-    name: x.name,
-    value: x.value
-  })));
+  // console.log(">>> SERVER raw header cookie:", String(h.get("cookie")));
+  // console.log(">>> SERVER cookies list:", c.getAll().map(x => ({
+  //   name: x.name,
+  //   value: x.value
+  // })));
 
   // Build real headers object for the lib
   const H = new Headers(h as any);
@@ -26,7 +26,7 @@ export default async function NavBarPage() {
   // Now test session
   const session = await auth.api.getSession({ headers: H });
 
-  console.log(">>> SERVER session from getSession:", session);
+  // console.log(">>> SERVER session from getSession:", session);
 
   return <NavBarClient session={session} />;
 }
