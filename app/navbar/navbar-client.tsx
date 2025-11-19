@@ -282,13 +282,13 @@ export default function NavBarClient({ session }: { session: any }) {
                       Mes paramètres
                     </Link>
                   </DropdownItem>
-                  <DropdownItem key="contact">
+                  <DropdownItem key="about">
                     <Link href="/contact" className="text-md gap-1 text-black">
                       <HelpCircle />
                       Aide
                     </Link>
                   </DropdownItem>
-                  <DropdownItem key="about">
+                  <DropdownItem key="contact">
                     <Link href="/about" className="text-md gap-1 text-black">
                       <Mail />
                       Nous contacter
