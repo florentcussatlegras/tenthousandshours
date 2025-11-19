@@ -78,11 +78,14 @@ export function CurrentStudySession() {
 
     getTopics();
     modal1.onClose();
-    console.log("c'est là que je viens de fermer la modal 1");
 
     if (localStorage.getItem("current_study_session_timer")) {
-      setTime(JSON.parse(String(localStorage.getItem("current_study_session_timer"))));
-      setCurrentTopicId(String(localStorage.getItem("current_study_session_topic_id")));
+      setTime(
+        JSON.parse(String(localStorage.getItem("current_study_session_timer")))
+      );
+      setCurrentTopicId(
+        String(localStorage.getItem("current_study_session_topic_id"))
+      );
       setHoursStartedAt(
         Number(localStorage.getItem("current_study_session_started_at"))
       );
@@ -100,19 +103,42 @@ export function CurrentStudySession() {
     }
   }, []);
 
-  useEffect(() => {
-    if (localStorage.getItem("current_study_session_resume") === "true") {
-      localStorage.setItem("current_study_session_is_playing", "true");
-      // localStorage.setItem("current_study_session_resume", "false");
-      let id = setInterval(updateTimer, 1000);
-      setIntervalId(id);
-      setIsPlaying(true);
+  // useEffect(() => {
+  //   if (localStorage.getItem("current_study_session_resume") === "true") {
+  //     localStorage.setItem("current_study_session_is_playing", "true");
+  //     // localStorage.setItem("current_study_session_resume", "false");
+  //     let id = setInterval(updateTimer, 1000);
+  //     setIntervalId(id);
+  //     setIsPlaying(true);
 
-      return () => {
-        clearInterval(id);
-      };
+  //     return () => {
+  //       clearInterval(id);
+  //     };
+  //   }
+  // }, [localStorage.getItem("current_study_session_resume")]);
+
+  useEffect(() => {
+    function checkResume() {
+      if (localStorage.getItem("current_study_session_resume") === "true") {
+        localStorage.setItem("current_study_session_is_playing", "true");
+        localStorage.setItem("current_study_session_resume", "false");
+
+        let id = setInterval(updateTimer, 1000);
+        setIntervalId(id);
+        setIsPlaying(true);
+      }
     }
-  }, [localStorage.getItem("current_study_session_resume")]);
+
+    // Vérifie au montage
+    checkResume();
+
+    // Vérifie si un autre onglet modifie localStorage
+    window.addEventListener("storage", checkResume);
+
+    return () => {
+      window.removeEventListener("storage", checkResume);
+    };
+  }, []);
 
   const updateTimer = () => {
     setTime((prev: any) => {
@@ -202,7 +228,7 @@ export function CurrentStudySession() {
       title: "Session annulée",
       description: "La session a bien été annulée",
       color: "success",
-    })
+    });
     modal1.onClose();
   };
 
@@ -422,7 +448,11 @@ export function CurrentStudySession() {
                   <ModalHeader className="flex flex-col gap-1 w-full mt-4 text-3xl">
                     <div>
                       Vous avez une session en cours en{" "}
-                      <span className="text-sky-500">{localStorage.getItem('current_study_session_topic_name')}</span>
+                      <span className="text-sky-500">
+                        {localStorage.getItem(
+                          "current_study_session_topic_name"
+                        )}
+                      </span>
                     </div>
                   </ModalHeader>
                   <ModalBody className="flex flex-col gap-4 w-full my-8 text-2xl">

@@ -34,6 +34,7 @@ export default function SignInForm() {
         description: "Bonjour! Heureux de vous revoir :)",
         color: "success",
       });
+      router.refresh();
       router.push("/profile");
     }
 
