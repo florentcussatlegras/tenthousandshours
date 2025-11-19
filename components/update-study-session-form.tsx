@@ -105,6 +105,11 @@ export function UpdateStudySessionForm({
                   className="max-w-[150px]"
                   value={dateCreation}
                   onChange={setDateCreation}
+                  minValue={parseDate(
+                    new Intl.DateTimeFormat("en-CA", {
+                      timeZone: "Europe/Paris",
+                    }).format(studyProcess.createdAt)
+                  )}
                 />
               </div>
             </div>

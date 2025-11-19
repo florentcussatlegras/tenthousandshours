@@ -24,6 +24,13 @@ const updateStudySessionSchema = z.object({
   studyProcessId: z.string(),
   urls: z.string(),
 }).superRefine(({ urls, startedAt, finishedAt }, ctx) => {
+  if (startedAt == finishedAt) {
+      ctx.addIssue({
+        code: "custom",
+        message: "L'heure de début ne peut pas être égale à l'heure de fin",
+        path: ["finishedAt"],
+      });
+    }
   if (startedAt != "" && finishedAt !== "" && finishedAt < startedAt) {
     ctx.addIssue({
       code: "custom",
