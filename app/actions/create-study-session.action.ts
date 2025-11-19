@@ -9,20 +9,10 @@ import { auth } from "../lib/auth";
 import { headers } from "next/headers";
 
 function buildLocalDate(dateStr: string, timeStr: string) {
-  // dateStr = "2025-01-18"
-  // timeStr = "16:23"
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const [h, min] = timeStr.split(":").map(Number);
 
-  const [year, month, day] = dateStr.split("-").map(Number);
-  const [hour, minute] = timeStr.split(":").map(Number);
-
-  // On construit une date ISO locale sans timezone
-  const iso = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(
-    2,
-    "0"
-  )}T${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00`;
-
-  // Puis on laisse new Date() interpréter correctement en local
-  return new Date(iso);
+  return new Date(y, m - 1, d, h, min, 0, 0); // mois indexé à 0
 }
 
 const createStudySessionSchema = z
