@@ -213,7 +213,9 @@ export default function NavBarClient({ session }: { session: any }) {
           {finalSession?.user ? (
             <>
               <CurrentStudySession />
-              <GithubIcon />
+              <Link href="https://github.com/florentcussatlegras/tenthousandshours">
+                <GithubIcon />
+              </Link>
               <ThemeSwitch />
               <Link href="/settings">
                 <svg
@@ -302,7 +304,9 @@ export default function NavBarClient({ session }: { session: any }) {
             </>
           ) : (
             <>
-              <GithubIcon />
+              <Link href="https://github.com/florentcussatlegras/tenthousandshours">
+                <GithubIcon />
+              </Link>
               <ThemeSwitch />
               <div className="hidden md:flex gap-2">
                 <NavbarItem>
