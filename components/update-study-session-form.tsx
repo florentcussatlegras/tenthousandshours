@@ -22,7 +22,7 @@ export function UpdateStudySessionForm({
   studyProcess,
   studySession,
 }: {
-  onReset: any
+  onReset: any;
   studyProcess: StudyProcess;
   studySession: StudySession;
 }) {
@@ -32,7 +32,12 @@ export function UpdateStudySessionForm({
 
   const [urls, setUrls] = useState(studySession.urls.split(","));
   const [dateCreation, setDateCreation] = useState<any>(
-    parseDate(studySession.createdAt.toISOString().substring(0, 10))
+    // parseDate(studySession.createdAt.toISOString().substring(0, 10))
+    parseDate(
+      new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris" }).format(
+        studySession.createdAt
+      )
+    )
   );
 
   let formatter = useDateFormatter({ dateStyle: "full" });
@@ -170,7 +175,10 @@ export function UpdateStudySessionForm({
 
             {urls.map((url, index) => {
               return (
-                <div key={index} className="flex flex-row w-full gap-4 items-center">
+                <div
+                  key={index}
+                  className="flex flex-row w-full gap-4 items-center"
+                >
                   <LinkIcon />
                   <Input
                     id={`url-${index}`}

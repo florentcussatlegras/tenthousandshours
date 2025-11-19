@@ -81,14 +81,30 @@ model StudyProcess {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+// model StudySession {
+//   id        String   @id @default(cuid())
+//   createdAt DateTime @default(now())
+
+//   description String
+
+//   startedAt  DateTime
+//   finishedAt DateTime?
+//   totalSeconds Int?
+
+//   urls String
+
+//   studyProcessId String
+//   studyProcess   StudyProcess @relation(fields: [studyProcessId], references: [id])
+// }
+
 model StudySession {
   id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @db.Timestamp(6)
 
   description String
 
-  startedAt  DateTime
-  finishedAt DateTime?
+  startedAt    DateTime  @db.Timestamp(6)
+  finishedAt   DateTime? @db.Timestamp(6)
   totalSeconds Int?
 
   urls String

@@ -145,18 +145,18 @@ export default function DetailsStudyProcess({
     <Card className="rounded-none relative p-4">
       <CardHeader className="flex gap-2 items-start">
         {/* <h2 className="font-bold text-sky-500">{studyProcess.topic.name}</h2> */}
-        <span className="text-default-500 text-xs md:text-sm">
+        <span className="text-default-500 text-xs md:text-sm mt-4">
           Apprentissage débuté le {intl.format(studyProcess.createdAt)}
         </span>
         {studyProcess.totalSeconds && studyProcess.totalSeconds >= 36000000 ? (
-          <div className="ml-auto flex text-sm items-center gap-4 text-success uppercase">
+          <div className="ml-auto flex text-sm items-center gap-4 text-success-600 uppercase">
             <span>
               Bravo ! Vous avez atteint les 10000 heures, vous êtes un pro !
             </span>
             <CheckCircle size={50} />
           </div>
         ) : (
-          <div className="ml-auto flex items-center gap-4 text-default-500 text-xs md:text-sm uppercase">
+          <div className="ml-auto flex items-center gap-4 text-neutral-600 text-xs md:text-sm uppercase">
             {studyProcess.totalSeconds === 0 ? (
               <span>
                 Lancez-vous ! C'est toujours le premier pas le plus difficile
