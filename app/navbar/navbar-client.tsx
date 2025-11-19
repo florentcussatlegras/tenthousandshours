@@ -263,7 +263,7 @@ export default function NavBarClient({ session }: { session: any }) {
                     </button>
                   )}
                 </DropdownTrigger>
-                <DropdownMenu aria-label="Profile Actions" variant="flat">
+                <DropdownMenu aria-label="profil" variant="flat">
                   <DropdownItem
                     key="profile"
                     className="gap-2 bg-default-200 flex flex-row"
@@ -283,13 +283,13 @@ export default function NavBarClient({ session }: { session: any }) {
                     </Link>
                   </DropdownItem>
                   <DropdownItem key="contact">
-                    <Link href="/profile" className="text-md gap-1 text-black">
+                    <Link href="/contact" className="text-md gap-1 text-black">
                       <HelpCircle />
                       Aide
                     </Link>
                   </DropdownItem>
                   <DropdownItem key="about">
-                    <Link href="/profile" className="text-md gap-1 text-black">
+                    <Link href="/about" className="text-md gap-1 text-black">
                       <Mail />
                       Nous contacter
                     </Link>
