@@ -74,7 +74,7 @@ interface CreateStudySessionState {
 export async function createStudySessionAction(
   formState: CreateStudySessionState,
   formData: FormData
-): Promise<CreateStudySessionState | void> {
+): Promise<CreateStudySessionState> {
   const headerList = await headers();
 
   const session = await auth.api.getSession({
