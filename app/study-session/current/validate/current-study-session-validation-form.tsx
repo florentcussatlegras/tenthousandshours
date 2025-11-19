@@ -60,7 +60,11 @@ export function CurrentStudySessionValidationForm() {
       studyProcess !== null // 🔒 empêcher l'accès avant le chargement
     ) {
       localStorage.setItem("current_study_session_resume", "true");
-      redirect(`/study-process/${studyProcess.slug}`);
+
+      setTimeout(() => {
+        window.location.href = `/study-process/${studyProcess.slug}`;
+      }, 0);
+      // redirect(`/study-process/${studyProcess.slug}`);
     }
   }, [formResumeCurrentSessionState]);
 

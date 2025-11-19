@@ -1,7 +1,23 @@
+// "use client";
+
+// default function UserMenuClient({ session }: {session: any}) {
+//   const { data, isPending } = useSession();
+
+//   // On utilise la session client si disponible, sinon celle du serveur
+//   const finalSession = data ?? session;
+
+//   if (!finalSession && isPending) return null;
+
+//   return finalSession ? (
+//     <div>Bonjour {finalSession.user.name}</div>
+//   ) : (
+//     <div>Connexion</div>
+//   );
+// }
+
 "use client";
 
 import { SignOutButton } from "@/app/auth/sign-out/sign-out-button";
-import { useSession } from "@/app/lib/auth-client";
 
 import {
   Navbar,
@@ -17,8 +33,8 @@ import {
   Avatar,
   Button,
 } from "@heroui/react";
-import { ThemeSwitch } from "./theme-switch";
-import { GithubIcon } from "./icons";
+import { ThemeSwitch } from "../../components/theme-switch";
+import { GithubIcon } from "../../components/icons";
 import {
   Calendar,
   GraduationCap,
@@ -32,7 +48,8 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { fetchCurrentStudySession } from "@/app/actions/actions";
-import { CurrentStudySession } from "./current-study-session";
+import { CurrentStudySession } from "../../components/current-study-session";
+import { useSession } from "@/app/lib/auth-client";
 
 export const AcmeLogo = () => {
   return (
@@ -103,9 +120,15 @@ export const UserIcon = ({}) => {
   );
 };
 
-export default function NavBarPage() {
-  const { data: session } = useSession();
+export default function NavBarClient({ session }: { session: any }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const { data, isPending } = useSession();
+
+  // On utilise la session client si disponible, sinon celle du serveur
+  const finalSession = data ?? session;
+
+  if (!finalSession && isPending) return null;
 
   return (
     <>
@@ -166,7 +189,7 @@ export default function NavBarPage() {
             >
               <Link
                 className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
-                href="#"
+                href="/about"
                 data-react-aria-pressable="true"
                 role="link"
                 aria-current="page"
@@ -187,7 +210,7 @@ export default function NavBarPage() {
               </Link>
             </NavbarItem>
           </NavbarContent>
-          {session !== null ? (
+          {finalSession?.user ? (
             <>
               <CurrentStudySession />
               <GithubIcon />
@@ -224,7 +247,7 @@ export default function NavBarPage() {
               /> */}
               <Dropdown placement="bottom-end">
                 <DropdownTrigger>
-                  {session.user.image ? (
+                  {finalSession.user.image ? (
                     <Avatar
                       isBordered
                       as="button"
@@ -232,11 +255,11 @@ export default function NavBarPage() {
                       color="primary"
                       name="Jason Hughes"
                       size="sm"
-                      src={session.user.image}
+                      src={finalSession.user.image}
                     />
                   ) : (
                     <button className="w-10 h-10 rounded-full border flex items-center justify-center bg-sky-500 text-white cursor-pointer">
-                      {session.user.name.slice(0, 1)}
+                      {finalSession.user.name.slice(0, 1)}
                     </button>
                   )}
                 </DropdownTrigger>
@@ -250,7 +273,7 @@ export default function NavBarPage() {
                       className="font-semibold text-sky-500 text-md items-center gap-1"
                     >
                       <User />
-                      {session.user.email}
+                      {finalSession.user.email}
                     </Link>
                   </DropdownItem>
                   <DropdownItem key="settings">
@@ -265,7 +288,7 @@ export default function NavBarPage() {
                       Aide
                     </Link>
                   </DropdownItem>
-                  <DropdownItem key="contact">
+                  <DropdownItem key="about">
                     <Link href="/profile" className="text-md gap-1 text-black">
                       <Mail />
                       Nous contacter
@@ -340,7 +363,7 @@ export default function NavBarPage() {
             <Calendar /> Votre calendrier
           </Link>
 
-          <Link href="#" className="flex items-center gap-2">
+          <Link href="/about" className="flex items-center gap-2">
             <HelpCircle /> Qui sommes-nous ?
           </Link>
 

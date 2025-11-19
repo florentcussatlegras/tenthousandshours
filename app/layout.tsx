@@ -7,10 +7,10 @@ import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
-import NavbarPage from "@/components/navbar";
-
 import { Geist } from 'next/font/google'
 import { CurrentStudySession } from "@/components/current-study-session";
+import NavBarPage from "./navbar/page";
+import { headers } from "next/headers";
  
 const geist = Geist({
   subsets: ['latin'],
@@ -39,6 +39,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <html suppressHydrationWarning lang="en">
       <head />
@@ -52,7 +53,7 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div className="relative flex flex-col h-screen">
-            <NavbarPage />
+            <NavBarPage />
             <main className="mx-auto pt-8 px-6 flex-grow w-full">
               <div className="container mx-auto max-w-[1536px]">
                 {/* <CurrentStudySession /> */}
