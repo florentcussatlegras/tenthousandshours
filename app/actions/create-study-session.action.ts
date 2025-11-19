@@ -74,7 +74,7 @@ interface CreateStudySessionState {
 export async function createStudySessionAction(
   formState: CreateStudySessionState,
   formData: FormData
-): Promise<CreateStudySessionState> {
+): Promise<CreateStudySessionState | void> {
   const headerList = await headers();
 
   const session = await auth.api.getSession({
@@ -207,5 +207,5 @@ export async function createStudySessionAction(
   }
 
   revalidateTag("studySession");
-  // redirect(`/study-process/${studyProcess?.slug}`);
+  redirect(`/study-process/${studyProcess?.slug}`);
 }
