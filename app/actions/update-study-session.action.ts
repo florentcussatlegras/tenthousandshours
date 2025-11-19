@@ -8,6 +8,13 @@ import { StudyProcess, Prisma, User } from "@prisma/client";
 import { auth } from "../lib/auth";
 import { headers } from "next/headers";
 
+function buildLocalDate(dateStr: string, timeStr: string) {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const [h, min] = timeStr.split(":").map(Number);
+
+  return new Date(y, m - 1, d, h, min, 0, 0); // mois indexé à 0
+}
+
 const updateStudySessionSchema = z.object({
   description: z.string(),
   date: z.string(),
@@ -106,44 +113,50 @@ export async function updateStudySessionAction(
       };
     }
 
-    const objStartedAt = result.data.startedAt?.split(":");
-    const objFinishedAt = result.data.finishedAt?.split(":");
-    const objCreatedAt = result.data.date.split('-');
+    // const objStartedAt = result.data.startedAt?.split(":");
+    // const objFinishedAt = result.data.finishedAt?.split(":");
+    // const objCreatedAt = result.data.date.split('-');
 
-    const dateCreatedAt = new Date(
-      Number(objCreatedAt[0]),
-      Number(objCreatedAt[1]) - 1,
-      Number(objCreatedAt[2]) + 1,
-      -22,
-      0,
-      0
-    );
+    // const dateCreatedAt = new Date(
+    //   Number(objCreatedAt[0]),
+    //   Number(objCreatedAt[1]) - 1,
+    //   Number(objCreatedAt[2]) + 1,
+    //   -22,
+    //   0,
+    //   0
+    // );
 
-    const dateStartedAt = new Date(
-      Number(objCreatedAt[0]),
-      Number(objCreatedAt[1]) - 1,
-      Number(objCreatedAt[2]),
-      Number(objStartedAt[0]) + 2,
-      Number(objStartedAt[1]),
-      Number(objStartedAt[2])
-    );
-    const dateFinishedAt = new Date(
-      Number(objCreatedAt[0]),
-      Number(objCreatedAt[1]) - 1,
-      Number(objCreatedAt[2]),
-      Number(objFinishedAt[0]) + 2,
-      Number(objFinishedAt[1]),
-      Number(objFinishedAt[2])
-    );
+    // const dateStartedAt = new Date(
+    //   Number(objCreatedAt[0]),
+    //   Number(objCreatedAt[1]) - 1,
+    //   Number(objCreatedAt[2]),
+    //   Number(objStartedAt[0]) + 2,
+    //   Number(objStartedAt[1]),
+    //   Number(objStartedAt[2])
+    // );
+    // const dateFinishedAt = new Date(
+    //   Number(objCreatedAt[0]),
+    //   Number(objCreatedAt[1]) - 1,
+    //   Number(objCreatedAt[2]),
+    //   Number(objFinishedAt[0]) + 2,
+    //   Number(objFinishedAt[1]),
+    //   Number(objFinishedAt[2])
+    // );
 
-    console.log(dateCreatedAt, dateStartedAt, dateFinishedAt);
+    const startedAt = buildLocalDate(result.data.date, result.data.startedAt);
+    const finishedAt = buildLocalDate(result.data.date, result.data.finishedAt);
+
+    // Pour createdAt si tu veux :
+    const createdAt = buildLocalDate(result.data.date, "00:00");
+
+    console.log(createdAt, startedAt, finishedAt);
 
     const studyProcessInThisHours: any[] = await prisma.$queryRaw(Prisma.sql`
               SELECT * FROM public."StudySession" 
               WHERE "StudySession"."id" != ${result.data.studySessionId}
                 AND "StudySession"."studyProcessId" = ${result.data.studyProcessId}
-                AND (("startedAt" <= ${dateStartedAt} AND "finishedAt" >= ${dateStartedAt}) 
-                OR ("startedAt" <= ${dateFinishedAt} AND "finishedAt" >= ${dateFinishedAt}))
+                AND (("startedAt" <= ${startedAt} AND "finishedAt" >= ${startedAt}) 
+                OR ("startedAt" <= ${finishedAt} AND "finishedAt" >= ${finishedAt}))
     `);
 
     if (Array.from(studyProcessInThisHours).length !== 0) {
@@ -155,19 +168,34 @@ export async function updateStudySessionAction(
     }
 
     const totalSecondsSession =
-      (dateFinishedAt.getTime() - dateStartedAt.getTime()) / 1000;
+      (finishedAt.getTime() - startedAt.getTime()) / 1000;
 
     studySession = await prisma.studySession.update({
       where: {id: result.data.studySessionId},
       data: {
         description: result.data.description,
-        createdAt: dateCreatedAt,
-        startedAt: dateStartedAt,
-        finishedAt: dateFinishedAt,
+        createdAt: createdAt,
+        startedAt: startedAt,
+        finishedAt: finishedAt,
         totalSeconds: totalSecondsSession,
         studyProcessId: result.data.studyProcessId,
         urls: result.data.urls,
       },
+    });
+
+    const allSessions = await prisma.studySession.findMany({
+      where: { studyProcessId: result.data.studyProcessId },
+      select: { totalSeconds: true },
+    });
+
+    const newTotalSeconds = allSessions.reduce(
+      (acc, s) => acc + (s.totalSeconds ?? 0),
+      0
+    );
+
+    await prisma.studyProcess.update({
+      where: { id: result.data.studyProcessId },
+      data: { totalSeconds: newTotalSeconds },
     });
 
   } catch (err: unknown) {

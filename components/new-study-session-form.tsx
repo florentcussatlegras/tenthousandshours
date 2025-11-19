@@ -16,8 +16,26 @@ import { useDateFormatter } from "@react-aria/i18n";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { StudyProcess } from "@prisma/client";
 import { LinkIcon, PlusIcon } from "lucide-react";
-import { useActionState, useState } from "react";
+import { useActionState, useState, useEffect } from "react";
 import { DeleteIcon } from "./icons";
+
+function roundToFiveMinutes(date: Date) {
+  const ms = 1000 * 60 * 5;
+  return new Date(Math.floor(date.getTime() / ms) * ms);
+}
+
+// ⏱️ Fonction pour arrondir à la minute
+function roundToMinute(date: Date) {
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    date.getHours(),
+    date.getMinutes(),
+    0,
+    0
+  );
+}
 
 export const NewStudySessionForm = ({
   studyProcess,
@@ -31,6 +49,23 @@ export const NewStudySessionForm = ({
   const [dateCreation, setDateCreation] = useState<any>(
     parseDate(new Date().toISOString().substring(0, 10))
   );
+
+  // --- 🔥 STATE POUR L'HEURE DE DÉBUT ---
+  const [startedAt, setStartedAt] = useState<Time | null>(null);
+
+  // --- 🔥 MISE À JOUR AUTOMATIQUE TOUTES LES MINUTES ---
+  useEffect(() => {
+    function updateTime() {
+      const now = roundToMinute(new Date());
+      setStartedAt(new Time(now.getHours(), now.getMinutes()));
+    }
+
+    updateTime(); // 1ère mise à jour immédiate
+
+    const interval = setInterval(updateTime, 60_000); // chaque minute
+
+    return () => clearInterval(interval);
+  }, []);
 
   let formatter = useDateFormatter({ dateStyle: "full" });
 
@@ -115,9 +150,8 @@ export const NewStudySessionForm = ({
                   className="flex-1"
                   name="startedAt"
                   hourCycle={24}
-                  defaultValue={
-                    new Time(new Date().getHours(), new Date().getMinutes())
-                  }
+                  value={startedAt}
+                  onChange={setStartedAt}
                 />
                 <TimeInput
                   label="Terminé à"
@@ -144,7 +178,10 @@ export const NewStudySessionForm = ({
 
             {urls.map((url, index) => {
               return (
-                <div key={index} className="flex flex-row w-full gap-4 items-center">
+                <div
+                  key={index}
+                  className="flex flex-row w-full gap-4 items-center"
+                >
                   <LinkIcon />
                   <Input
                     type="text"
