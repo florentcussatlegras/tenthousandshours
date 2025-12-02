@@ -140,6 +140,7 @@ export async function createStudySessionAction(
 
     const startedAt = buildLocalDate(result.data.date, result.data.startedAt);
     const finishedAt = buildLocalDate(result.data.date, result.data.finishedAt);
+    console.log(startedAt);
 
     // Pour createdAt si tu veux :
     const createdAt = buildLocalDate(result.data.date, "00:00");
