@@ -27,6 +27,7 @@ import { Clock, Pause, Play, SearchIcon, Timer } from "lucide-react";
 import Link from "next/link";
 import { StudyProcess } from "@prisma/client";
 import { usePathname, useRouter } from "next/navigation";
+import { checkCurrentStudySessionAction } from "@/app/actions/check-study-session.action";
 
 const SECOND = 1_000;
 const MINUTE = SECOND * 60;
@@ -172,8 +173,17 @@ export function CurrentStudySession() {
     localStorage.removeItem("current_study_session_resume");
   }
 
-  function handleLaunchSession() {
-    alert('je suis là');
+  async function handleLaunchSession() {
+    const alreadyExists = await checkCurrentStudySessionAction(
+      currentTopicId,
+      new Date().getTime()
+    );
+
+    if (alreadyExists) {
+      alert("Cette session existe déjà dans cette tranche horaire.");
+      return;
+    }
+    
     pauseOrResume();
     setIsPlaying(true);
     setHoursStartedAt(new Date().getTime());
