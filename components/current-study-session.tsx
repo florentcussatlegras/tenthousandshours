@@ -173,6 +173,7 @@ export function CurrentStudySession() {
   }
 
   function handleLaunchSession() {
+    alert('je suis là');
     pauseOrResume();
     setIsPlaying(true);
     setHoursStartedAt(new Date().getTime());
