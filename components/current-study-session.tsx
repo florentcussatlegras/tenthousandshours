@@ -2,6 +2,7 @@
 
 import {
   fetchCurrentStudySession,
+  fetchStudyProcessByTopic,
   getTopicsOfaUser,
   updateTotalSecondsStudySession,
 } from "@/app/actions/actions";
@@ -27,7 +28,16 @@ import { Clock, Pause, Play, SearchIcon, Timer } from "lucide-react";
 import Link from "next/link";
 import { StudyProcess } from "@prisma/client";
 import { usePathname, useRouter } from "next/navigation";
-import { checkCurrentStudySessionAction } from "@/app/actions/check-study-session.action";
+import {
+  checkCurrentStudySessionAction,
+  testDate,
+} from "@/app/actions/check-study-session.action";
+
+function buildLocalDate(dateStr: string, timeStr: string) {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const [h, min] = timeStr.split(":").map(Number);
+  return new Date(y, m - 1, d, h, min, 0, 0);
+}
 
 const SECOND = 1_000;
 const MINUTE = SECOND * 60;
@@ -176,20 +186,33 @@ export function CurrentStudySession() {
   async function handleLaunchSession() {
     const now = new Date();
 
-    const dateStr = now.toISOString().split("T")[0]; // "2025-02-08"
-    const timeStr = now.toTimeString().slice(0, 5); // "14:23"
+    const studyProcess = await fetchStudyProcessByTopic(currentTopicId);
 
+    if (!studyProcess) {
+      alert("Aucun process associé à ce topic !");
+      return;
+    }
+
+    // Construire la date et l'heure au format strings comme pour les saisies
+    const dateStr = now.toISOString().split("T")[0];      // "2025-12-02"
+    const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")}`;                                // "16:39"
+
+    const checkDate = buildLocalDate(dateStr, timeStr);
+
+    // Passe directement maintenant à la server action
     const alreadyExists = await checkCurrentStudySessionAction(
-      currentTopicId,
-      dateStr,
-      timeStr
+      studyProcess.id,
+      checkDate
     );
 
     if (alreadyExists) {
       alert("Cette session existe déjà dans cette tranche horaire.");
       return;
     }
-    
+
     pauseOrResume();
     setIsPlaying(true);
     setHoursStartedAt(new Date().getTime());

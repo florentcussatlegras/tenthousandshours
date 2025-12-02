@@ -11,21 +11,17 @@ function buildLocalDate(dateStr: string, timeStr: string) {
 
 export async function checkCurrentStudySessionAction(
   studyProcessId: string,
-  dateStr: string,
-  timeStr: string
+  checkDate: Date // directement un Date
 ) {
-  const checkDate = buildLocalDate(dateStr, timeStr);
-
   const rows = await prisma.$queryRaw<any[]>(Prisma.sql`
     SELECT *
     FROM public."StudySession"
     WHERE "studyProcessId" = ${studyProcessId}
-    AND (
-      "startedAt" <= ${checkDate}
+      AND "startedAt" <= ${checkDate}
       AND "finishedAt" >= ${checkDate}
-    )
   `);
 
   return rows.length > 0;
 }
+
 
