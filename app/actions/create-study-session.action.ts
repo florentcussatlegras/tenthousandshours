@@ -157,7 +157,7 @@ export async function createStudySessionAction(
       console.log(studyProcessInThisHours);
       return {
         errors: {
-          _form: ["Cette session dans cette tranche horaire existe dèja."],
+          _form: ["Cette session dans cette tranche horaire existe dèja create."],
         },
       };
     }
