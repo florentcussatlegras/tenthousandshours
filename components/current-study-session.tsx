@@ -174,9 +174,15 @@ export function CurrentStudySession() {
   }
 
   async function handleLaunchSession() {
+    const now = new Date();
+
+    const dateStr = now.toISOString().split("T")[0]; // "2025-02-08"
+    const timeStr = now.toTimeString().slice(0, 5); // "14:23"
+
     const alreadyExists = await checkCurrentStudySessionAction(
       currentTopicId,
-      new Date().getTime()
+      dateStr,
+      timeStr
     );
 
     if (alreadyExists) {
