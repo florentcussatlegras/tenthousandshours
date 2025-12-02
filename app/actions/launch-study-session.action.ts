@@ -105,7 +105,7 @@ export async function launchStudySessionAction(
       if (Array.from(studyProcessInThisHours).length !== 0) {
         return {
           errors: {
-            _form: ["Cette session dans cette tranche horaire existe dèja."],
+            _form: ["Cette session dans cette tranche horaire existe dèja foo."],
           },
         };
       }
