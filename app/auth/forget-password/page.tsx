@@ -6,7 +6,7 @@ import { Card, CardBody, CardHeader, Divider } from "@heroui/react";
 export default function ForgetPasswordPage() {
   return (
     <Card className="flex flex-col items-center p-6" shadow="none">
-      <CardHeader className="flex flex-col gap-2 mb-4 items-start">
+      <CardHeader className="flex flex-col gap-2 mb-4 items-start p-0">
         <h1 className="text-4xl font-bold mb-4 text-default-600">
           Mot de passe oublié
         </h1>
