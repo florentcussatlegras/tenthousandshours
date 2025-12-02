@@ -73,7 +73,7 @@ export const ForgetPasswordForm = () => {
                     text-center
                   "
       >
-        Envoyer un lien de réinitialisation de votre mot de passe
+        Envoyer le lien
       </Button>
       
     </Form>
