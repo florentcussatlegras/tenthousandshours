@@ -421,7 +421,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
         </Card>
 
         <Card className="rounded-none relative p-4 gap-0 w-full md:w-2/3 xl:w-4/5 flex flex-col">
-          <Tabs aria-label="Options" className="font-semibold">
+          <Tabs aria-label="Options" className="font-semibold mt-14 md:mt-0">
             <Tab key="day" title="Jour" onClick={() => setDisplayTab("day")}>
               <DayCalendar
                 currentDate={currentDate}
