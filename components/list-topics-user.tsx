@@ -25,7 +25,7 @@ export const CustomCheckbox = (props: any) => {
       isSelected: {
         true: {
           base: "bg-secondary hover:bg-secondary",
-          content: "text-white text-base pl-1 w-full",
+          content: "text-white pl-1 w-full",
         },
       },
       isFocusVisible: {
@@ -55,12 +55,13 @@ export const CustomCheckbox = (props: any) => {
         <input {...getInputProps()} />
       </VisuallyHidden>
       <Chip
+        className="flex items-center"
         classNames={{
           base: styles.base(),
           content: styles.content(),
         }}
         color="secondary"
-        startContent={isSelected ? <CheckIcon className="ml-1" /> : null}
+        startContent={isSelected ? <CheckIcon size={16} className="ml-1 text-white" /> : null}
         variant="faded"
         // {...getLabelProps()}
       >

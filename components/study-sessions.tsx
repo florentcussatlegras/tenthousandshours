@@ -38,7 +38,7 @@ export function StudySessions({
       )}
       <ListStudiesSession
         onEditClick={handleEditForm}
-        studyProcessId={Number(studyProcess.id)}
+        studyProcessId={studyProcess.id}
         studySessions={studySessions}
       />
     </div>

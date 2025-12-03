@@ -94,7 +94,7 @@ export const CustomCheckbox = (props: any) => {
       isSelected: {
         true: {
           base: "bg-secondary hover:bg-secondary",
-          content: "text-white text-base pl-1 w-full",
+          content: "text-white pl-1 w-full",
         },
       },
       isFocusVisible: {
@@ -124,12 +124,13 @@ export const CustomCheckbox = (props: any) => {
         <input {...getInputProps()} />
       </VisuallyHidden>
       <Chip
+        className="flex items-center"
         classNames={{
           base: styles.base(),
           content: styles.content(),
         }}
         color="secondary"
-        startContent={isSelected ? <CheckIcon className="ml-1" /> : null}
+        startContent={isSelected ? <CheckIcon size={16} className="ml-1 text-white" /> : null}
         variant="faded"
         // {...getLabelProps()}
       >
@@ -165,10 +166,16 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
 
   // const [searchItem, setSearchItem] = useState("");
 
-  const { data: session } = useSession();
+  const { data: session, isPending } = useSession();
 
   useEffect(() => {
+    if (isPending) return;
+    if (!session?.user?.id) return;
+
+    // console.log("SESSION OK:", session);
+
     async function getStudySessions() {
+
       const newStudySessions = await fetchStudySessionsPerDay(
         String(session?.user.id),
         currentDate
@@ -225,7 +232,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
     getStudySessions();
     getStudySessionsPerDay();
     getTopicsUser();
-  }, [currentDate]);
+  }, [session, isPending, currentDate]);
 
   useEffect(() => {
     setCurrentWeek(getCurrentWeek(currentDate));

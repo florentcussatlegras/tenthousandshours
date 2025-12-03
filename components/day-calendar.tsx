@@ -32,8 +32,9 @@ export function DayCalendar({
 
           <Accordion variant="splitted">
             {studySessions.map((session: any) => {
-              const ratioProgress =
-                (Number(session.study_process_total_hours) / 10000) * 100;
+              console.log(session);
+              // const ratioProgress =
+              //   (Number(session.study_process_total_hours) / 10000) * 100;
 
               return (
                 <AccordionItem
@@ -52,8 +53,8 @@ export function DayCalendar({
                   }
                   disableIndicatorAnimation={true}
                   indicator={
-                    <div className="flex flex-row items-end gap-4">
-                      <Progress
+                    <div className="flex flex-row items-end">
+                      {/* <Progress
                         aria-label="Loading..."
                         className="w-full"
                         classNames={{
@@ -63,8 +64,8 @@ export function DayCalendar({
                         }}
                         value={ratioProgress}
                         showValueLabel={true}
-                      />
-                      <ChevronDown className="-mb-2" />
+                      /> */}
+                      <ChevronDown className="-mb-2 ml-auto" />
                     </div>
                   }
                 >
