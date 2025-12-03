@@ -95,7 +95,7 @@ export default function ListStudiesSession({
   studySessions,
 }: {
   onEditClick: any,
-  studyProcessId: Number,
+  studyProcessId: String,
   studySessions: StudySession[];
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -254,6 +254,7 @@ export default function ListStudiesSession({
   }, []);
 
   const onSearchChange = React.useCallback(async (value: any) => {
+    console.log(studyProcessId);
     if (value) {
       setFilterValue(value);
       const result = await fetchStudySessionsPerRangeDays(

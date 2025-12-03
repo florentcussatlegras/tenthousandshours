@@ -192,13 +192,21 @@ export async function fetchStudySessionsPerRangeDays(
     const dateStartFilter = new Date(
       yearStart,
       monthStart - 1,
-      dayStart + 1,
-      -22,
+      dayStart,
+      0,
       0,
       0
     );
 
-    const dateEndFilter = new Date(yearEnd, monthEnd - 1, dayEnd + 1, 1, 59, 0);
+    const dateEndFilter = new Date(
+      yearEnd, 
+      monthEnd - 1, 
+      dayEnd, 
+      23, 
+      59, 
+      59,
+      999
+    );
 
     studySessions = await prisma.$queryRaw`
         SELECT * FROM public."StudySession" 
@@ -222,19 +230,23 @@ export async function fetchStudySessionsPerDay(userId: String, dateSelect: Date)
   const dateTimeSlotStart = new Date(
     dateSelect.getFullYear(),
     dateSelect.getMonth(),
-    dateSelect.getDate() + 1,
-    -22,
+    dateSelect.getDate(),
+    0,
     0,
     0
   );
   const dateTimeSlotFinish = new Date(
     dateSelect.getFullYear(),
     dateSelect.getMonth(),
-    dateSelect.getDate() + 1,
-    1,
+    dateSelect.getDate(),
+    23, 
+    59, 
     59,
-    0
+    999
   );
+
+  console.log("filtering by:" + dateTimeSlotStart + '-' + dateTimeSlotFinish);
+  console.log("user id est: " + userId);
 
   const studySessions: any = await prisma.$queryRaw`SELECT 
         "StudySession"."id" AS "session_id", 
