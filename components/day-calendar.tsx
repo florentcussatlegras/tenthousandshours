@@ -14,15 +14,13 @@ export function DayCalendar({
 }) {
   return (
     <div className="flex flex-col gap-4 pt-1">
-      <div className="uppercase flex justify-center items-center text-sm text-default-500 h-10 font-semibold rounded-xl px-4 absolute top-4 right-2">
-        {new Intl.DateTimeFormat("fr-FR", {
-          dateStyle: "full",
-        }).format(currentDate)}
+      <div className="uppercase inline-flex w-max px-4 py-1 rounded-xl bg-white border border-gray-300 text-gray-700 font-semibold text-sm shadow-sm absolute top-4 left-4 md:left-auto md:right-5 mt-2">
+        {new Intl.DateTimeFormat("fr-FR", { dateStyle: "full" }).format(currentDate)}
       </div>
 
       {studySessions.length === 0 ? (
-        <div className="justify-center text-default-400 font-medium uppercase py-12 text-center">
-          Aucune session de travail trouvées ce jour là
+        <div className="justify-center text-default-400 text-xs md:text-sm font-medium uppercase py-10 md:py-32 text-center italic">
+          Aucune session de travail trouvées ce jour
         </div>
       ) : (
         <div className="flex flex-col gap-3">
