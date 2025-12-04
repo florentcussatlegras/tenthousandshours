@@ -47,6 +47,8 @@ import { convertSecondsInHourMin } from "@/app/lib/utils";
 import Link from "next/link";
 import { WeekCalendar } from "./week-calendar";
 import { DayCalendar } from "./day-calendar";
+import WeekCalendarWithHours from "./week-calendar-with-hours";
+
 
 function getCurrentWeek(currentDate: Date) {
   let i = currentDate.getDay();
@@ -433,9 +435,14 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
               title="Semaine"
               onClick={() => setDisplayTab("week")}
             >
-              <WeekCalendar
+              {/* <WeekCalendar
                 currentWeek={currentWeek}
                 studySessionsPerDay={studySessionsPerDayFilter}
+              /> */}
+              <WeekCalendarWithHours
+                weekDates={currentWeek}
+                studySessionsPerDay={studySessionsPerDayFilter}
+                isLoading={false} // tu ajouteras ton vrai loader plus tard si besoin
               />
             </Tab>
           </Tabs>

@@ -6,7 +6,7 @@ export default function SchedulerLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex flex-col items-start py-8 md:py-10 max-w-[1536] mx-auto">
+    <section className="flex flex-col items-start py-0 md:py-10 max-w-[1536] mx-auto">
       {children}
     </section>
   );
