@@ -134,7 +134,7 @@ export default function NavBarClient({ session }: { session: any }) {
     <>
       <Navbar
         classNames={{
-          base: "w-full px-2 2xl:px-0", // enleve padding du <nav>
+          base: "w-full px-2 2xl:px-0 my-2 md:my-4", // enleve padding du <nav>
           wrapper: "w-full px-2 2xl:px-0", // enleve padding du wrapper interne
         }}
         maxWidth="full" // IMPORTANT : sinon HeroUI remet un max-w + centrage
@@ -156,7 +156,7 @@ export default function NavBarClient({ session }: { session: any }) {
         </NavbarBrand>
 
         <NavbarContent justify="end">
-          <NavbarContent className="flex-row flex-nowrap items-center bg-content2 dark:bg-content1 hidden h-12 w-full max-w-fit gap-4 rounded-full px-4 md:flex">
+          <NavbarContent className="flex-row flex-nowrap items-center bg-content2 dark:bg-content1 hidden h-12 w-full max-w-fit gap-4 rounded-full px-4 md:flex mr-4">
             <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
               <Link
                 className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
@@ -351,27 +351,31 @@ export default function NavBarClient({ session }: { session: any }) {
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        <div className="flex justify-between items-center p-4 border-b">
-          <p className="font-bold text-lg">Menu</p>
+        <div className="flex justify-between items-center p-4">
+  
+          <Link href="/" className="text-default-600 flex">
+            <AcmeLogo />
+          </Link>
+  
           <button onClick={() => setSidebarOpen(false)}>
             <X size={26} />
           </button>
         </div>
 
         <nav className="flex flex-col py-4 gap-4 px-4 text-lg">
-          <Link href="/profile" className="flex items-center gap-2">
+          <Link href="/profile" className="flex items-center gap-2 text-black">
             <GraduationCap /> Mes apprentissages
           </Link>
 
-          <Link href="/scheduler" className="flex items-center gap-2">
+          <Link href="/scheduler" className="flex items-center gap-2 text-black">
             <Calendar /> Votre calendrier
           </Link>
 
-          <Link href="/about" className="flex items-center gap-2">
+          <Link href="/about" className="flex items-center gap-2 text-black">
             <HelpCircle /> Qui sommes-nous ?
           </Link>
 
-          <Link href="/contact" className="flex items-center gap-2">
+          <Link href="/contact" className="flex items-center gap-2 text-black">
             <Mail /> Nous contacter
           </Link>
 
