@@ -57,9 +57,9 @@ export default function WeekCalendarWithHours({
           )}
 
           {/* Grille */}
-          <div className="grid grid-cols-8 border border-gray-200">
+          <div className="grid grid-cols-8 border-t border-r border-l border-gray-200">
             {/* Colonne des heures */}
-            <div className="flex flex-col border-r border-gray-200 bg-gray-50">
+            <div className="flex flex-col border-gray-200 bg-gray-50 mt-9 border-t">
               {hours.map((hour) => (
                 <div
                   key={hour}
@@ -73,7 +73,7 @@ export default function WeekCalendarWithHours({
 
             {/* 7 jours */}
             {weekDates.map((date, dayIndex) => (
-              <div key={dayIndex} className="relative border-r border-gray-200">
+              <div key={dayIndex} className="relative border-l border-gray-200">
                 {/* Header du jour */}
                 <div className="text-center py-2 border-b border-gray-200 bg-gray-50 text-sm font-medium">
                   {date.toLocaleDateString("fr-FR", {
