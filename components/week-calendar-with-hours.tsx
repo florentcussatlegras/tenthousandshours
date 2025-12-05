@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { StudySessionModal } from "./study-session-modal";
+import ThreeDotsLoader from "./three-dots-loader";
 
 export default function WeekCalendarWithHours({
   weekDates,
@@ -10,7 +11,6 @@ export default function WeekCalendarWithHours({
   studySessionsPerDay: any[][];
   isLoading: boolean;
 }) {
-    console.log(studySessionsPerDay);
   const hours = Array.from({ length: 24 }, (_, i) => i);
 
   const formatHour = (h: number) => `${h.toString().padStart(2, "0")}:00`;
@@ -30,93 +30,94 @@ export default function WeekCalendarWithHours({
   const getPositionStyle = (startedAt: string, finishedAt: string) => {
     const startDate = new Date(startedAt);
     const endDate = new Date(finishedAt);
-
     const startHour = startDate.getHours() + startDate.getMinutes() / 60;
     const endHour = endDate.getHours() + endDate.getMinutes() / 60;
-
-    const topPercent = (startHour / 24) * 100;
-    const heightPercent = ((endHour - startHour) / 24) * 100;
-
     return {
-      top: `${topPercent}%`,
-      height: `${heightPercent}%`,
+      top: `${(startHour / 24) * 100}%`,
+      height: `${((endHour - startHour) / 24) * 100}%`,
     };
   };
 
   return (
-    <div className="w-full">
-
+    <div>
       {/* Titre de la semaine */}
-      <h2 className="text-xl font-semibold mb-4">{weekLabel}</h2>
+      <div className="uppercase inline-flex w-max h-8 items-center justify-center min-w-[280px] px-4 py-1 rounded-xl bg-white border border-gray-300 text-gray-700 font-semibold text-sm shadow-sm absolute top-4 left-4 md:left-auto md:right-5 mt-2 z-40">
+        {isLoading ? <ThreeDotsLoader /> : weekLabel}
+      </div>
 
-      {/* Loader */}
-      {isLoading && (
-        <div className="flex justify-center py-10">Chargement…</div>
-      )}
+      {/* Wrapper scroll horizontal */}
+      <div className="w-full overflow-x-auto relative">
+        {/* Grille interne */}
+        <div className="inline-block min-w-full w-max relative">
+          {/* Overlay loader */}
+          {isLoading && (
+            <div className="absolute inset-0 z-50 flex items-start pt-80 justify-center bg-white/70 backdrop-blur-sm">
+              <ThreeDotsLoader />
+            </div>
+          )}
 
-      {!isLoading && (
-        <div className="grid grid-cols-8 border border-gray-200">
+          {/* Grille */}
+          <div className="grid grid-cols-8 border border-gray-200">
+            {/* Colonne des heures */}
+            <div className="flex flex-col border-r border-gray-200 bg-gray-50">
+              {hours.map((hour) => (
+                <div
+                  key={hour}
+                  className="border-b border-gray-200 flex items-start justify-end pr-2 text-xs text-gray-500"
+                  style={{ height: "calc(100% / 24)" }}
+                >
+                  {formatHour(hour)}
+                </div>
+              ))}
+            </div>
 
-          {/* Colonne des heures */}
-          <div className="flex flex-col border-r border-gray-200 bg-gray-50 mt-9">
-            {hours.map((hour) => (
-              <div
-                key={hour}
-                className="h-[66.66px] border-b border-gray-200 flex items-start justify-end pr-2 text-xs text-gray-500"
-              >
-                {formatHour(hour)}
+            {/* 7 jours */}
+            {weekDates.map((date, dayIndex) => (
+              <div key={dayIndex} className="relative border-r border-gray-200">
+                {/* Header du jour */}
+                <div className="text-center py-2 border-b border-gray-200 bg-gray-50 text-sm font-medium">
+                  {date.toLocaleDateString("fr-FR", {
+                    weekday: "short",
+                    day: "numeric",
+                    month: "numeric",
+                  })}
+                </div>
+
+                {/* Grille horaire */}
+                <div className="relative h-[1600px]">
+                  {hours.map((hour) => (
+                    <div
+                      key={hour}
+                      className="absolute left-0 right-0 border-b border-gray-200"
+                      style={{
+                        top: `${(hour / 24) * 100}%`,
+                        height: "calc(100% / 24)",
+                      }}
+                    />
+                  ))}
+
+                  {/* Sessions */}
+                  {!isLoading &&
+                    studySessionsPerDay[date.getDay()]?.map((session: any) => {
+                      const pos = getPositionStyle(
+                        session.startedAt,
+                        session.finishedAt
+                      );
+
+                      return (
+                        <StudySessionModal
+                          key={session.session_id}
+                          session={session}
+                          pos={pos}
+                        />
+                      );
+                    })}
+                </div>
               </div>
             ))}
           </div>
-
-          {/* 7 jours */}
-          {weekDates.map((date, dayIndex) => (
-            <div
-              key={dayIndex}
-              className="relative border-r border-gray-200"
-            >
-              {/* Header du jour */}
-              <div className="text-center py-2 border-b border-gray-200 bg-gray-50 text-sm font-medium">
-                {date.toLocaleDateString("fr-FR", {
-                  weekday: "short",
-                  day: "numeric",
-                  month: "numeric",
-                })}
-              </div>
-
-              {/* Grille horaire */}
-              <div className="relative h-[1600px]">
-                {/* Heures en fond */}
-                {hours.map((hour) => (
-                  <div
-                    key={hour}
-                    className="absolute left-0 right-0 border-b border-gray-200"
-                    style={{
-                      top: `${(hour / 24) * 100}%`,
-                      height: "calc(100%/24)",
-                    }}
-                  ></div>
-                ))}
-
-                {/* Sessions */}
-                {studySessionsPerDay[dayIndex]?.map((session: any) => {
-                  const pos = getPositionStyle(
-                    session.startedAt,
-                    session.finishedAt
-                  );
-
-                  return (
-                    <StudySessionModal 
-                        session={session}
-                        pos={pos}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          ))}
         </div>
-      )}
+      </div>
     </div>
   );
 }
