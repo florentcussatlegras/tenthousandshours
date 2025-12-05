@@ -170,71 +170,91 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
 
   const { data: session, isPending } = useSession();
 
+  const [isGridLoading, setIsGridLoading] = useState(false);
+
   useEffect(() => {
-    if (isPending) return;
-    if (!session?.user?.id) return;
+  if (isPending) return;
+  if (!session?.user?.id) return;
 
-    // console.log("SESSION OK:", session);
+  let cancelled = false;
 
-    async function getStudySessions() {
+  async function loadAll() {
+    setIsGridLoading(true);
 
-      const newStudySessions = await fetchStudySessionsPerDay(
-        String(session?.user.id),
-        currentDate
-      );
+    try {
+      async function getStudySessions() {
+        const newStudySessions = await fetchStudySessionsPerDay(
+          String(session?.user.id),
+          currentDate
+        );
+        if (cancelled) return;
 
-      setStudySessions(newStudySessions);
+        setStudySessions(newStudySessions);
 
-      if (groupSelected.length !== 0) {
-        const newStudySessionsFilter = newStudySessions.filter((item: any) => {
-          return groupSelected.includes(item.topic_id);
-        });
-        setStudySessionsFilter(newStudySessionsFilter);
-      } else {
-        setStudySessionsFilter(newStudySessions);
-      }
-    }
-
-    async function getStudySessionsPerDay() {
-      let newStudySessionsPerDay = [];
-
-      const getStudySessionPerDay = async (day: any) => {
-        return await fetchStudySessionsPerDay(String(session?.user.id), day);
-      };
-
-      for (let index = 0; index < currentWeek.length; index++) {
-        let day = currentWeek[index];
-        newStudySessionsPerDay[day.getDay()] = await getStudySessionPerDay(day);
+        if (groupSelected.length !== 0) {
+          const newStudySessionsFilter = newStudySessions.filter((item: any) =>
+            groupSelected.includes(item.topic_id)
+          );
+          setStudySessionsFilter(newStudySessionsFilter);
+        } else {
+          setStudySessionsFilter(newStudySessions);
+        }
       }
 
-      if (groupSelected.length !== 0) {
-        let newStudySessionsPerDayFilter: any[] = [];
+      async function getStudySessionsPerDay() {
+        let newStudySessionsPerDay: any[] = [];
 
-        newStudySessionsPerDay.forEach((items, indexDay) => {
-          const newitems = items.filter((item: any) => {
-            return groupSelected.includes(item.topic_id);
+        const getStudySessionPerDay = async (day: any) =>
+          await fetchStudySessionsPerDay(String(session?.user.id), day);
+
+        for (let index = 0; index < currentWeek.length; index++) {
+          let day = currentWeek[index];
+          newStudySessionsPerDay[day.getDay()] =
+            await getStudySessionPerDay(day);
+        }
+
+        if (cancelled) return;
+
+        if (groupSelected.length !== 0) {
+          let newStudySessionsPerDayFilter: any[] = [];
+
+          newStudySessionsPerDay.forEach((items, indexDay) => {
+            const newItems = items.filter((item: any) =>
+              groupSelected.includes(item.topic_id)
+            );
+            newStudySessionsPerDayFilter[indexDay] = newItems;
           });
-          newStudySessionsPerDayFilter[indexDay] = newitems;
-        });
 
-        setStudySessionsPerDayFilter(newStudySessionsPerDayFilter);
-      } else {
-        setStudySessionsPerDayFilter(newStudySessionsPerDay);
+          setStudySessionsPerDayFilter(newStudySessionsPerDayFilter);
+        } else {
+          setStudySessionsPerDayFilter(newStudySessionsPerDay);
+        }
+
+        setStudySessionsPerDay(newStudySessionsPerDay);
       }
 
-      // setStudySessionsPerDayFilter(newStudySessionsPerDay);
-      setStudySessionsPerDay(newStudySessionsPerDay);
-    }
+      async function getTopicsUser() {
+        const topics = await getTopicsOfaUser();
+        if (!cancelled) setTopics(topics);
+      }
 
-    async function getTopicsUser() {
-      const topics = await getTopicsOfaUser();
-      setTopics(topics);
+      await getStudySessions();
+      await getStudySessionsPerDay();
+      await getTopicsUser();
+    } catch (err) {
+      console.error("loadAll error:", err);
+    } finally {
+      if (!cancelled) setIsGridLoading(false);
     }
+  }
 
-    getStudySessions();
-    getStudySessionsPerDay();
-    getTopicsUser();
-  }, [session, isPending, currentDate]);
+  loadAll();
+
+  return () => {
+    cancelled = true;
+  };
+}, [session, isPending, currentDate]);
+
 
   useEffect(() => {
     setCurrentWeek(getCurrentWeek(currentDate));
@@ -291,6 +311,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
   }
 
   function handleDayRemove() {
+    setIsGridLoading(true); // <-- show loader immediately
     let newCurrentDate;
     if (displayTab === "day") {
       newCurrentDate = dateAddDays(-1, currentDate);
@@ -305,6 +326,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
   }
 
   function handleDayAdd() {
+    setIsGridLoading(true); // <-- show loader immediately
     let newCurrentDate;
     if (displayTab === "day") {
       newCurrentDate = dateAddDays(1, currentDate);
@@ -319,6 +341,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
   }
 
   function handleDateCalendarChange(value: any) {
+    setIsGridLoading(true); // <-- show loader immediately
     setValueDatePicker(value);
     const newDate = new Date(value.year, value.month - 1, value.day);
     setCurrentDate(value.toDate());
@@ -442,7 +465,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
               <WeekCalendarWithHours
                 weekDates={currentWeek}
                 studySessionsPerDay={studySessionsPerDayFilter}
-                isLoading={false} // tu ajouteras ton vrai loader plus tard si besoin
+                isLoading={isGridLoading}
               />
             </Tab>
           </Tabs>
