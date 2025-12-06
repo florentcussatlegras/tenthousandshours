@@ -182,7 +182,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
     setIsGridLoading(true);
 
     try {
-      async function getStudySessions() {
+      const getStudySessions = async () => {
         const newStudySessions = await fetchStudySessionsPerDay(
           String(session?.user.id),
           currentDate
