@@ -201,7 +201,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
         }
       }
 
-      async function getStudySessionsPerDay() {
+      const getStudySessionsPerDay = async () => {
         let newStudySessionsPerDay: any[] = [];
 
         const getStudySessionPerDay = async (day: any) =>
@@ -233,7 +233,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
         setStudySessionsPerDay(newStudySessionsPerDay);
       }
 
-      async function getTopicsUser() {
+      const getTopicsUser = async () => {
         const topics = await getTopicsOfaUser();
         if (!cancelled) setTopics(topics);
       }
