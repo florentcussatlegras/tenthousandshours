@@ -9,16 +9,14 @@ import { auth } from "../lib/auth";
 import { headers } from "next/headers";
 
 const createTopicSchema = z.object({
-  name: z.string(),
   description: z.string(),
-  timeDedicated: z.string().nullable(),
-  timeDedicatedPeriod: z.string().nullable(),
+  timeDedicated: z.string().optional().nullable(),
+  timeDedicatedPeriod: z.string().optional().nullable(),
   topicId: z.string(),
 });
 
 interface CreateStudyProcessState {
   errors: {
-    name?: string[];
     description?: string[];
     timeDedicated?: string[];
     topicId?: string[];
@@ -38,6 +36,17 @@ export async function createStudyProcess(
   });
 
   if (!session || !session.user) redirect("/auth/sign-in");
+
+  const topicId = formData.get("topicId");
+  console.log(topicId);
+
+  if (!topicId || topicId === "null" || topicId === "") {
+    return {
+      errors: {
+        _form: ["Veuillez saisir une matière"],
+      },
+    };
+  }
 
   const result = createTopicSchema.safeParse(
     Object.fromEntries(formData)
@@ -72,6 +81,7 @@ export async function createStudyProcess(
     });
 
     if (studyProcessUser !== null) {
+      console.log(result.data.topicId);
       return {
           errors: {
             _form: ["Vous êtes déja en train d'apprendre cette matière. Veuillez en choisir une nouvelle."],
@@ -81,11 +91,11 @@ export async function createStudyProcess(
 
     studyProcess = await prisma.studyProcess.create({
       data: {
-        name: result.data.name,
+        name: "",
         slug: slugify(String(topic?.name)),
         description: result.data.description,
-        forecastedDedicatedHours: result.data.timeDedicated === '' ? null : Number(result.data.timeDedicated),
-        forecastedDedicatedHoursPeriod: result.data.timeDedicated === '' ? null : result.data.timeDedicatedPeriod,
+        forecastedDedicatedHours: !result.data.timeDedicated ? null : Number(result.data.timeDedicated),
+        forecastedDedicatedHoursPeriod: !result.data.timeDedicated ? null : result.data.timeDedicatedPeriod,
         topicId: result.data.topicId,
         userId: session.user.id,
       },
