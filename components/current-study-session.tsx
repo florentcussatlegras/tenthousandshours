@@ -29,8 +29,7 @@ import Link from "next/link";
 import { StudyProcess } from "@prisma/client";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  checkCurrentStudySessionAction,
-  testDate,
+  checkCurrentStudySessionAction
 } from "@/app/actions/check-study-session.action";
 
 function buildLocalDate(dateStr: string, timeStr: string) {

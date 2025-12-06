@@ -46,8 +46,13 @@ export default function StudyProcessCreateForm({
   const [currentTopicName, setCurrentTopicName] = useState(topicName);
 
   function handleTopicChange(value: string | null) {
+    console.log(value);
     setCurrentTopicName(value);
-    setCurrentTopicId(topics.filter((topic) => topic.name === value)[0].id);
+    if (!value) {
+        setCurrentTopicId(null); // reset topicId si champ vide
+    } else {
+        setCurrentTopicId(topics.filter((topic) => topic.name === value)[0].id);
+    }
   }
 
   return (
@@ -139,26 +144,6 @@ export default function StudyProcessCreateForm({
         <span className="text-sky-500">{currentTopicName}</span>
       </h1>
 
-      <Input
-        color={formState.errors.name !== undefined ? "danger" : "default"}
-        label="Titre (facultatif)"
-        labelPlacement="outside"
-        name="name"
-        type="text"
-        value={`Devenir un expert en ${currentTopicName}`}
-        classNames={{
-          label: "self-start pb-2",
-          inputWrapper: "h-[60px]",
-        }}
-        size="lg"
-        onChange={(e) => setCurrentName(e.currentTarget.value)}
-      />
-      {formState.errors.name ? (
-        <div className="text-danger text-sm">
-          {formState.errors.name?.join(", ")}
-        </div>
-      ) : null}
-
       <div className="flex w-full">
         <div className="flex flex-col justify-start items-start gap-2">
           <label>
@@ -167,7 +152,7 @@ export default function StudyProcessCreateForm({
           </label>
           <div className="flex flex-row gap-4">
             <NumberInput
-              color={formState.errors.name !== undefined ? "danger" : "default"}
+              color={formState.errors.timeDedicated !== undefined ? "danger" : "default"}
               name="timeDedicated"
               classNames={{
                 base: "flex-3",
@@ -189,11 +174,6 @@ export default function StudyProcessCreateForm({
             </RadioGroup>
           </div>
         </div>
-        {formState.errors.name ? (
-          <div className="text-danger text-sm">
-            {formState.errors.name?.join(", ")}
-          </div>
-        ) : null}
       </div>
 
       <Textarea
