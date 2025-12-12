@@ -24,7 +24,7 @@ export default async function DashboardPage() {
 
   if (!session) redirect("/auth/sign-in");
 
-  if (session.user.role !== "ADMIN") {
+  if (session.user.role !== "admin") {
     return (
       <div className="px-8 py-16 container mx-auto max-w-[1536px] space-y-8 border">
         <div className="space-y-8">
