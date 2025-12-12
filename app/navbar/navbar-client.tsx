@@ -180,7 +180,7 @@ export default function NavBarClient({ session }: { session: any }) {
                 role="link"
                 aria-current="page"
               >
-                <Calendar className="text-sky-500" />
+                <Calendar className="text-gray-500" />
                 <span className="hidden xl:block text-sm">Votre calendrier</span>
               </Link>
             </NavbarItem>
@@ -195,7 +195,7 @@ export default function NavBarClient({ session }: { session: any }) {
                 role="link"
                 aria-current="page"
               >
-                <HelpCircle className="text-sky-500" />
+                <HelpCircle className="text-gray-500" />
                 <span className="hidden 2xl:block text-sm">Qui sommes-nous?</span>
               </Link>
             </NavbarItem>
@@ -206,7 +206,7 @@ export default function NavBarClient({ session }: { session: any }) {
                 data-react-aria-pressable="true"
                 role="link"
               >
-                <Mail className="text-sky-500" />
+                <Mail className="text-gray-500" />
                 <span className="hidden 2xl:block text-sm">Nous contacter</span>
               </Link>
             </NavbarItem>
