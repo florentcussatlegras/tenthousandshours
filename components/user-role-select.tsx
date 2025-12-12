@@ -65,11 +65,11 @@ export const UserRoleSelect = ({ userId, role }: UserRoleSelectProps) => {
     <select
         value={role}
         onChange={handleChange}
-        disabled={role === "ADMIN" || isPending}
+        disabled={role === "admin" || isPending}
         className="px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50"
     >
-        <option value="ADMIN">ADMIN</option>
-        <option value="USER">USER</option>
+        <option value="admin">ADMIN</option>
+        <option value="user">USER</option>
     </select>
   )
 }
