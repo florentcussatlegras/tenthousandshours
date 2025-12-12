@@ -43,7 +43,7 @@ export default async function Page() {
 
   const CATEGORY_TOPIC_ACCESS = await auth.api.userHasPermission({
     body: {
-      role: "ADMIN",
+      role: "admin",
       permissions: {
         categoryTopic: ["create", "update", "delete"],
       },
@@ -52,7 +52,7 @@ export default async function Page() {
 
   const TOPIC_ACCESS = await auth.api.userHasPermission({
     body: {
-      role: "ADMIN",
+      role: "admin",
       permissions: {
         topic: ["create", "update", "delete"],
       },
@@ -81,7 +81,7 @@ export default async function Page() {
     <div className="py-8 container mx-auto max-w-[1536px] space-y-8">
       <Breadcrumb steps={[{ label: "Mon profil" }]} />
       <div className="flex items-center gap-2">
-        {session.user.role === "ADMIN" && (
+        {session.user.role === "admin" && (
           <Button className="bg-sky-500">
             <Link href="/admin/dashboard" className="text-white">
               Admin Dashboard
