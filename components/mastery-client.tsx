@@ -74,12 +74,12 @@ export default function MasteryClient({
                 <div className="text-xs text-default-500">Moyenne (h → master)</div>
                 <div className="text-2xl font-bold">{avgTimeToMaster}</div>
               </div>
-              <div>
+              {/* <div>
                 <div className="text-xs text-default-500">Dernière maîtrisée</div>
                 <div className="text-2xl font-bold">
                   {mastered[0] ? formatDate(mastered[0].reachedAt) : "—"}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -130,10 +130,10 @@ export default function MasteryClient({
                 </div>
                 <div className="flex-1">
                   <div className="flex justify-between items-start gap-3">
-                    <div>
+                    {/* <div>
                       <h3 className="font-semibold text-lg">{t.name}</h3>
                       <div className="text-xs text-default-500 mt-1">Atteint le {formatDate(t.reachedAt)}</div>
-                    </div>
+                    </div> */}
                     <div className="text-right">
                       <div className="text-sm text-default-500">Heures total</div>
                       <div className="text-xl font-bold">{hours(t.totalSeconds)} h</div>
@@ -161,7 +161,7 @@ export default function MasteryClient({
                     {i + 1}
                   </span>
                   <div className="text-sm font-semibold">{t.name}</div>
-                  <div className="text-xs text-default-500">{formatDate(t.reachedAt)} — {hours(t.totalSeconds)} h</div>
+                  {/* <div className="text-xs text-default-500">{formatDate(t.reachedAt)} — {hours(t.totalSeconds)} h</div> */}
                 </li>
               ))}
             </ol>
