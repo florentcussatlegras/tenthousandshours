@@ -165,7 +165,7 @@ export default function NavBarClient({ session }: { session: any }) {
                 data-react-aria-pressable="true"
                 role="link"
               >
-                <GraduationCap className="text-gray-500" />
+                <GraduationCap className="text-gray-800" />
                 <span className="hidden xl:block text-sm">Vos apprentissages</span>
               </Link>
             </NavbarItem>
@@ -180,7 +180,7 @@ export default function NavBarClient({ session }: { session: any }) {
                 role="link"
                 aria-current="page"
               >
-                <Calendar className="text-gray-500" />
+                <Calendar className="text-gray-800" />
                 <span className="hidden xl:block text-sm">Votre calendrier</span>
               </Link>
             </NavbarItem>
@@ -195,7 +195,7 @@ export default function NavBarClient({ session }: { session: any }) {
                 role="link"
                 aria-current="page"
               >
-                <HelpCircle className="text-gray-500" />
+                <HelpCircle className="text-gray-800" />
                 <span className="hidden 2xl:block text-sm">Qui sommes-nous?</span>
               </Link>
             </NavbarItem>
@@ -206,7 +206,7 @@ export default function NavBarClient({ session }: { session: any }) {
                 data-react-aria-pressable="true"
                 role="link"
               >
-                <Mail className="text-gray-500" />
+                <Mail className="text-gray-800" />
                 <span className="hidden 2xl:block text-sm">Nous contacter</span>
               </Link>
             </NavbarItem>
@@ -370,19 +370,19 @@ export default function NavBarClient({ session }: { session: any }) {
         <nav className="flex flex-col py-4 gap-4 px-4 text-lg items-center">
           <div className="flex flex-col max-w-auto w-3/4 gap-2">
           <Link href="/profile" className="flex items-center gap-2 text-black">
-            <GraduationCap className="text-sky-500" /> Vos apprentissages
+            <GraduationCap className="text-gray-800" /> Vos apprentissages
           </Link>
 
           <Link href="/scheduler" className="flex items-center gap-2 text-black">
-            <Calendar className="text-sky-500" /> Votre calendrier
+            <Calendar className="text-gray-800" /> Votre calendrier
           </Link>
 
           <Link href="/about" className="flex items-center gap-2 text-black">
-            <HelpCircle className="text-sky-500" /> Qui sommes-nous ?
+            <HelpCircle className="text-gray-800" /> Qui sommes-nous ?
           </Link>
 
           <Link href="/contact" className="flex items-center gap-2 text-black">
-            <Mail className="text-sky-500" /> Nous contacter
+            <Mail className="text-gray-800" /> Nous contacter
           </Link>
 
           {!session && (
