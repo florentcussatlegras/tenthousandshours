@@ -127,9 +127,14 @@ const options = {
       maxAge: 5 * 60,
     }
   },
+  // account: {
+  //   accountLinking: {
+  //     enabled: false,
+  //   },
+  // },
   account: {
     accountLinking: {
-      enabled: false,
+      enabled: true, // ✅ activer le linking
     },
   },
   plugins: [
