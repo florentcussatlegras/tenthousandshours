@@ -53,13 +53,17 @@ const options = {
     sendOnSignUp: true,
     autoSignInAfterVerification: false,
     sendVerificationEmail: async ({ user, url }) => {
+
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+      const fullUrl = new URL(url, baseUrl).toString();
+
       await sendEmailAction({
         to: user.email,
         subject: "Vérification de votre adresse email",
         meta: {
           description:
             "Please verify your email address to complete registration.",
-          link: url,
+          link: fullUrl,
         },
       });
     },

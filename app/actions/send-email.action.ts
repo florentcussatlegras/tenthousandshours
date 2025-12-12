@@ -24,7 +24,7 @@ export async function sendEmailAction({
     const mailOptions = {
         from: process.env.NODEMAILER_USER,
         to,
-        subject: `Ten Thousands Hours - ${subject}`,
+        subject: `Ten Thousand Hours - ${subject}`,
         html: `
         <div style="${styles.container}">
             <h1 style="${styles.heading}">${subject}</h1>
