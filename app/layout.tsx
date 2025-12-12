@@ -79,12 +79,12 @@ export const telma = localFont({
 export const cabinet = localFont({
   src: [
     { path: "./fonts/cabinet/CabinetGrotesk-Thin.woff2", weight: "100", style: "normal" },
-    { path: "./fonts/cabinet/CabinetGrotesk-ExtraLight.woff2", weight: "200", style: "normal" },
+    { path: "./fonts/cabinet/CabinetGrotesk-Extralight.woff2", weight: "200", style: "normal" },
     { path: "./fonts/cabinet/CabinetGrotesk-Light.woff2", weight: "300", style: "normal" },
     { path: "./fonts/cabinet/CabinetGrotesk-Regular.woff2", weight: "400", style: "normal" },
     { path: "./fonts/cabinet/CabinetGrotesk-Medium.woff2", weight: "500", style: "normal" },
     { path: "./fonts/cabinet/CabinetGrotesk-Bold.woff2", weight: "700", style: "normal" },
-    { path: "./fonts/cabinet/CabinetGrotesk-ExtraBold.woff2", weight: "800", style: "normal" },
+    { path: "./fonts/cabinet/CabinetGrotesk-Extrabold.woff2", weight: "800", style: "normal" },
     // Optionnel : version variable
     // { path: "../public/fonts/cabinet/Cabinet-Variable.woff2", weight: "100 900", style: "normal" },
   ],
