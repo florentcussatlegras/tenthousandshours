@@ -18,6 +18,8 @@ export const UserRoleSelect = ({ userId, role }: UserRoleSelectProps) => {
   async function handleChange(evt: React.ChangeEvent<HTMLSelectElement>) {
     const newRole = evt.target.value as UserRole;
 
+    const roleForAuth = newRole === "ADMIN" ? "admin" : "user";
+
     const canChangeRole = await admin.hasPermission({
         permissions: {
             user: ["set-role"],
@@ -34,7 +36,7 @@ export const UserRoleSelect = ({ userId, role }: UserRoleSelectProps) => {
 
     await admin.setRole({
         userId,
-        role: newRole,
+        role: roleForAuth,
         fetchOptions: {
             onRequest: () => {
                 setIsPending(true);
