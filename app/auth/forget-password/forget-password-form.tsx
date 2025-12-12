@@ -31,7 +31,7 @@ export const ForgetPasswordForm = () => {
         onResponse: () => {
           setIsPending(false);
         },
-        onError: (ctx) => {
+        onError: (ctx: any) => {
           addToast({
             title: "Erreur envoi email réinitialisation du mot de passe",
             description: ctx.error.message,
