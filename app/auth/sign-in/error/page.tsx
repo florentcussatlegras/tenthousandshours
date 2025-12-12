@@ -14,7 +14,7 @@ export default async function SignInErrorPage({ searchParams }: SignInErrorPageP
 
             <h1 className="text-2xl font-bold">Sign In Error</h1>
         </div>
-
+        {sp.error}
         <p className="text-red-600">
             {sp.error === "account_not_linked"
             ?
