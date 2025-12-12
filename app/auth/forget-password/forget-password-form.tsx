@@ -3,7 +3,7 @@
 import { addToast, Button, Card, CardBody, Form, Input } from "@heroui/react";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { forgetPassword } from "@/app/lib/auth-client";
+import { requestPasswordReset } from "@/app/lib/auth-client";
 
 export const ForgetPasswordForm = () => {
   const [isPending, setIsPending] = useState(false);
@@ -21,7 +21,7 @@ export const ForgetPasswordForm = () => {
       });
     }
 
-    await forgetPassword({
+    await requestPasswordReset({
       email,
       redirectTo: "/auth/reset-password",
       fetchOptions: {
