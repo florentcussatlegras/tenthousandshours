@@ -23,7 +23,7 @@ export async function resumeCurrentStudySessionAction(
 
   if (!session || !session.user) redirect("/auth/sign-in");
 
-  revalidateTag('CurrentStudySession');
+  revalidateTag('CurrentStudySession', {});
 
   return {
     resumeCurrentStudySession: true,
