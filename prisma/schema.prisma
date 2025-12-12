@@ -10,7 +10,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 enum UserRole {
@@ -118,10 +117,10 @@ model User {
   createdAt DateTime
   updatedAt DateTime
 
-  firstname     String
-  name          String
+  firstname     String?
+  name          String?
   email         String    @unique
-  emailVerified Boolean
+  emailVerified Boolean?
   image         String?
   role          UserRole  @default(user)
   banned        Boolean?

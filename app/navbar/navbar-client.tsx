@@ -165,7 +165,7 @@ export default function NavBarClient({ session }: { session: any }) {
                 data-react-aria-pressable="true"
                 role="link"
               >
-                <GraduationCap className="text-sky-500" />
+                <GraduationCap className="text-gray-500" />
                 <span className="hidden xl:block text-sm">Vos apprentissages</span>
               </Link>
             </NavbarItem>
