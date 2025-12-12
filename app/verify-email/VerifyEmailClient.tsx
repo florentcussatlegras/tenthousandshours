@@ -1,4 +1,3 @@
-// app/verify-email/VerifyEmailClient.tsx
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
@@ -18,46 +17,27 @@ export default function VerifyEmailClient() {
       return;
     }
 
-    let mounted = true;
-
-    (async () => {
-      try {
-        const res = await fetch("/api/auth/verify-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token }),
-        });
-
-        if (!res.ok) {
-          // optional: read server message
-          const errText = await res.text().catch(() => "");
-          console.error("verify-email response not ok:", res.status, errText);
-          throw new Error("Invalid or expired token");
-        }
-
-        if (!mounted) return;
+    // ✅ Appel REST natif de Better Auth
+    fetch(`/api/auth/verify-email?token=${token}`)
+      .then(async (res) => {
+        if (!res.ok) throw new Error("Token invalide ou expiré");
         setStatus("success");
 
-        setTimeout(() => {
-          router.push(callbackURL);
-        }, 1500);
-      } catch (e) {
-        console.error("verify-email error:", e);
-        if (mounted) setStatus("error");
-      }
-    })();
-
-    return () => {
-      mounted = false;
-    };
-    // include searchParams so effect re-runs if url changes
+        // Redirection après succès
+        setTimeout(() => router.push(callbackURL), 1500);
+      })
+      .catch(() => setStatus("error"));
   }, [searchParams, router]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-6">
+    <div className="flex flex-col items-center justify-center h-screen gap-4">
       {status === "loading" && <p>Vérification en cours…</p>}
-      {status === "success" && <p>Email vérifié avec succès 🎉 — redirection…</p>}
-      {status === "error" && <p>Erreur lors de la vérification. Le lien est peut-être expiré.</p>}
+      {status === "success" && <p>Email vérifié avec succès 🎉</p>}
+      {status === "error" && (
+        <p className="text-red-500">
+          Erreur lors de la vérification. Le lien est peut-être expiré.
+        </p>
+      )}
     </div>
   );
 }
