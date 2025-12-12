@@ -8,9 +8,88 @@ import { Providers } from "./providers";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { Geist } from "next/font/google";
+import localFont from "next/font/local";
 import { CurrentStudySession } from "@/components/current-study-session";
 import NavBarPage from "./navbar/page";
 import { headers } from "next/headers";
+
+export const clashDisplay = localFont({
+  src: [
+    {
+      path: "../public//fonts/clash-display/ClashDisplay-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public//fonts/clash-display/ClashDisplay-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../public//fonts/clash-display/ClashDisplay-Semibold.woff2",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../public//fonts/clash-display/ClashDisplay-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-clash-display",
+});
+
+export const telma = localFont({
+  src: [
+    {
+      path: "../public/fonts/telma/Telma-Light.woff2",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/telma/Telma-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/telma/Telma-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/telma/Telma-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/telma/Telma-Black.woff2",
+      weight: "900",
+      style: "normal",
+    },
+    // Optionnel si tu veux utiliser la version variable
+    // {
+    //   path: "../public/fonts/telma/Telma-Variable.woff2",
+    //   weight: "100 900",
+    //   style: "normal",
+    // },
+  ],
+  variable: "--font-telma",
+});
+
+export const cabinet = localFont({
+  src: [
+    { path: "../public/fonts/cabinet/CabinetGrotesk-Thin.woff2", weight: "100", style: "normal" },
+    { path: "../public/fonts/cabinet/CabinetGrotesk-ExtraLight.woff2", weight: "200", style: "normal" },
+    { path: "../public/fonts/cabinet/CabinetGrotesk-Light.woff2", weight: "300", style: "normal" },
+    { path: "../public/fonts/cabinet/CabinetGrotesk-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../public/fonts/cabinet/CabinetGrotesk-Medium.woff2", weight: "500", style: "normal" },
+    { path: "../public/fonts/cabinet/CabinetGrotesk-Bold.woff2", weight: "700", style: "normal" },
+    { path: "../public/fonts/cabinet/CabinetGrotesk-ExtraBold.woff2", weight: "800", style: "normal" },
+    // Optionnel : version variable
+    // { path: "../public/fonts/cabinet/Cabinet-Variable.woff2", weight: "100 900", style: "normal" },
+  ],
+  variable: "--font-cabinet",
+});
 
 const geist = Geist({
   subsets: ["latin"],
@@ -47,7 +126,10 @@ export default function RootLayout({
         className={clsx(
           "min-h-screen text-foreground bg-background font-sans antialiased",
           // fontSans.variable,
-          geist.className
+          geist.className,
+          clashDisplay.className,
+          telma.className,
+          cabinet.className
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
@@ -63,7 +145,7 @@ export default function RootLayout({
               <div className="max-w-[1536px] mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-3 gap-10">
                 {/* Colonne 1 */}
                 <div className="flex flex-col gap-3">
-                  <h4 className="font-semibold text-lg">Ten Thousands Hours</h4>
+                  <h4 className="font-semibold text-lg font-[Cabinet]">Ten Thousand Hours</h4>
                   <p className="text-sm text-foreground/70">
                     Progressez, apprenez et maîtrisez n'importe quel domaine
                     grâce à la pratique.
@@ -100,7 +182,7 @@ export default function RootLayout({
               </div>
 
               <div className="text-center py-4 border-t border-default-100 text-sm text-foreground/60">
-                © {new Date().getFullYear()} Ten Thousands Hours. Tous droits
+                © {new Date().getFullYear()} Ten Thousand Hours. Tous droits
                 réservés.
               </div>
             </footer>

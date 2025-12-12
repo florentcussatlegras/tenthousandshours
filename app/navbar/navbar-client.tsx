@@ -147,17 +147,17 @@ export default function NavBarClient({ session }: { session: any }) {
           </button>
         </NavbarContent>
 
-        <NavbarBrand className="hidden md:flex md:w-1/10 md:max-w-1/10 lg:w-1/5 lg:min-w-1/5">
+        <NavbarBrand className="hidden md:flex md:w-1/10 md:max-w-1/10 lg:w-1/4 lg:min-w-1/4">
           <Link href="/" className="text-default-600 hidden md:flex 2xl:-ml-4">
-            <Image src="/logo-10000.png" width="100" />
-            <p className="hidden lg:flex font-bold text-xl text-sky-500">
+            <Image src="/logo-10000.png" width={80} />
+            <p className="hidden lg:flex font-bold text-3xl text-sky-500 brand-title font-[Cabinet]">
               Ten Thousand Hours
             </p>
           </Link>
         </NavbarBrand>
 
-        <NavbarContent justify="end">
-          <NavbarContent className="flex-row flex-nowrap items-center bg-content2 dark:bg-content1 hidden h-12 w-full max-w-fit gap-4 rounded-full px-4 md:flex mr-4">
+        <NavbarContent justify="center">
+           <NavbarContent className="flex-row flex-nowrap items-center bg-content2 dark:bg-content1 hidden h-12 w-full max-w-fit gap-4 rounded-full px-4 md:flex mr-4">
             <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
               <Link
                 className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
@@ -165,8 +165,8 @@ export default function NavBarClient({ session }: { session: any }) {
                 data-react-aria-pressable="true"
                 role="link"
               >
-                <GraduationCap />
-                <span className="hidden xl:block">Mes apprentissages</span>
+                <GraduationCap className="text-sky-500" />
+                <span className="hidden xl:block text-sm">Vos apprentissages</span>
               </Link>
             </NavbarItem>
             <NavbarItem
@@ -180,8 +180,8 @@ export default function NavBarClient({ session }: { session: any }) {
                 role="link"
                 aria-current="page"
               >
-                <Calendar />
-                <span className="hidden xl:block">Votre calendrier</span>
+                <Calendar className="text-sky-500" />
+                <span className="hidden xl:block text-sm">Votre calendrier</span>
               </Link>
             </NavbarItem>
             <NavbarItem
@@ -195,8 +195,8 @@ export default function NavBarClient({ session }: { session: any }) {
                 role="link"
                 aria-current="page"
               >
-                <HelpCircle />
-                <span className="hidden 2xl:block">Qui sommes-nous?</span>
+                <HelpCircle className="text-sky-500" />
+                <span className="hidden 2xl:block text-sm">Qui sommes-nous?</span>
               </Link>
             </NavbarItem>
             <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
@@ -206,11 +206,14 @@ export default function NavBarClient({ session }: { session: any }) {
                 data-react-aria-pressable="true"
                 role="link"
               >
-                <Mail />
-                <span className="hidden 2xl:block">Nous contacter</span>
+                <Mail className="text-sky-500" />
+                <span className="hidden 2xl:block text-sm">Nous contacter</span>
               </Link>
             </NavbarItem>
           </NavbarContent>
+        </NavbarContent>
+
+        <NavbarContent justify="center">
           {finalSession?.user ? (
             <>
               <CurrentStudySession />
@@ -352,32 +355,34 @@ export default function NavBarClient({ session }: { session: any }) {
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        <div className="flex justify-between items-center p-4">
-  
-          <Link href="/" className="text-default-600 flex">
-            <Image src="/logo-10000.png" />
-          </Link>
-  
-          <button onClick={() => setSidebarOpen(false)}>
+        <div className="flex flex-col justify-between items-center p-4">
+          
+          <button onClick={() => setSidebarOpen(false)} className="ml-auto">
             <X size={26} />
           </button>
+
+          <Link href="/" className="text-default-600 flex">
+            <Image src="/logo-10000.png" width="100" />
+          </Link>
+  
         </div>
 
-        <nav className="flex flex-col py-4 gap-4 px-4 text-lg">
+        <nav className="flex flex-col py-4 gap-4 px-4 text-lg items-center">
+          <div className="flex flex-col max-w-auto w-3/4 gap-2">
           <Link href="/profile" className="flex items-center gap-2 text-black">
-            <GraduationCap /> Mes apprentissages
+            <GraduationCap className="text-sky-500" /> Vos apprentissages
           </Link>
 
           <Link href="/scheduler" className="flex items-center gap-2 text-black">
-            <Calendar /> Votre calendrier
+            <Calendar className="text-sky-500" /> Votre calendrier
           </Link>
 
           <Link href="/about" className="flex items-center gap-2 text-black">
-            <HelpCircle /> Qui sommes-nous ?
+            <HelpCircle className="text-sky-500" /> Qui sommes-nous ?
           </Link>
 
           <Link href="/contact" className="flex items-center gap-2 text-black">
-            <Mail /> Nous contacter
+            <Mail className="text-sky-500" /> Nous contacter
           </Link>
 
           {!session && (
@@ -390,6 +395,7 @@ export default function NavBarClient({ session }: { session: any }) {
               </Link>
             </>
           )}
+          </div>
         </nav>
       </aside>
     </>

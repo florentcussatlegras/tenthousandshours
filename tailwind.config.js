@@ -12,6 +12,9 @@ const config = {
       fontFamily: {
         sans: ["var(--font-sans)"],
         mono: ["var(--font-mono)"],
+        clash: ["var(--font-clash-display)"],
+        telma: ["var(--font-telma)"],
+        cabinet: ["var(--font-cabinet)", "sans-serif"],
       },
     },
   },
