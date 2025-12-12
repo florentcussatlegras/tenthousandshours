@@ -73,6 +73,6 @@ export async function createTopic(
     }
   }
 
-  revalidateTag("topic");
+  revalidateTag("topic", {});
   redirect("/admin/dashboard/topic/list");
 }

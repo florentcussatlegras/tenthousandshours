@@ -224,6 +224,6 @@ export async function updateStudySessionAction(
     }
   }
 
-  revalidateTag("studySession");
+  revalidateTag("studySession", {});
   redirect(`/study-process/${studyProcess?.slug}`);
 }

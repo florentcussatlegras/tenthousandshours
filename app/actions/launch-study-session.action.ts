@@ -173,7 +173,7 @@ export async function launchStudySessionAction(
   //     }
   // }
 
-  revalidateTag("CurrentStudySession");
-  revalidateTag("studySession");
+  revalidateTag("CurrentStudySession", {});
+  revalidateTag("studySession", {});
   redirect(`/study-process/${studyProcess?.slug}`);
 }

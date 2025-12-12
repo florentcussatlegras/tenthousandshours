@@ -31,6 +31,6 @@ export async function deleteTopic(
     }
   }
 
-  revalidateTag("topic");
+  revalidateTag("topic", {});
   redirect("/admin/dashboard/topic/list");
 }

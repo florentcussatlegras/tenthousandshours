@@ -70,6 +70,6 @@ export async function updateTopic(
     }
   }
 
-  revalidateTag("topic");
+  revalidateTag("topic", {});
   redirect("/admin/dashboard/topic/list");
 }

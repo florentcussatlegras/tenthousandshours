@@ -118,6 +118,6 @@ export async function createStudyProcess(
     }
   }
 
-  revalidateTag("studyProcess");
+  revalidateTag("studyProcess", {});
   redirect("/profile");
 }

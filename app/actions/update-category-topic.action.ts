@@ -73,6 +73,6 @@ export async function updateCategoryTopic(
     }
   }
 
-  revalidateTag("categoryTopic");
+  revalidateTag("categoryTopic", {});
   redirect("/admin/dashboard/category-topic/list");
 }

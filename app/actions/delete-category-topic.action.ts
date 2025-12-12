@@ -32,6 +32,6 @@ export async function deleteCategoryTopic(
     }
   }
 
-  revalidateTag("categoryTopic");
+  revalidateTag("categoryTopic", {});
   redirect("/admin/dashboard/category-topic/list");
 }
