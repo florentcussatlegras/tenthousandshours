@@ -17,7 +17,7 @@ export async function deleteUserAction({ userId }: { userId: string }) {
 
   if (!session) throw new Error("Unautorized");
 
-  if (session.user.role !== "ADMIN") {
+  if (session.user.role !== "admin") {
     throw new Error("FORBIDDEN");
   }
 
@@ -25,7 +25,7 @@ export async function deleteUserAction({ userId }: { userId: string }) {
     await prisma.user.delete({
       where: {
         id: userId,
-        role: "USER",
+        role: "user",
       },
     });
 
