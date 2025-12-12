@@ -12,12 +12,12 @@ const statements = {
 export const ac = createAccessControl(statements);
 
 export const roles = {
-    [UserRole.USER]: ac.newRole({
+    [UserRole.user]: ac.newRole({
         studyProcesses: ["create", "read", "update:own", "delete:own"],
         topic: ["read"],
         categoryTopic: ["read"],
     }),
-    [UserRole.ADMIN]: ac.newRole({
+    [UserRole.admin]: ac.newRole({
         ...adminAc.statements,
         studyProcesses: ["create", "read", "update", "delete", "update:own", "delete:own"],
         topic: ["create", "read", "update", "delete"],

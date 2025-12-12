@@ -99,7 +99,7 @@ const options = {
           const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(";") ?? [];
 
           if (ADMIN_EMAILS.includes(user.email)) {
-            return { data: { ...user, role: UserRole.ADMIN } };
+            return { data: { ...user, role: UserRole.admin } };
           }
 
           return { data: user };
@@ -115,7 +115,7 @@ const options = {
         input: true,
       },
       role: {
-        type: ["USER", "ADMIN"] as Array<UserRole>,
+        type: ["user", "admin"] as Array<UserRole>,
         input: false,
       },
     },
@@ -135,8 +135,8 @@ const options = {
   plugins: [
     nextCookies(),
     admin({
-      defaultRole: UserRole.USER,
-      adminRoles: [UserRole.ADMIN],
+      defaultRole: UserRole.user,
+      adminRoles: [UserRole.admin],
       ac,
       roles,
     }),
