@@ -135,7 +135,7 @@ export default function MasteryClient({
                       <div className="text-xs text-default-500 mt-1">Atteint le {formatDate(t.reachedAt)}</div>
                     </div> */}
                     <div className="text-right">
-                      <div className="text-sm text-default-500">Heures total</div>
+                      <div className="text-sm text-default-500">Heures totales</div>
                       <div className="text-xl font-bold">{hours(t.totalSeconds)} h</div>
                     </div>
                   </div>
