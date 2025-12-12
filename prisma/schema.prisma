@@ -14,8 +14,8 @@ datasource db {
 }
 
 enum UserRole {
-  USER
-  ADMIN
+  user
+  admin
 }
 
 model Post {
@@ -123,7 +123,7 @@ model User {
   email         String    @unique
   emailVerified Boolean
   image         String?
-  role          UserRole  @default(USER)
+  role          UserRole  @default(user)
   banned        Boolean?
   banReason     String?
   banExpires    DateTime?
