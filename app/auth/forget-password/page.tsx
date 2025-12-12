@@ -11,7 +11,7 @@ export default function ForgetPasswordPage() {
           Mot de passe oublié
         </h1>
         <p className="text-mute-foreground p-0">
-          Merci de saisir votre adresse email afin de recevoir un lien pour
+          Veuillez saisir votre adresse email afin de recevoir un lien pour
           resaisir votre mot de passe.
         </p>
       </CardHeader>
