@@ -46,6 +46,7 @@ import {
   Settings,
   User,
   X,
+  LayoutDashboard,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { fetchCurrentStudySession } from "@/app/actions/actions";
@@ -156,62 +157,79 @@ export default function NavBarClient({ session }: { session: any }) {
           </Link>
         </NavbarBrand>
 
-        <NavbarContent justify="center">
-           <NavbarContent className="flex-row flex-nowrap items-center bg-content2 dark:bg-content1 hidden h-12 w-full max-w-fit gap-4 rounded-full px-4 md:flex mr-4">
-            <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
-              <Link
-                className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
-                href="/profile"
-                data-react-aria-pressable="true"
-                role="link"
+        {finalSession?.user && (
+          <NavbarContent justify="center">
+            <NavbarContent className="flex-row flex-nowrap items-center bg-content2 dark:bg-content1 hidden h-12 w-full max-w-fit gap-4 rounded-full px-4 md:flex mr-4">
+              <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
+                <Link
+                  className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
+                  href="/profile"
+                  data-react-aria-pressable="true"
+                  role="link"
+                >
+                  <LayoutDashboard className="text-gray-800" />
+                  <span className="hidden xl:block text-sm">
+                    Tableau de bord
+                  </span>
+                </Link>
+              </NavbarItem>
+              <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
+                <Link
+                  className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
+                  href="/studies"
+                  data-react-aria-pressable="true"
+                  role="link"
+                >
+                  <GraduationCap className="text-gray-800" />
+                  <span className="hidden xl:block text-sm">
+                    Apprentissages
+                  </span>
+                </Link>
+              </NavbarItem>
+              <NavbarItem
+                className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary"
+                // data-active="true"
               >
-                <GraduationCap className="text-gray-800" />
-                <span className="hidden xl:block text-sm">Vos apprentissages</span>
-              </Link>
-            </NavbarItem>
-            <NavbarItem
-              className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary"
-              // data-active="true"
-            >
-              <Link
-                className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
-                href="/scheduler"
-                data-react-aria-pressable="true"
-                role="link"
-                aria-current="page"
+                <Link
+                  className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
+                  href="/scheduler"
+                  data-react-aria-pressable="true"
+                  role="link"
+                  aria-current="page"
+                >
+                  <Calendar className="text-gray-800" />
+                  <span className="hidden xl:block text-sm">Calendrier</span>
+                </Link>
+              </NavbarItem>
+              {/* <NavbarItem
+                className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary"
+                // data-active="true"
               >
-                <Calendar className="text-gray-800" />
-                <span className="hidden xl:block text-sm">Votre calendrier</span>
-              </Link>
-            </NavbarItem>
-            <NavbarItem
-              className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary"
-              // data-active="true"
-            >
-              <Link
-                className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
-                href="/about"
-                data-react-aria-pressable="true"
-                role="link"
-                aria-current="page"
-              >
-                <HelpCircle className="text-gray-800" />
-                <span className="hidden 2xl:block text-sm">Qui sommes-nous?</span>
-              </Link>
-            </NavbarItem>
-            <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
-              <Link
-                className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
-                href="/contact"
-                data-react-aria-pressable="true"
-                role="link"
-              >
-                <Mail className="text-gray-800" />
-                <span className="hidden 2xl:block text-sm">Nous contacter</span>
-              </Link>
-            </NavbarItem>
+                <Link
+                  className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
+                  href="/about"
+                  data-react-aria-pressable="true"
+                  role="link"
+                  aria-current="page"
+                >
+                  <HelpCircle className="text-gray-800" />
+                  <span className="hidden 2xl:block text-sm">A propos</span>
+                </Link>
+              </NavbarItem>
+              <NavbarItem className="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold data-[active=true]:text-primary">
+                <Link
+                  className="relative items-center tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex gap-2 text-inherit"
+                  href="/contact"
+                  data-react-aria-pressable="true"
+                  role="link"
+                >
+                  <Mail className="text-gray-800" />
+                  <span className="hidden 2xl:block text-sm">Contact</span>
+                </Link>
+              </NavbarItem> */}
+            </NavbarContent>
           </NavbarContent>
-        </NavbarContent>
+        )}
 
         <NavbarContent justify="center">
           {finalSession?.user ? (
@@ -221,90 +239,61 @@ export default function NavBarClient({ session }: { session: any }) {
                 <GithubIcon />
               </Link>
               <ThemeSwitch />
-              <Link href="/settings">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-settings-icon lucide-settings text-default-500"
-                >
-                  <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-              </Link>
-              {/* <Input
-                classNames={{
-                  base: "max-w-full sm:max-w-[10rem] h-10",
-                  mainWrapper: "h-full",
-                  input: "text-small",
-                  inputWrapper:
-                    "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
-                }}
-                placeholder="Type to search..."
-                size="sm"
-                startContent={<SearchIcon size={18} />}
-                type="search"
-              /> */}
-              <Dropdown placement="bottom-end">
-                <DropdownTrigger>
-                  {finalSession.user.image ? (
-                    <Avatar
-                      isBordered
-                      as="button"
-                      className="transition-transform cursor-pointer"
-                      color="primary"
-                      name="Jason Hughes"
-                      size="sm"
-                      src={finalSession.user.image}
-                    />
-                  ) : (
-                    <button className="w-10 h-10 rounded-full border flex items-center justify-center bg-sky-500 text-white cursor-pointer">
-                      {finalSession.user.name.slice(0, 1)}
-                    </button>
-                  )}
-                </DropdownTrigger>
-                <DropdownMenu aria-label="profil" variant="flat">
-                  <DropdownItem
-                    key="profile"
-                    className="gap-2 bg-default-200 flex flex-row"
-                  >
-                    <Link
-                      href="/profile"
-                      className="font-semibold text-sky-500 text-md items-center gap-1"
+              <div className="hidden md:flex">
+                <Dropdown placement="bottom-end">
+                  <DropdownTrigger>
+                    {finalSession.user.image ? (
+                      <Avatar
+                        isBordered
+                        as="button"
+                        className="transition-transform cursor-pointer"
+                        color="primary"
+                        name="Jason Hughes"
+                        size="sm"
+                        src={finalSession.user.image}
+                      />
+                    ) : (
+                      <button className="w-10 h-10 rounded-full border flex items-center justify-center bg-sky-500 text-white cursor-pointer uppercase">
+                        {finalSession.user.firstname.slice(0, 2)}
+                      </button>
+                    )}
+                  </DropdownTrigger>
+                  <DropdownMenu aria-label="profil" variant="flat">
+                    <DropdownItem
+                      key="profile"
+                      className="gap-2 bg-default-200 flex flex-row"
                     >
-                      <User />
-                      {finalSession.user.email}
-                    </Link>
-                  </DropdownItem>
-                  <DropdownItem key="settings">
-                    <Link href="/settings" className="text-md gap-1 text-black">
-                      <Settings />
-                      Mes paramètres
-                    </Link>
-                  </DropdownItem>
-                  <DropdownItem key="about">
-                    <Link href="/contact" className="text-md gap-1 text-black">
-                      <HelpCircle />
-                      Aide
-                    </Link>
-                  </DropdownItem>
-                  <DropdownItem key="contact">
-                    <Link href="/about" className="text-md gap-1 text-black">
-                      <Mail />
-                      Nous contacter
-                    </Link>
-                  </DropdownItem>
-                  <DropdownItem key="logout" color="danger">
-                    <SignOutButton />
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+                      <Link
+                        href="/profile"
+                        className="font-semibold text-sky-500 text-md items-center gap-1"
+                      >
+                        <User />
+                        {finalSession.user.email}
+                      </Link>
+                    </DropdownItem>
+                    <DropdownItem key="settings">
+                      <Link href="/settings" className="text-md gap-1 text-black">
+                        <Settings />
+                        Mes paramètres
+                      </Link>
+                    </DropdownItem>
+                    <DropdownItem key="about">
+                      <Link href="/about" className="text-md gap-1 text-black">
+                        <HelpCircle />A propos
+                      </Link>
+                    </DropdownItem>
+                    <DropdownItem key="contact">
+                      <Link href="/contact" className="text-md gap-1 text-black">
+                        <Mail />
+                        Contact
+                      </Link>
+                    </DropdownItem>
+                    <DropdownItem key="logout" color="danger">
+                      <SignOutButton />
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
             </>
           ) : (
             <>
@@ -356,7 +345,6 @@ export default function NavBarClient({ session }: { session: any }) {
         `}
       >
         <div className="flex flex-col justify-between items-center p-4">
-          
           <button onClick={() => setSidebarOpen(false)} className="ml-auto">
             <X size={26} />
           </button>
@@ -364,37 +352,75 @@ export default function NavBarClient({ session }: { session: any }) {
           <Link href="/" className="text-default-600 flex">
             <Image src="/logo-10000.png" width="100" />
           </Link>
-  
         </div>
 
         <nav className="flex flex-col py-4 gap-4 px-4 text-lg items-center">
           <div className="flex flex-col max-w-auto w-3/4 gap-2">
-          <Link href="/profile" className="flex items-center gap-2 text-black">
-            <GraduationCap className="text-gray-800" /> Vos apprentissages
-          </Link>
+            {!finalSession ? (
+              <>
+                <Link href="/auth/sign-in" className="mt-4 font-semibold">
+                  Connexion
+                </Link>
+                <Link href="/auth/sign-up" className="font-semibold">
+                  Inscription
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/studies"
+                  className="flex items-center gap-2 text-black text-sm"
+                >
+                  <LayoutDashboard className="text-gray-800" /> Tableau de bord
+                </Link>
 
-          <Link href="/scheduler" className="flex items-center gap-2 text-black">
-            <Calendar className="text-gray-800" /> Votre calendrier
-          </Link>
+                <Link
+                  href="/studies"
+                  className="flex items-center gap-2 text-black text-sm"
+                >
+                  <GraduationCap className="text-gray-800" /> Apprentissages
+                </Link>
 
-          <Link href="/about" className="flex items-center gap-2 text-black">
-            <HelpCircle className="text-gray-800" /> Qui sommes-nous ?
-          </Link>
+                <Link
+                  href="/scheduler"
+                  className="flex items-center gap-2 text-black text-sm"
+                >
+                  <Calendar className="text-gray-800" /> Calendrier
+                </Link>
 
-          <Link href="/contact" className="flex items-center gap-2 text-black">
-            <Mail className="text-gray-800" /> Nous contacter
-          </Link>
+                <Link href="/settings" className="text-md gap-2 text-black text-sm">
+                  <Settings />
+                  Mes paramètres
+                </Link>
 
-          {!session && (
-            <>
-              <Link href="/auth/sign-in" className="mt-4 font-semibold">
-                Connexion
-              </Link>
-              <Link href="/auth/sign-up" className="font-semibold">
-                Inscription
-              </Link>
-            </>
-          )}
+                <Link href="/about" className="text-md gap-2 text-black text-sm">
+                  <HelpCircle />A propos
+                </Link>
+
+                <Link href="/contact" className="text-md gap-2 text-black text-sm">
+                  <Mail />
+                  Contact
+                </Link>
+
+                <div className="mt-4">
+                  <SignOutButton gap={2} charSize="sm" />
+                </div>
+
+                {/* <Link
+                  href="/about"
+                  className="flex items-center gap-2 text-black"
+                >
+                  <HelpCircle className="text-gray-800" /> A propos
+                </Link>
+
+                <Link
+                  href="/contact"
+                  className="flex items-center gap-2 text-black"
+                >
+                  <Mail className="text-gray-800" /> Contact
+                </Link> */}
+              </>
+            )}
           </div>
         </nav>
       </aside>

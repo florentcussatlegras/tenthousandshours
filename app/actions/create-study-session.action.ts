@@ -8,6 +8,8 @@ import { StudyProcess, Prisma, User } from "@prisma/client";
 import { auth } from "../lib/auth";
 import { headers } from "next/headers";
 
+const TEN_THOUSAND_HOURS_IN_SECONDS = 10_000 * 60 * 60;
+
 function buildLocalDate(dateStr: string, timeStr: string) {
   const [y, m, d] = dateStr.split("-").map(Number);
   const [h, min] = timeStr.split(":").map(Number);
@@ -108,44 +110,10 @@ export async function createStudySessionAction(
   const totalSecondsStudyProcess = studyProcess.totalSeconds;
 
   try {
-    // const objStartedAt = result.data.startedAt?.split(":");
-    // const objFinishedAt = result.data.finishedAt?.split(":");
-    // const objCreatedAt = result.data.date.split('-');
-
-    // const dateCreatedAt = new Date(
-    //   Number(objCreatedAt[0]),
-    //   Number(objCreatedAt[1]) - 1,
-    //   Number(objCreatedAt[2]) + 1,
-    //   -22,
-    //   0,
-    //   0
-    // );
-
-    // const dateStartedAt = new Date(
-    //   Number(objCreatedAt[0]),
-    //   Number(objCreatedAt[1]) - 1,
-    //   Number(objCreatedAt[2]),
-    //   Number(objStartedAt[0]) + 2,
-    //   Number(objStartedAt[1]),
-    //   Number(objStartedAt[2])
-    // );
-    // const dateFinishedAt = new Date(
-    //   Number(objCreatedAt[0]),
-    //   Number(objCreatedAt[1]) - 1,
-    //   Number(objCreatedAt[2]),
-    //   Number(objFinishedAt[0]) + 2,
-    //   Number(objFinishedAt[1]),
-    //   Number(objFinishedAt[2])
-    // );
-
     const startedAt = buildLocalDate(result.data.date, result.data.startedAt);
     const finishedAt = buildLocalDate(result.data.date, result.data.finishedAt);
-    console.log(startedAt);
 
-    // Pour createdAt si tu veux :
     const createdAt = buildLocalDate(result.data.date, "00:00");
-
-    console.log(createdAt, startedAt, finishedAt);
 
     const studyProcessInThisHours: any[] = await prisma.$queryRaw(Prisma.sql`
         SELECT * FROM public."StudySession" 
@@ -166,6 +134,26 @@ export async function createStudySessionAction(
     const totalSecondsSession =
       (finishedAt.getTime() - startedAt.getTime()) / 1000;
 
+    const newTotalSeconds =
+      Number(totalSecondsStudyProcess) + totalSecondsSession;
+
+    console.log('new total seconds?');
+    console.log(newTotalSeconds);
+
+    const hasReached10kBefore = studyProcess.reachedAt != null;
+
+    console.log('study process reached at');
+    console.log(studyProcess.reachedAt);
+
+    console.log('hasReached10kBefore ?');
+    console.log(hasReached10kBefore);
+
+    const isReaching10kNow =
+      !hasReached10kBefore && newTotalSeconds >= TEN_THOUSAND_HOURS_IN_SECONDS;
+
+    console.log('is reaching 10k now?');
+    console.log(isReaching10kNow);
+
     const studySession = await prisma.studySession.create({
       data: {
         description: result.data.description,
@@ -180,7 +168,10 @@ export async function createStudySessionAction(
 
     await prisma.studyProcess.update({
       data: {
-        totalSeconds: Number(totalSecondsStudyProcess) + totalSecondsSession,
+        totalSeconds: newTotalSeconds,
+        ...(isReaching10kNow && {
+          reachedAt: new Date()
+        }),
       },
       where: {
         id: result.data.studyProcessId,

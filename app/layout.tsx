@@ -159,13 +159,19 @@ export default function RootLayout({
                     href="/"
                     className="text-foreground/70 hover:text-primary text-sm"
                   >
-                    Accueil
+                    Tableau de bord
                   </Link>
                   <Link
-                    href="/topics"
+                    href="/studies"
                     className="text-foreground/70 hover:text-primary text-sm"
                   >
-                    Sujets
+                    Apprentissages
+                  </Link>
+                  <Link
+                    href="/scheduler"
+                    className="text-foreground/70 hover:text-primary text-sm"
+                  >
+                    Calendrier
                   </Link>
                 </div>
 
@@ -176,7 +182,20 @@ export default function RootLayout({
                     href="/terms"
                     className="text-foreground/70 hover:text-primary text-sm"
                   >
-                    Conditions
+                    Mentions légales
+                  </Link>
+                  <h5 className="font-semibold text-sm mt-2 mb-1">A propos</h5>
+                  <Link
+                    href="/about"
+                    className="text-foreground/70 hover:text-primary text-sm"
+                  >
+                    Qui sommes-nous ?
+                  </Link>
+                  <Link
+                    href="/contact"
+                    className="text-foreground/70 hover:text-primary text-sm"
+                  >
+                    Contact
                   </Link>
                 </div>
               </div>

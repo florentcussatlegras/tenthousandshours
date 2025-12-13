@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const protectedRoutes = ["/profile", "/admin/dashboard"];
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { nextUrl } = req;
   const sessionCookie = getSessionCookie(req);
 

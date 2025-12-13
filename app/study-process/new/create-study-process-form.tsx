@@ -56,7 +56,7 @@ export default function StudyProcessCreateForm({
   }
 
   return (
-    <Form action={formAction} className='space-y-8 max-w-[600px]'>
+    <Form action={formAction} className='space-y-8 w-full md:w-2/3 lg:w-1/2'>
       <Input type="hidden" name="topicId" value={String(currentTopicId)} />
 
       <Autocomplete
@@ -198,7 +198,7 @@ export default function StudyProcessCreateForm({
 
       <Button
         type="submit"
-        className="uppercase text-white bg-sky-500 font-bold dark:text-black dark:bg-default-600"
+        className="uppercase text-white bg-sky-500 font-bold dark:text-black dark:bg-default-600 w-full lg:w-auto"
       >
         Valider
       </Button>

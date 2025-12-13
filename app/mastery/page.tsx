@@ -4,15 +4,9 @@ import prisma from "@/app/lib/prisma";
 import { getUser } from "../actions/actions";
 import { redirect } from "next/navigation";
 import MasteryClient from "@/components/mastery-client";
-import { Breadcrumb } from "@/components/breadcrumb";
+import { MasteredTopic, ProgressTopic } from "@/app/types/mastery";
 
-type MasteredTopic = {
-  id: string;
-  name: string;
-  icon?: string;
-  totalSeconds: number;
-//   reachedAt: string;
-};
+
 
 async function fetchMasteredTopics(
   userId: string | undefined
@@ -26,21 +20,30 @@ async function fetchMasteredTopics(
     },
   });
 
+  console.log(processes);
+
   // calcul heures par topic, trouver ceux >= 10000h
   const topics = processes.map((p) => {
-    const totalSec = p.studySessions.reduce(
-      (acc, s) => acc + (s.totalSeconds ?? 0),
-      0
-    );
+    // const totalSec = p.studySessions.reduce(
+    //   (acc, s) => acc + (s.totalSeconds ?? 0),
+    //   0
+    // );
     return {
       id: p.id,
       name: p.topic.name,
-      totalSeconds: totalSec,
-      // reachedAt: calculer la date à laquelle la somme a franchi 10k (optionnel)
+      // totalSeconds: totalSec,
+      totalSeconds: p.totalSeconds ?? 0,
+      reachedAt: p.reachedAt ? p.reachedAt.toISOString() : null,
     };
   });
 
+  console.log('foo');
+  console.log(topics);
+
   const mastered = topics.filter((t) => t.totalSeconds >= 10000 * 3600);
+
+  console.log(mastered);
+
   const inProgress = topics
     .filter((t) => t.totalSeconds < 10000 * 3600)
     .sort((a, b) => b.totalSeconds - a.totalSeconds)
@@ -63,7 +66,6 @@ async function fetchMasteredTopics(
 }
 
 export default async function MasteryPage() {
-  // TODO : récupérer userId depuis session
   const userId = await getUser();
 
   if (!userId) {
@@ -73,14 +75,6 @@ export default async function MasteryPage() {
   const { mastered, inProgress } = await fetchMasteredTopics(userId);
 
   return (
-    <div className="w-full space-y-6">
-        <Breadcrumb
-            steps={[
-                { label: "Mes sessions de travail" },
-            ]}
-        />
-        <h1 className="text-3xl font-bold">Hall of mastery</h1>
-        <MasteryClient mastered={mastered} inProgress={inProgress} />
-    </div>
+     <MasteryClient mastered={mastered} inProgress={inProgress} />
   );
 }

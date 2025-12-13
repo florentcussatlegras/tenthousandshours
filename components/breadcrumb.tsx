@@ -15,7 +15,7 @@ export const Breadcrumb = ({ steps }: { steps: StepBreadcrumb[] }) => {
     <div>
       <Breadcrumbs>
         <BreadcrumbItem>
-          <Link href="/">Accueil</Link>
+          <Link href="/profile">Accueil</Link>
         </BreadcrumbItem>
         {steps.map((step) => (
           <BreadcrumbItem>

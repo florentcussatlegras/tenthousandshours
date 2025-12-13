@@ -277,7 +277,7 @@ export default function ListStudiesProgressbar({
                 }
               })
             ) : (
-              <span className="text-default-400 text-xs md:text-base uppercase w-full text-center italic">
+              <span className="text-default-400 text-xs md:text-base uppercase w-full text-center italic my-30">
                 Aucun apprentissage en cours
               </span>
             )}

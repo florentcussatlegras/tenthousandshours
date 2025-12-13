@@ -21,7 +21,6 @@ import {
   getStudyProcessesAchieved,
 } from "../actions/actions";
 import { Divider } from "@heroui/react";
-import MasteryPage from "../mastery/page";
 
 export default async function Page() {
   const headerList = await headers();
@@ -81,54 +80,47 @@ export default async function Page() {
   return (
     <div className="py-8 container mx-auto max-w-[1536px] space-y-8">
 
-      {session.user.role === "admin" && (
-        <div className="flex items-center gap-2">
-          <Button className="bg-sky-500">
-            <Link href="/admin/dashboard" className="text-white">
-              Admin Dashboard
-            </Link>
+      <Breadcrumb steps={[{ label: "Apprentissages" }]} />
+
+      <h1 className="text-3xl font-bold">Mes apprentissages</h1>
+
+      <ListStudiesProgressbar
+        userStudies={userStudies}
+        categoryTopics={categoryTopics}
+        studyProcessAchievedLength={studyProcessesAchieved.length}
+      />
+    
+      {/* <div className="flex items-center gap-2">
+        {session.user.role === "ADMIN" && (
+          <Button>
+            <Link href="/admin/dashboard">Admin Dashboard</Link>
           </Button>
-        </div>
-      )}
-
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-        <div className="lg:col-span-1">
-          <Card className="h-full rounded-none relative">
-            <CardBody className="flex-col items-center justify-center gap-4 my-4">
-              {session?.user.image ? (
-                <Avatar imgSrc={session?.user.image} />
-              ) : (
-                <div className="size-26 border-3 border-primary rounded-full bg-sky-500 text-primary-foreground flex items-center justify-center">
-                  <span className="uppercase text-lg font-bold">
-                    {session?.user.firstname.slice(0, 2)}
-                  </span>
-                </div>
-              )}
-              <span className="text-xl text-default-600 font-medium">
-                {session.user.firstname} {session.user.name}
-              </span>
-              <span className="font-light text-md text-sky-500">
-                {session.user.email}
-              </span>
-              <span className="font-light text-sm text-default-400">
-                Développeur Full Stack
-              </span>
-
-              <Link href="/settings">
-                <EditIcon className="text-default-600" />
-              </Link>
-            </CardBody>
-          </Card>
-        </div>
-
-        <div className="lg:col-span-3">
-          <Card className="h-full rounded-none relative">
-            <CardBody className="flex-col items-center justify-center gap-4 my-4">
-              <MasteryPage />
-            </CardBody>
-          </Card>
-        </div>
+        )}
       </div>
+
+      <div className="space-x-4">
+        {TOPIC_ACCESS.success && (
+          <Button color="primary">
+            <Link href="/topic/list" className="text-white">TOPICS</Link>
+          </Button>
+        )}
+
+        {CATEGORY_TOPIC_ACCESS.success && (
+          <Button color="primary">
+            <Link href="/category-topic/list" className="text-white">CATEGORY TOPICS</Link>
+          </Button>
+        )}
+
+        <Button color="primary" variant="solid">
+          MY STUDY PROCESSES
+        </Button>
+
+        {FULL_STUDY_PROCESS_ACCESS.success && (
+          <Button variant="solid" color="primary">
+            ALL STUDY PROCESSES
+          </Button>
+        )}
+      </div> */}
     </div>
   );
 }
