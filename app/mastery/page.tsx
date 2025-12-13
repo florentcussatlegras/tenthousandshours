@@ -31,6 +31,7 @@ async function fetchMasteredTopics(
     return {
       id: p.id,
       name: p.topic.name,
+      slug: p.slug,
       // totalSeconds: totalSec,
       totalSeconds: p.totalSeconds ?? 0,
       reachedAt: p.reachedAt ? p.reachedAt.toISOString() : null,

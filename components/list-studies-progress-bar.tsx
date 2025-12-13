@@ -161,10 +161,10 @@ export default function ListStudiesProgressbar({
                 orientation="horizontal"
                 onValueChange={handleSelectChange}
               >
-                <Radio value="all">Tous</Radio>
-                <Radio value="beginner">Débutant</Radio>
-                <Radio value="intermediate">Intermédiaire</Radio>
-                <Radio value="expert">Expert</Radio>
+                <Radio value="all" className="text-xs"><span className="text-sm">Tous</span></Radio>
+                <Radio value="beginner"><span className="text-sm">Débutant</span></Radio>
+                <Radio value="intermediate"><span className="text-sm">Intermédiaire</span></Radio>
+                <Radio value="expert"><span className="text-sm">Expert</span></Radio>
               </RadioGroup>
             </div>
 

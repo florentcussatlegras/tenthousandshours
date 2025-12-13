@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { BadgesHeader } from "./badges-header";
 import { MasteredTopic, ProgressTopic } from "@/app/types/mastery";
 
@@ -48,7 +49,7 @@ export default function MasteryClient({
         {/* Left: stats */}
         <aside className="space-y-4">
           <div className="p-4 rounded-lg border border-gray-200">
-            <div className="mt-4 grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3">
               <div>
                 <div className="text-xs text-default-500">Matières maîtrisées</div>
                 <div className="text-2xl font-bold">{totalMastered}</div>
@@ -73,7 +74,7 @@ export default function MasteryClient({
           
 
           <div className="p-4 rounded-lg border border-gray-200">
-            <h4 className="font-semibold">En progression (proches)</h4>
+            <h4 className="font-semibold">En progression</h4>
             <div className="mt-3 space-y-3">
               {inProgress.length === 0 && <div className="text-sm text-default-500">Aucun proche de 10k.</div>}
               {inProgress.map((t) => {
@@ -90,6 +91,7 @@ export default function MasteryClient({
                   </div>
                 );
               })}
+              <Link href="/studies" className="text-sm px-3 py-1 bg-sky-500 text-white rounded-md">Voir tous mes apprentissages</Link>
             </div>
           </div>
         </aside>
@@ -120,10 +122,10 @@ export default function MasteryClient({
                     </div>
                   </div>
 
-                  <div className="mt-3 flex items-center justify-between">
-                    <div className="text-sm text-default-500">Voir le parcours</div>
+                  <div className="mt-3 flex items-center justify-end">
+                    {/* <div className="text-sm text-default-500">Voir le parcours</div> */}
                     <div className="flex items-center gap-2">
-                      <button className="text-sm px-3 py-1 bg-sky-500 text-white rounded-md">Détails</button>
+                      <Link href={`/study-process/${t.slug}`} className="text-sm px-3 py-1 bg-sky-500 text-white rounded-md">Détails</Link>
                     </div>
                   </div>
                 </div>
@@ -141,7 +143,7 @@ export default function MasteryClient({
                     {i + 1}
                   </span>
                   <div className="text-sm font-semibold">{t.name}</div>
-                  {/* <div className="text-xs text-default-500">{formatDate(t.reachedAt)} — {hours(t.totalSeconds)} h</div> */}
+                  <div className="text-xs text-default-500">{formatDate(t.reachedAt)} — {hours(t.totalSeconds)} h</div>
                 </li>
               ))}
             </ol>

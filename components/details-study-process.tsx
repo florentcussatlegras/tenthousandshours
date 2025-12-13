@@ -150,6 +150,11 @@ export default function DetailsStudyProcess({
         </span>
         {studyProcess.totalSeconds && studyProcess.totalSeconds >= 36000000 ? (
           <div className="ml-auto flex text-sm items-center gap-4 text-success-600 uppercase">
+            <span
+              className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800`}
+            >
+              🏆 10k Master
+            </span>
             <span>
               Bravo ! Vous avez atteint les 10000 heures, vous êtes un pro !
             </span>
@@ -163,12 +168,16 @@ export default function DetailsStudyProcess({
               </span>
             ) : (
               <span>
-                A ce rythme là vous aurez atteint les 10000 heures de pratique{" "}
-                {<RemainingTime studyProcess={studyProcess} />}, persevérez !
+                {/* A ce rythme là vous aurez atteint les 10000 heures de pratique{" "}
+                {<RemainingTime studyProcess={studyProcess} />}, persevérez ! */}
+                Vous êtes sur la bonne voie, persevérez !
               </span>
             )}
 
-            <ThumbsUpIcon size={40} className="mb-4 text-success hidden md:block" />
+            <ThumbsUpIcon
+              size={40}
+              className="mb-4 text-success hidden md:block"
+            />
           </div>
         )}
         {/* <div className="ml-auto">

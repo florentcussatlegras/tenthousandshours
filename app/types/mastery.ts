@@ -3,6 +3,7 @@
 export type MasteredTopic = {
   id: string;
   name: string;
+  slug: string;
   icon?: string;
   totalSeconds: number;
   reachedAt: string | null;
@@ -11,6 +12,7 @@ export type MasteredTopic = {
 export type ProgressTopic = {
   id: string;
   name: string;
+  slug: string;
   icon?: string;
   totalSeconds: number;
 };
