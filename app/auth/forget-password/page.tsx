@@ -12,7 +12,7 @@ export default function ForgetPasswordPage() {
         </h1>
         <p className="text-mute-foreground p-0">
           Veuillez saisir votre adresse email afin de recevoir un lien pour
-          resaisir votre mot de passe.
+          ressaisir votre mot de passe.
         </p>
       </CardHeader>
       <CardBody className="overflow-x-hidden p-0 w-full">
