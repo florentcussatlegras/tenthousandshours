@@ -11,6 +11,8 @@ import { addToast } from "@heroui/react";
 import { cookies } from "next/headers";
 import { fetchStudyProcessByTopic } from "./actions";
 
+const TEN_THOUSAND_HOURS_IN_SECONDS = 10_000 * 60 * 60;
+
 const validateCurrentStudySessionSchema = z
   .object({
     topicId: z.string(),
@@ -102,33 +104,31 @@ export async function validateCurrentStudySessionAction(
     };
   }
 
-  // const totalSecondsStudyProcess = studyProcess.totalSeconds;
+  const totalSecondsStudyProcess = studyProcess.totalSeconds;
 
   try {
+    const dateCreatedAt = new Date();
+    dateCreatedAt.setHours(0, 0, 0, 0);
     const dateStartedAt = new Date(Number(result.data.startedAt));
-    const dateCreatedAt = new Date(
-      dateStartedAt.getFullYear(),
-      dateStartedAt.getMonth(),
-      dateStartedAt.getDate(),
-      +2,
-      0,
-      0
-    );
     const dateFinishedAt = new Date(Number(result.data.finishedAt));
 
-    console.log(dateCreatedAt);
-    console.log(dateStartedAt);
-    console.log(dateFinishedAt);
-
     const timer = JSON.parse(result.data.timer);
-    const totalSeconds = timer.sec + timer.min * 60 + timer.hr * 3600;
+    const totalSecondsSession = timer.sec + timer.min * 60 + timer.hr * 3600;
+
+    const newTotalSeconds =
+      Number(totalSecondsStudyProcess) + totalSecondsSession;
+
+    const hasReached10kBefore = studyProcess.reachedAt != null;
+
+    const isReaching10kNow =
+      !hasReached10kBefore && newTotalSeconds >= TEN_THOUSAND_HOURS_IN_SECONDS;
 
     await prisma.studySession.create({
       data: {
         createdAt: dateCreatedAt,
         startedAt: dateStartedAt,
         finishedAt: dateFinishedAt,
-        totalSeconds,
+        totalSeconds: totalSecondsSession,
         studyProcessId: studyProcess?.id,
         description: result.data.description,
         urls: result.data.urls,
@@ -137,13 +137,18 @@ export async function validateCurrentStudySessionAction(
 
     await prisma.studyProcess.update({
       data: {
-        totalSeconds: studyProcess.totalSeconds + totalSeconds,
+        totalSeconds: newTotalSeconds,
+        ...(isReaching10kNow && {
+          reachedAt: new Date()
+        }),
       },
       where: {
         id: studyProcess.id,
       },
     });
+
   } catch (err: unknown) {
+
     if (err instanceof Error) {
       return {
         errors: {

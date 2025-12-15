@@ -126,7 +126,7 @@ export async function createStudySessionAction(
       console.log(studyProcessInThisHours);
       return {
         errors: {
-          _form: ["Cette session dans cette tranche horaire existe dèja."],
+          _form: ["Une session dans cette tranche horaire existe dèja."],
         },
       };
     }
@@ -137,22 +137,10 @@ export async function createStudySessionAction(
     const newTotalSeconds =
       Number(totalSecondsStudyProcess) + totalSecondsSession;
 
-    console.log('new total seconds?');
-    console.log(newTotalSeconds);
-
     const hasReached10kBefore = studyProcess.reachedAt != null;
-
-    console.log('study process reached at');
-    console.log(studyProcess.reachedAt);
-
-    console.log('hasReached10kBefore ?');
-    console.log(hasReached10kBefore);
 
     const isReaching10kNow =
       !hasReached10kBefore && newTotalSeconds >= TEN_THOUSAND_HOURS_IN_SECONDS;
-
-    console.log('is reaching 10k now?');
-    console.log(isReaching10kNow);
 
     const studySession = await prisma.studySession.create({
       data: {
@@ -177,7 +165,9 @@ export async function createStudySessionAction(
         id: result.data.studyProcessId,
       },
     });
+
   } catch (err: unknown) {
+
     if (err instanceof Error) {
       return {
         errors: {
@@ -193,6 +183,7 @@ export async function createStudySessionAction(
         },
       };
     }
+    
   }
 
   revalidateTag("studySession", {});

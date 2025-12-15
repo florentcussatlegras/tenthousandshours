@@ -8,6 +8,8 @@ import { StudyProcess, Prisma, User } from "@prisma/client";
 import { auth } from "../lib/auth";
 import { headers } from "next/headers";
 
+const TEN_THOUSAND_HOURS_IN_SECONDS = 10_000 * 60 * 60;
+
 function buildLocalDate(dateStr: string, timeStr: string) {
   const [y, m, d] = dateStr.split("-").map(Number);
   const [h, min] = timeStr.split(":").map(Number);
@@ -102,6 +104,8 @@ export async function updateStudySessionAction(
     };
   }
 
+  const totalSecondsStudyProcess = studyProcess.totalSeconds;
+
   try {
 
     let studySession;
@@ -112,6 +116,8 @@ export async function updateStudySessionAction(
       }
     });
 
+    const oldTotalSecondsSession = studySession?.totalSeconds;
+
     if (studySession === null) {
       return {
         errors: {
@@ -120,43 +126,10 @@ export async function updateStudySessionAction(
       };
     }
 
-    // const objStartedAt = result.data.startedAt?.split(":");
-    // const objFinishedAt = result.data.finishedAt?.split(":");
-    // const objCreatedAt = result.data.date.split('-');
-
-    // const dateCreatedAt = new Date(
-    //   Number(objCreatedAt[0]),
-    //   Number(objCreatedAt[1]) - 1,
-    //   Number(objCreatedAt[2]) + 1,
-    //   -22,
-    //   0,
-    //   0
-    // );
-
-    // const dateStartedAt = new Date(
-    //   Number(objCreatedAt[0]),
-    //   Number(objCreatedAt[1]) - 1,
-    //   Number(objCreatedAt[2]),
-    //   Number(objStartedAt[0]) + 2,
-    //   Number(objStartedAt[1]),
-    //   Number(objStartedAt[2])
-    // );
-    // const dateFinishedAt = new Date(
-    //   Number(objCreatedAt[0]),
-    //   Number(objCreatedAt[1]) - 1,
-    //   Number(objCreatedAt[2]),
-    //   Number(objFinishedAt[0]) + 2,
-    //   Number(objFinishedAt[1]),
-    //   Number(objFinishedAt[2])
-    // );
-
     const startedAt = buildLocalDate(result.data.date, result.data.startedAt);
     const finishedAt = buildLocalDate(result.data.date, result.data.finishedAt);
 
-    // Pour createdAt si tu veux :
     const createdAt = buildLocalDate(result.data.date, "00:00");
-
-    console.log(createdAt, startedAt, finishedAt);
 
     const studyProcessInThisHours: any[] = await prisma.$queryRaw(Prisma.sql`
               SELECT * FROM public."StudySession" 
@@ -169,13 +142,20 @@ export async function updateStudySessionAction(
     if (Array.from(studyProcessInThisHours).length !== 0) {
       return {
         errors: {
-          _form: ["Cette session dans cette tranche horaire existe dèja."],
+          _form: ["Une session dans cette tranche horaire existe dèja."],
         },
       };
     }
 
-    const totalSecondsSession =
+    const newTotalSecondsSession =
       (finishedAt.getTime() - startedAt.getTime()) / 1000;
+
+    const newTotalSeconds =
+      Number(totalSecondsStudyProcess) - Number(oldTotalSecondsSession) + newTotalSecondsSession;
+
+    // const hasReached10kBefore = studyProcess.reachedAt != null;
+
+    const isReaching10kNow = newTotalSeconds >= TEN_THOUSAND_HOURS_IN_SECONDS;
 
     studySession = await prisma.studySession.update({
       where: {id: result.data.studySessionId},
@@ -184,25 +164,28 @@ export async function updateStudySessionAction(
         createdAt: createdAt,
         startedAt: startedAt,
         finishedAt: finishedAt,
-        totalSeconds: totalSecondsSession,
+        totalSeconds: newTotalSecondsSession,
         studyProcessId: result.data.studyProcessId,
         urls: result.data.urls,
       },
     });
 
-    const allSessions = await prisma.studySession.findMany({
-      where: { studyProcessId: result.data.studyProcessId },
-      select: { totalSeconds: true },
-    });
+    // const allSessions = await prisma.studySession.findMany({
+    //   where: { studyProcessId: result.data.studyProcessId },
+    //   select: { totalSeconds: true },
+    // });
 
-    const newTotalSeconds = allSessions.reduce(
-      (acc, s) => acc + (s.totalSeconds ?? 0),
-      0
-    );
+    // const newTotalSeconds = allSessions.reduce(
+    //   (acc, s) => acc + (s.totalSeconds ?? 0),
+    //   0
+    // );
 
     await prisma.studyProcess.update({
       where: { id: result.data.studyProcessId },
-      data: { totalSeconds: newTotalSeconds },
+      data: { 
+        totalSeconds: newTotalSeconds,
+        reachedAt: isReaching10kNow ? new Date() : null, 
+      },
     });
 
   } catch (err: unknown) {
