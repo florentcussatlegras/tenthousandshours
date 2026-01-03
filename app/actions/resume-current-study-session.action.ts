@@ -26,7 +26,6 @@ export async function resumeCurrentStudySessionAction(
   revalidateTag('CurrentStudySession', {});
 
   return {
-    resumeCurrentStudySession: true, 
-    'foo': 'bar',
+    resumeCurrentStudySession: true,
   };
 }
