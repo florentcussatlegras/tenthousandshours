@@ -253,7 +253,7 @@ export default function NavBarClient({ session }: { session: any }) {
                         src={finalSession.user.image}
                       />
                     ) : (
-                      <button className="w-10 h-10 rounded-full border flex items-center justify-center bg-sky-500 text-white cursor-pointer uppercase">
+                      <button className="w-10 h-10 rounded-full flex items-center justify-center bg-sky-500 text-white cursor-pointer uppercase">
                         {finalSession.user.firstname.slice(0, 2)}
                       </button>
                     )}
