@@ -12,7 +12,6 @@ import localFont from "next/font/local";
 import { CurrentStudySession } from "@/components/current-study-session";
 import NavBarPage from "./navbar/page";
 import { headers } from "next/headers";
-import { useEffect } from "react";
 
 export const clashDisplay = localFont({
   src: [
@@ -147,12 +146,19 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  useEffect(() => {
-    localStorage.setItem("theme", "light");
-  }, []);
   return (
     <html suppressHydrationWarning lang="en">
-      <head />
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              localStorage.setItem('theme', 'light');
+              document.documentElement.classList.remove('dark');
+              document.documentElement.classList.add('light');
+            `,
+          }}
+        />
+      </head>
       <body
         suppressHydrationWarning
         className={clsx(
