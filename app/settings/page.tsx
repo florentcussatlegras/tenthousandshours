@@ -41,7 +41,7 @@ export default function SettingsPage() {
       </div>
 
       <div className="flex flex-col md:flex-row gap-6">
-        <Card className="p-6 w-full md:w-1/2 flex flex-col rounded-none">
+        <Card className="p-6 w-full md:w-1/2 flex flex-col rounded-2xl bg-white dark:bg-content1">
           <h2 className="text-2xl font-bold text-default-600">
             Modification de l'utilisateur
           </h2>
@@ -53,7 +53,7 @@ export default function SettingsPage() {
           />
         </Card>
 
-        <Card className="p-6 w-full md:w-1/2 rounded-none">
+        <Card className="p-6 w-full md:w-1/2 flex flex-col rounded-2xl border-0 bg-white dark:bg-content1">
           <h2 className="text-2xl font-bold text-default-600">
             Modification du mot de passe
           </h2>

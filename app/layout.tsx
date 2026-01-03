@@ -171,7 +171,7 @@ export default function RootLayout({
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <div className="relative flex flex-col h-screen">
+          <div className="relative flex flex-col h-screen bg-white dark:bg-dark-bg">
             <NavBarPage />
             <main className="mx-auto pt-8 px-6 flex-grow w-full">
               <div className="container mx-auto max-w-[1536px]">
@@ -179,7 +179,7 @@ export default function RootLayout({
               </div>
               {children}
             </main>
-            <footer className="w-full bg-background border-t border-default-100 mt-10">
+            <footer className="w-full bg-white dark:bg-dark-bg border-t border-default-100 mt-10">
               <div className="max-w-[1536px] mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-3 gap-10">
                 {/* Colonne 1 */}
                 <div className="flex flex-col gap-3">

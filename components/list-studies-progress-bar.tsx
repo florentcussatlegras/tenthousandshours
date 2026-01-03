@@ -135,7 +135,7 @@ export default function ListStudiesProgressbar({
   }
 
   return (
-    <Card className="h-full rounded-none">
+    <Card className="h-full rounded-2xl bg-white dark:bg-content1">
       {/* <CardHeader className="flex flex-col items-start gap-3 p-4">
         <h2 className="text-md font-medium text-black/90">
           Mes apprentissages

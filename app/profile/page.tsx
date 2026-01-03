@@ -93,7 +93,7 @@ export default async function Page() {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
         <div className="lg:col-span-1">
-          <Card className="h-full rounded-none relative">
+          <Card className="h-full rounded-2xl relative border-none bg-white dark:bg-content1">
             <CardBody className="flex-col items-center justify-center gap-4 my-4">
               {session?.user.image ? (
                 <Avatar imgSrc={session?.user.image} />
@@ -122,7 +122,7 @@ export default async function Page() {
         </div>
 
         <div className="lg:col-span-3">
-          <Card className="h-full rounded-none relative">
+          <Card className="h-full rounded-2xl relative bg-white dark:bg-content1">
             <CardBody className="flex-col items-center justify-center gap-4 my-4">
               <MasteryPage />
             </CardBody>

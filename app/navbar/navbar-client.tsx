@@ -140,7 +140,7 @@ export default function NavBarClient({ session }: { session: any }) {
           wrapper: "w-full px-2 2xl:px-0", // enleve padding du wrapper interne
         }}
         maxWidth="full" // IMPORTANT : sinon HeroUI remet un max-w + centrage
-        className="bg-white dark:bg-black/90 max-w-[1536px] mx-auto"
+        className="bg-white dark:bg-dark-bg max-w-[1536px] mx-auto"
       >
         <NavbarContent className="md:hidden" justify="start">
           <button className="p-2" onClick={() => setSidebarOpen(true)}>
@@ -331,7 +331,7 @@ export default function NavBarClient({ session }: { session: any }) {
 
       {/* ===== SIDEBAR MOBILE ===== */}
       <div
-        className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity ${
+        className={`fixed inset-0 bg-white dark:bg-dark-bg backdrop-blur-sm z-40 transition-opacity ${
           sidebarOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
         onClick={() => setSidebarOpen(false)}

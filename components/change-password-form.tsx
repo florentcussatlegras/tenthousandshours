@@ -46,7 +46,8 @@ export const ChangePasswordForm = () => {
         label="Mot de passe actuel"
         labelPlacement="inside"
         classNames={{
-          label: "self-start"
+          label: "self-start",
+          input: 'bg-[#ffffff] dark:bg-[#1F2937]'
         }}
         size="md"
       />

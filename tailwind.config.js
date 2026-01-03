@@ -16,6 +16,10 @@ const config = {
         telma: ["var(--font-telma)"],
         cabinet: ["var(--font-cabinet)", "sans-serif"],
       },
+      colors: {
+        'dark-bg': '#1F2937',
+        'content1': '#111727'
+      }
     },
   },
   darkMode: "class",

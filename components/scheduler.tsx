@@ -381,10 +381,10 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
   return (
     <div className="w-full">
       <div className="flex flex-col md:flex-row gap-6">
-        <Card className="flex flex-col rounded-none items-center relative p-4 gap-4 w-full md:w-1/3 xl:w-1/5">
+        <Card className="flex flex-col rounded-2xl items-center relative p-4 gap-4 w-full md:w-1/3 xl:w-1/5 bg-white dark:bg-content1">
           <div className="flex justify-between text-default-900 rounded-2xl w-full">
             <Button
-              className="cursor-pointer bg-default-100 hover:bg-default-200 px-4 py-2 rounded-2xl transition-color duration-500 text-default-500 font-semibold"
+              className="cursor-pointer bg-dark-bg hover:bg-default-200 px-4 py-2 rounded-2xl transition-color duration-500 text-default-500 font-semibold"
               onPress={handleTodaySelect}
             >
               Aujourd'hui
@@ -392,14 +392,14 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
             <div className="flex gap-2">
               <Button
                 size="sm"
-                className="cursor-pointer bg-default-100 hover:bg-default-200 rounded-2xl transition-color duration-500 h-[40px]"
+                className="cursor-pointer bg-dark-bg hover:bg-default-200 rounded-2xl transition-color duration-500 h-[40px]"
                 onPress={handleDayRemove}
               >
                 <ArrowLeft className="text-default-500" />
               </Button>
               <Button
                 size="sm"
-                className="cursor-pointer bg-default-100 hover:bg-default-200 rounded-2xl transition-color duration-500 h-[40px]"
+                className="cursor-pointer bg-dark-bg hover:bg-default-200 rounded-2xl transition-color duration-500 h-[40px]"
                 onPress={handleDayAdd}
               >
                 <ArrowRight className="text-default-500" />
@@ -445,7 +445,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
           </div>
         </Card>
 
-        <Card className="rounded-none relative p-4 gap-0 w-full md:w-2/3 xl:w-4/5 flex flex-col">
+        <Card className="rounded-2xl relative p-4 gap-0 w-full md:w-2/3 xl:w-4/5 flex flex-col bg-white dark:bg-content1">
           <Tabs aria-label="Options" className="font-semibold mt-14 md:mt-0">
             <Tab key="day" title="Jour" onClick={() => setDisplayTab("day")}>
               <DayCalendar

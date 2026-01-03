@@ -59,11 +59,11 @@ export default function WeekCalendarWithHours({
           {/* Grille */}
           <div className="grid grid-cols-8 border-t border-r border-l border-gray-200 dark:border-gray-500">
             {/* Colonne des heures */}
-            <div className="flex flex-col border-gray-200 dark:border-gray-500 bg-gray-50 dark:bg-black mt-9 border-t">
+            <div className="flex flex-col border-gray-200 dark:border-gray-500 bg-gray-50 dark:bg-content1 mt-9 border-t">
               {hours.map((hour) => (
                 <div
                   key={hour}
-                  className="border-b border-gray-200 dark:border-gray-500 flex items-start justify-end pr-2 text-xs text-gray-500 dark:bg-black dark:text-white"
+                  className="border-b border-gray-200 dark:border-gray-500 flex items-start justify-end pr-2 text-xs text-gray-500 bg-white dark:bg-content1 dark:text-white"
                   style={{ height: "calc(100% / 24)" }}
                 >
                   {formatHour(hour)}
@@ -75,7 +75,7 @@ export default function WeekCalendarWithHours({
             {weekDates.map((date, dayIndex) => (
               <div key={dayIndex} className="relative border-l border-gray-200">
                 {/* Header du jour */}
-                <div className="text-center py-2 border-b dark:border-gray-500 border-gray-200 bg-gray-50 text-sm font-medium dark:bg-black dark:text-white">
+                <div className="text-center py-2 border-b dark:border-gray-500 border-gray-200 bg-gray-50 text-sm font-medium dark:bg-content1 dark:text-white">
                   {date.toLocaleDateString("fr-FR", {
                     weekday: "short",
                     day: "numeric",
@@ -88,7 +88,7 @@ export default function WeekCalendarWithHours({
                   {hours.map((hour) => (
                     <div
                       key={hour}
-                      className="absolute left-0 right-0 border-b border-gray-200 dark:border-gray-500 dark:bg-black dark:text-white"
+                      className="absolute left-0 right-0 border-b border-gray-200 dark:border-gray-500 bg-white dark:bg-content1 dark:text-white"
                       style={{
                         top: `${(hour / 24) * 100}%`,
                         height: "calc(100% / 24)",
