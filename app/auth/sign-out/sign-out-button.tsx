@@ -61,7 +61,7 @@ const textSizeClasses: Record<string, string> = {
       disabled={isPending}
       variant="light"
       className={clsx(
-        "flex items-center justify-start p-0 h-auto bg-transparent text-black",
+        "flex items-center justify-start p-0 h-auto bg-transparent text-black dark:text-gray-200",
         "hover:bg-transparent data-[hover=true]:bg-transparent",
         "active:bg-transparent data-[active=true]:bg-transparent",
         gapClasses[gap],

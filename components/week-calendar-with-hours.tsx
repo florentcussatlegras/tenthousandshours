@@ -41,7 +41,7 @@ export default function WeekCalendarWithHours({
   return (
     <div>
       {/* Titre de la semaine */}
-      <div className="uppercase inline-flex w-max h-8 items-center justify-center min-w-[280px] px-4 py-1 rounded-xl bg-white border border-gray-300 text-gray-700 font-semibold text-sm shadow-sm absolute top-4 left-4 md:left-auto md:right-5 mt-2 z-40">
+      <div className="uppercase inline-flex w-max h-8 items-center justify-center min-w-[280px] px-4 py-1 rounded-xl bg-white border dark:bg-content1 dark:text-white border-gray-300 text-gray-700 font-semibold text-sm shadow-sm absolute top-4 left-4 md:left-auto md:right-5 mt-2 z-40">
         {isLoading ? <ThreeDotsLoader /> : weekLabel}
       </div>
 
@@ -57,13 +57,13 @@ export default function WeekCalendarWithHours({
           )}
 
           {/* Grille */}
-          <div className="grid grid-cols-8 border-t border-r border-l border-gray-200">
+          <div className="grid grid-cols-8 border-t border-r border-l border-gray-200 dark:border-gray-500">
             {/* Colonne des heures */}
-            <div className="flex flex-col border-gray-200 bg-gray-50 mt-9 border-t">
+            <div className="flex flex-col border-gray-200 dark:border-gray-500 bg-gray-50 dark:bg-black mt-9 border-t">
               {hours.map((hour) => (
                 <div
                   key={hour}
-                  className="border-b border-gray-200 flex items-start justify-end pr-2 text-xs text-gray-500"
+                  className="border-b border-gray-200 dark:border-gray-500 flex items-start justify-end pr-2 text-xs text-gray-500 dark:bg-black dark:text-white"
                   style={{ height: "calc(100% / 24)" }}
                 >
                   {formatHour(hour)}
@@ -75,7 +75,7 @@ export default function WeekCalendarWithHours({
             {weekDates.map((date, dayIndex) => (
               <div key={dayIndex} className="relative border-l border-gray-200">
                 {/* Header du jour */}
-                <div className="text-center py-2 border-b border-gray-200 bg-gray-50 text-sm font-medium">
+                <div className="text-center py-2 border-b dark:border-gray-500 border-gray-200 bg-gray-50 text-sm font-medium dark:bg-black dark:text-white">
                   {date.toLocaleDateString("fr-FR", {
                     weekday: "short",
                     day: "numeric",
@@ -88,7 +88,7 @@ export default function WeekCalendarWithHours({
                   {hours.map((hour) => (
                     <div
                       key={hour}
-                      className="absolute left-0 right-0 border-b border-gray-200"
+                      className="absolute left-0 right-0 border-b border-gray-200 dark:border-gray-500 dark:bg-black dark:text-white"
                       style={{
                         top: `${(hour / 24) * 100}%`,
                         height: "calc(100% / 24)",

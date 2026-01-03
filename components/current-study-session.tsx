@@ -28,9 +28,7 @@ import { Clock, Pause, Play, SearchIcon, Timer } from "lucide-react";
 import Link from "next/link";
 import { StudyProcess } from "@prisma/client";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  checkCurrentStudySessionAction
-} from "@/app/actions/check-study-session.action";
+import { checkCurrentStudySessionAction } from "@/app/actions/check-study-session.action";
 
 function buildLocalDate(dateStr: string, timeStr: string) {
   const [y, m, d] = dateStr.split("-").map(Number);
@@ -193,11 +191,11 @@ export function CurrentStudySession() {
     }
 
     // Construire la date et l'heure au format strings comme pour les saisies
-    const dateStr = now.toISOString().split("T")[0];      // "2025-12-02"
+    const dateStr = now.toISOString().split("T")[0]; // "2025-12-02"
     const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now
       .getMinutes()
       .toString()
-      .padStart(2, "0")}`;                                // "16:39"
+      .padStart(2, "0")}`; // "16:39"
 
     const checkDate = buildLocalDate(dateStr, timeStr);
 
@@ -304,7 +302,7 @@ export function CurrentStudySession() {
           <Button
             onPress={modal1.onOpen}
             type="submit"
-            className="text-white rounded-full bg-sky-500"
+            className="text-white rounded-full bg-sky-500 dark:bg-default-500"
           >
             <Play />
             {/* <span>Lancer une nouvelle session </span> */}
@@ -427,7 +425,7 @@ export function CurrentStudySession() {
                       <div className="flex flex-row gap-2">
                         <Button
                           type="button"
-                          className="bg-sky-500 text-white"
+                          className="bg-sky-500 dark:bg-default-500 text-white dark:text-white"
                           onPress={handleLaunchSession}
                           isDisabled={currentTopicId === ""}
                         >
@@ -437,6 +435,7 @@ export function CurrentStudySession() {
                           color="danger"
                           variant="light"
                           onPress={modal1.onClose}
+                          className="dark:text-white"
                         >
                           Fermer
                         </Button>

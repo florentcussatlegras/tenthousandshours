@@ -149,9 +149,9 @@ export default function NavBarClient({ session }: { session: any }) {
         </NavbarContent>
 
         <NavbarBrand className="hidden md:flex md:w-1/10 md:max-w-1/10 lg:w-1/4 lg:min-w-1/4">
-          <Link href="/" className="text-default-600 hidden md:flex 2xl:-ml-4">
+          <Link href="/" className="text-default-600 hidden md:flex">
             {/* <Image src="/logo-10000.png" width={80} /> */}
-            <p className="hidden lg:flex font-bold text-3xl text-sky-500 brand-title font-[Cabinet]">
+            <p className="hidden lg:flex font-bold text-3xl text-sky-500 dark:text-white brand-title font-[Cabinet]">
               Ten Thousand Hours
             </p>
           </Link>
@@ -167,7 +167,7 @@ export default function NavBarClient({ session }: { session: any }) {
                   data-react-aria-pressable="true"
                   role="link"
                 >
-                  <LayoutDashboard className="text-gray-800" />
+                  <LayoutDashboard className="text-gray-800 dark:text-gray-200" />
                   <span className="hidden xl:block text-sm">
                     Tableau de bord
                   </span>
@@ -180,7 +180,7 @@ export default function NavBarClient({ session }: { session: any }) {
                   data-react-aria-pressable="true"
                   role="link"
                 >
-                  <GraduationCap className="text-gray-800" />
+                  <GraduationCap className="text-gray-800 dark:text-gray-200" />
                   <span className="hidden xl:block text-sm">
                     Apprentissages
                   </span>
@@ -197,7 +197,7 @@ export default function NavBarClient({ session }: { session: any }) {
                   role="link"
                   aria-current="page"
                 >
-                  <Calendar className="text-gray-800" />
+                  <Calendar className="text-gray-800 dark:text-gray-200" />
                   <span className="hidden xl:block text-sm">Calendrier</span>
                 </Link>
               </NavbarItem>
@@ -272,18 +272,18 @@ export default function NavBarClient({ session }: { session: any }) {
                       </Link>
                     </DropdownItem>
                     <DropdownItem key="settings">
-                      <Link href="/settings" className="text-md gap-1 text-black">
+                      <Link href="/settings" className="text-md gap-1 text-black dark:text-gray-200">
                         <Settings />
                         Mes paramètres
                       </Link>
                     </DropdownItem>
                     <DropdownItem key="about">
-                      <Link href="/about" className="text-md gap-1 text-black">
+                      <Link href="/about" className="text-md gap-1 text-black dark:text-gray-200">
                         <HelpCircle />A propos
                       </Link>
                     </DropdownItem>
                     <DropdownItem key="contact">
-                      <Link href="/contact" className="text-md gap-1 text-black">
+                      <Link href="/contact" className="text-md gap-1 text-black dark:text-gray-200">
                         <Mail />
                         Contact
                       </Link>

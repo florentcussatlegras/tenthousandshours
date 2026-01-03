@@ -40,7 +40,7 @@ export function DayCalendar({
 
   return (
     <div className="flex flex-col gap-4 pt-1">
-      <div className="uppercase inline-flex w-max h-8 items-center justify-center min-w-[280px] px-4 py-1 rounded-xl bg-white border border-gray-300 text-gray-700 font-semibold text-sm shadow-sm absolute top-4 left-4 md:left-auto md:right-5 mt-2">
+      <div className="uppercase inline-flex w-max h-8 items-center justify-center min-w-[280px] px-4 py-1 rounded-xl bg-white border dark:bg-content1 dark:text-white border-gray-300 text-gray-700 font-semibold text-sm shadow-sm absolute top-4 left-4 md:left-auto md:right-5 mt-2">
         {loadingDate ? (
           <ThreeDotsLoader />
         ) : (

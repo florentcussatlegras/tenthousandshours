@@ -2,18 +2,24 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import {Form, Input, Select, SelectItem, Checkbox, Button} from "@heroui/react";
-import { addToast } from "@heroui/react"; 
+import {
+  Form,
+  Input,
+  Select,
+  SelectItem,
+  Checkbox,
+  Button,
+} from "@heroui/react";
+import { addToast } from "@heroui/react";
 import signInEmailAction from "../../actions/sign-in-email.action";
 import Link from "next/link";
 
 export default function SignInForm() {
-
   const [isPending, setIsPending] = React.useState(false);
   const router = useRouter();
 
-  async function onSubmit(evt: React.FormEvent<HTMLFormElement>) {-
-    evt.preventDefault();
+  async function onSubmit(evt: React.FormEvent<HTMLFormElement>) {
+    -evt.preventDefault();
 
     setIsPending(true);
 
@@ -37,7 +43,6 @@ export default function SignInForm() {
       router.refresh();
       router.push("/profile");
     }
-
   }
 
   return (
@@ -66,7 +71,6 @@ export default function SignInForm() {
         />
 
         <div className="space-y-2">
-
           <Input
             // isRequired
             // errorMessage={getPasswordError(password)}
@@ -78,14 +82,20 @@ export default function SignInForm() {
             size="md"
           />
 
-          <Link href="/auth/forget-password" className="text-sm text-muted-foreground hover:text-foreground text-sky-500">
+          <Link
+            href="/auth/forget-password"
+            className="text-sm text-muted-foreground hover:text-foreground text-sky-500"
+          >
             Vous avez oublié votre mot de passe?
           </Link>
-
         </div>
 
         <div className="flex gap-4">
-          <Button className="bg-sky-500 text-white font-bold dark:bg-default-500 dark:text-white" type="submit" disabled={isPending}>
+          <Button
+            className="bg-sky-500 text-white font-bold dark:bg-default-500 dark:text-white"
+            type="submit"
+            disabled={isPending}
+          >
             VALIDER
           </Button>
           <Button className="font-bold" type="reset" variant="flat">
@@ -94,12 +104,14 @@ export default function SignInForm() {
         </div>
       </div>
       <div className="text-sm text-foreground-400 mt-6">
-          Vous n'avez pas encore de compte ?{" "}
-          <Link href="/auth/sign-up" className="hover:text-foreground text-sky-500">
-              Inscrivez-vous
-          </Link>
+        Vous n'avez pas encore de compte ?{" "}
+        <Link
+          href="/auth/sign-up"
+          className="hover:text-foreground text-sky-500"
+        >
+          Inscrivez-vous
+        </Link>
       </div>
     </Form>
   );
 }
-

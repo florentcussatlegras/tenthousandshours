@@ -2,7 +2,8 @@ import { Hero } from "@/components/hero";
 import SearchBarHomepage from "@/components/search-bar-homepage";
 import * as actions from "@/app/actions/actions";
 
-const urlImageHero = "/illustration-books-and-desk.jpg";
+const imageLight = "/illustration-books-and-desk.jpg";
+const imageDark = "/illustration-books-and-desk_dark.jpg";
 
 export default async function Home() {
   const topics: any[] = await actions.getListTopics();
@@ -11,10 +12,21 @@ export default async function Home() {
     <section className="flex items-center h-full justify-center gap-4 bg-white dark:bg-black/90 w-full p-0 m-0">
       <div className="flex flex-row w-full h-full items-stretch justify-between">
         <div className="hidden xl:w-1/2 items-center xl:flex justify-center">
-          <Hero
-            imageUrl={urlImageHero}
-            imageAlt="Books and watches on a desk"
-          />
+          {/* Light */}
+          <div className="dark:hidden">
+            <Hero
+              imageUrl={imageLight}
+              imageAlt="Books and watches on a desk"
+            />
+          </div>
+
+          {/* Dark */}
+          <div className="hidden dark:block">
+            <Hero
+              imageUrl={imageDark}
+              imageAlt="Books and watches on a desk (dark)"
+            />
+          </div>
         </div>
 
         <div className="w-full 2xl:w-1/2 h-full flex flex-col gap-10 items-center xl:items-start justify-center ml-0 xl:ml-18 2xl:ml-0">
