@@ -183,7 +183,7 @@ export default function RootLayout({
               <div className="max-w-[1536px] mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-3 gap-10">
                 {/* Colonne 1 */}
                 <div className="flex flex-col gap-3">
-                  <h4 className="font-semibold text-lg font-[Cabinet]">
+                  <h4 className="font-bold text-lg font-[Cabinet]">
                     Ten Thousand Hours
                   </h4>
                   <p className="text-sm text-foreground/70">

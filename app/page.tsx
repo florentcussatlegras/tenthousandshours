@@ -2,8 +2,7 @@ import { Hero } from "@/components/hero";
 import SearchBarHomepage from "@/components/search-bar-homepage";
 import * as actions from "@/app/actions/actions";
 
-const imageLight = "/illustration-books-and-desk.jpg";
-const imageDark = "/illustration-books-and-desk_dark.jpg";
+const imageHero = "/hand-drawn-resignation-illustration.png";
 
 export default async function Home() {
   const topics: any[] = await actions.getListTopics();
@@ -12,18 +11,11 @@ export default async function Home() {
     <section className="flex items-center h-full justify-center gap-4 bg-white dark:bg-black/90 w-full p-0 m-0">
       <div className="flex flex-row w-full h-full items-stretch justify-between">
         <div className="hidden xl:w-1/2 items-center xl:flex justify-center">
-          {/* Light */}
-          <div className="dark:hidden">
-            <Hero
-              imageUrl={imageLight}
-              imageAlt="Books and watches on a desk"
-            />
-          </div>
-
+          
           {/* Dark */}
-          <div className="hidden dark:block">
+          <div className="block">
             <Hero
-              imageUrl={imageDark}
+              imageUrl={imageHero}
               imageAlt="Books and watches on a desk (dark)"
             />
           </div>
