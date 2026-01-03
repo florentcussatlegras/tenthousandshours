@@ -12,6 +12,7 @@ import localFont from "next/font/local";
 import { CurrentStudySession } from "@/components/current-study-session";
 import NavBarPage from "./navbar/page";
 import { headers } from "next/headers";
+import { useEffect } from "react";
 
 export const clashDisplay = localFont({
   src: [
@@ -78,13 +79,41 @@ export const telma = localFont({
 
 export const cabinet = localFont({
   src: [
-    { path: "./fonts/cabinet/CabinetGrotesk-Thin.woff2", weight: "100", style: "normal" },
-    { path: "./fonts/cabinet/CabinetGrotesk-Extralight.woff2", weight: "200", style: "normal" },
-    { path: "./fonts/cabinet/CabinetGrotesk-Light.woff2", weight: "300", style: "normal" },
-    { path: "./fonts/cabinet/CabinetGrotesk-Regular.woff2", weight: "400", style: "normal" },
-    { path: "./fonts/cabinet/CabinetGrotesk-Medium.woff2", weight: "500", style: "normal" },
-    { path: "./fonts/cabinet/CabinetGrotesk-Bold.woff2", weight: "700", style: "normal" },
-    { path: "./fonts/cabinet/CabinetGrotesk-Extrabold.woff2", weight: "800", style: "normal" },
+    {
+      path: "./fonts/cabinet/CabinetGrotesk-Thin.woff2",
+      weight: "100",
+      style: "normal",
+    },
+    {
+      path: "./fonts/cabinet/CabinetGrotesk-Extralight.woff2",
+      weight: "200",
+      style: "normal",
+    },
+    {
+      path: "./fonts/cabinet/CabinetGrotesk-Light.woff2",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "./fonts/cabinet/CabinetGrotesk-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/cabinet/CabinetGrotesk-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./fonts/cabinet/CabinetGrotesk-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "./fonts/cabinet/CabinetGrotesk-Extrabold.woff2",
+      weight: "800",
+      style: "normal",
+    },
     // Optionnel : version variable
     // { path: "../public/fonts/cabinet/Cabinet-Variable.woff2", weight: "100 900", style: "normal" },
   ],
@@ -118,6 +147,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  useEffect(() => {
+    localStorage.setItem("theme", "light");
+  }, []);
   return (
     <html suppressHydrationWarning lang="en">
       <head />
@@ -145,7 +177,9 @@ export default function RootLayout({
               <div className="max-w-[1536px] mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-3 gap-10">
                 {/* Colonne 1 */}
                 <div className="flex flex-col gap-3">
-                  <h4 className="font-semibold text-lg font-[Cabinet]">Ten Thousand Hours</h4>
+                  <h4 className="font-semibold text-lg font-[Cabinet]">
+                    Ten Thousand Hours
+                  </h4>
                   <p className="text-sm text-foreground/70">
                     Progressez, apprenez et maîtrisez n'importe quel domaine
                     grâce à la pratique.
