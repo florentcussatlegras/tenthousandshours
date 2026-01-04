@@ -310,10 +310,10 @@ export function CurrentStudySession() {
           </Button>
           <Modal
             isOpen={modal1.isOpen}
-            // onOpenChange={modal1.onOpenChange}
+            onOpenChange={modal1.onOpenChange}
             size="xl"
           >
-            <ModalContent>
+            <ModalContent className="bg-white dark:bg-dark-bg">
               {(onClose) => (
                 <>
                   <ModalHeader className="flex flex-col gap-1 w-full mt-4">
@@ -374,7 +374,7 @@ export function CurrentStudySession() {
                             ],
                           },
                         }}
-                        placeholder="Exple: saxophone, javascript, maçonnerie..."
+                        placeholder="Exple: saxophone, javascript, maçonnerie 2..."
                         popoverProps={{
                           offset: 10,
                           classNames: {
@@ -480,7 +480,7 @@ export function CurrentStudySession() {
             onOpenChange={modal2.onOpenChange}
             size="3xl"
           >
-            <ModalContent className="p-4">
+            <ModalContent className="p-4 bg-white dark:bg-dark-bg">
               {(onClose) => (
                 <>
                   <ModalHeader className="flex flex-col gap-1 w-full mt-4 text-3xl">
@@ -493,7 +493,7 @@ export function CurrentStudySession() {
                       </span>
                     </div>
                   </ModalHeader>
-                  <ModalBody className="flex flex-col gap-4 w-full my-8 text-2xl">
+                  <ModalBody className="flex flex-col gap-4 w-full my-8 text-2xl bg-white dark:bg-dark-bg">
                     <div>
                       Session débutée le{" "}
                       {new Intl.DateTimeFormat("fr-Fr", {

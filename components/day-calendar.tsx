@@ -76,7 +76,7 @@ export function DayCalendar({
                     aria-label={`Accordion ${session.session_id}`}
                     title={`${session.topic_name}`}
                     classNames={{
-                      base: "relative px-0 mb-2 border-b-1 border-default-200 rounded-none shadow-none",
+                      base: "relative px-4 mb-2 rounded-2xl shadow-none bg-default-100 dark:bg-dark-bg",
                       title: "text-xl text-default-900",
                       indicator: "w-[350px]",
                     }}

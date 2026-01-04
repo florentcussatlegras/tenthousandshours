@@ -235,7 +235,7 @@ export function CurrentStudySessionValidationForm() {
               />
               <Button
                 onPress={() => handleUrlRemove(index)}
-                className="bg-white min-w-15"
+                className="bg-white dark:bg-dark-bg min-w-15"
               >
                 <DeleteIcon width="1.5em" height="1.5em" />
               </Button>

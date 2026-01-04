@@ -96,7 +96,7 @@ export const NewStudySessionForm = ({
   }).format(dateCreation.toDate(getLocalTimeZone()));
 
   return (
-    <Card className="rounded-none relative p-4 w-full lg:w-2/5">
+    <Card className="relative p-4 w-full lg:w-2/5 rounded-2xl bg-white dark:bg-dark-bg">
       <CardBody>
         <div className="flex flex-col gap-4">
           <Form
@@ -197,7 +197,7 @@ export const NewStudySessionForm = ({
                   />
                   <Button
                     onPress={() => handleUrlRemove(index)}
-                    className="bg-white min-w-15"
+                    className="bg-white dark:bg-dark-bg min-w-15"
                   >
                     <DeleteIcon width="1.5em" height="1.5em" />
                   </Button>

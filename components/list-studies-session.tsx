@@ -425,7 +425,7 @@ export default function ListStudiesSession({
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
   return (
-    <Card radius="none" className="w-full lg:w-2/3 px-6 py-8">
+    <Card radius="none" className="w-full lg:w-2/3 px-6 py-8 rounded-2xl bg-white dark:bg-dark-bg">
       <div>
         <ModalStudySessionView
           isOpen={isOpen}
@@ -440,7 +440,9 @@ export default function ListStudiesSession({
         bottomContentPlacement="outside"
         classNames={{
           wrapper: "p-0",
-          th: "text-sm",
+          thead: "[&>tr[aria-hidden=true]]:hidden",
+          tbody: "bg-white dark:bg-dark-bg",          
+          th: "text-sm border-b-0",
           td: "text-sm",
         }}
         radius="none"

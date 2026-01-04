@@ -384,7 +384,7 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
         <Card className="flex flex-col rounded-2xl items-center relative p-4 gap-4 w-full md:w-1/3 xl:w-1/5 bg-white dark:bg-content1">
           <div className="flex justify-between text-default-900 rounded-2xl w-full">
             <Button
-              className="cursor-pointer bg-dark-bg hover:bg-default-200 px-4 py-2 rounded-2xl transition-color duration-500 text-default-500 font-semibold"
+              className="cursor-pointer bg-default-200 dark:bg-dark-bg hover:bg-default-200 px-4 py-2 rounded-2xl transition-color duration-500 text-default-500 font-semibold"
               onPress={handleTodaySelect}
             >
               Aujourd'hui
@@ -392,14 +392,14 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
             <div className="flex gap-2">
               <Button
                 size="sm"
-                className="cursor-pointer bg-dark-bg hover:bg-default-200 rounded-2xl transition-color duration-500 h-[40px]"
+                className="cursor-pointer bg-default-200 dark:bg-dark-bg hover:bg-default-200 rounded-2xl transition-color duration-500 h-[40px]"
                 onPress={handleDayRemove}
               >
                 <ArrowLeft className="text-default-500" />
               </Button>
               <Button
                 size="sm"
-                className="cursor-pointer bg-dark-bg hover:bg-default-200 rounded-2xl transition-color duration-500 h-[40px]"
+                className="cursor-pointer bg-default-200 dark:bg-dark-bg hover:bg-default-200 rounded-2xl transition-color duration-500 h-[40px]"
                 onPress={handleDayAdd}
               >
                 <ArrowRight className="text-default-500" />
@@ -411,7 +411,19 @@ export default function Scheduler({ defaultDate }: { defaultDate: Date }) {
             showMonthAndYearPickers
             aria-label="Date (Show Month and Year Picker)"
             classNames={{
-              base: "shadow-none",
+              prevButton: "bg-default-200",       // Bouton précédent
+              nextButton: "bg-default-200",       // Bouton suivant
+              headerWrapper: "bg-white dark:bg-dark-bg [&::after]:hidden",     // Wrapper du header (mois + boutons)
+              header: "bg-default-200",             // Bandeau du header (mois affiché)
+              title: "bg-default-200",              // Texte du titre du mois
+              gridHeaderRow: "bg-white dark:bg-dark-bg",      // Ligne contenant S M T W T F S
+              gridHeaderCell: "bg-white dark:bg-dark-bg",     // Chaque jour de la semaine
+              pickerWrapper: "bg-white dark:bg-dark-bg",      // Wrapper du sélecteur mois/année
+              pickerMonthList: "bg-white dark:bg-dark-bg",    // Liste des mois
+              pickerYearList: "bg-white dark:bg-dark-bg",     // Liste des années
+              pickerHighlight: "bg-white dark:bg-dark-bg",    // Jour sélectionné
+              pickerItem: "bg-white dark:bg-dark-bg",         // Mois ou année sélectionné
+              gridBody: "bg-white dark:bg-dark-bg",
             }}
             onChange={handleDateCalendarChange}
             value={valueDatePicker}

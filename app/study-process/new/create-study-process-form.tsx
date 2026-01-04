@@ -91,7 +91,7 @@ export default function StudyProcessCreateForm({
             ],
           },
         }}
-        placeholder="Exple: saxophone, javascript, maçonnerie..."
+        placeholder="Exple: saxophone, javascript, maçonnerie 1..."
         popoverProps={{
           offset: 10,
           classNames: {
