@@ -69,7 +69,7 @@ export function StudySessionModal({ session, pos }: { session: any; pos?: any })
 
           {/* CONTENT */}
           <div
-            className="relative bg-white rounded-lg shadow-lg w-full max-w-lg p-6 z-10"
+            className="relative bg-white dark:bg-dark-bg rounded-lg shadow-lg w-full max-w-lg p-6 z-10"
             onClick={(e) => e.stopPropagation()} // important : évite la fermeture quand on clique dans la boîte
           >
             {/* Close button */}

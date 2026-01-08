@@ -59,12 +59,13 @@ export function DayCalendar({
             Aucune session de travail trouvées ce jour
           </div>
         ) : (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 px-0">
             <span className="text-sm text-default-500 ml-auto pr-1">
               {studySessions.length} sessions de travail
             </span>
 
-            <Accordion variant="splitted">
+            <div className="-mx-2">
+              <Accordion variant="splitted">
               {studySessions.map((session: any) => {
                 console.log(session);
                 // const ratioProgress =
@@ -151,7 +152,9 @@ export function DayCalendar({
                   </AccordionItem>
                 );
               })}
-            </Accordion>
+              </Accordion>
+            </div>
+
           </div>
         )
       }

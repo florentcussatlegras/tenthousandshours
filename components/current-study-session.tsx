@@ -374,7 +374,7 @@ export function CurrentStudySession() {
                             ],
                           },
                         }}
-                        placeholder="Exple: saxophone, javascript, maçonnerie 2..."
+                        placeholder="Exple: saxophone, javascript, maçonnerie..."
                         popoverProps={{
                           offset: 10,
                           classNames: {
